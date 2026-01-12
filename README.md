@@ -1,2 +1,11 @@
 # MyBlog
-This is my personal blog, which is synchronized with Seatable.
+
+项目介绍：这是我的个人博客，与 Seatable 同步。
+
+最近同步时间：2026年1月
+
+层级说明：Seatable 中表格——子表——行，分别对应三层目录。
+
+操作流程：旧版博客迁移到 Seatable 线上表格，定期删除旧数据，下载新表格数据，生成 markdown 文件，本项目代码不直接改动。
+
+目前先使用 file-browser 进行预览编辑。暂时不上线（不用 mkdocs 生成静态网站）。
