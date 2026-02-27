@@ -548,36 +548,6 @@ AI不仅是解决技术问题，还能解决产品和个人发展问题
 ​
 
 
-### 实用工具
-本地的 AI 工具
-
-1、POE：这个账户使用谷歌邮箱登录，效果不错 [https://poe.com/chat/3g5krmx7rie573x6t6h](https://poe.com/chat/3g5krmx7rie573x6t6h "https://poe.com/chat/3g5krmx7rie573x6t6h") 需要翻墙，类似豆包
-
-2、ChatGPT for Google 浏览器插件，需要翻墙+会员才可以
-
-3、Monica 浏览器插件，需要翻墙+会员
-
-4、Cursor 编写代码工具
-
-5、豆包
-
-6、deepseek
-
-​
-
-​
-
-
-### 中国多模态大模型API聚合平台
-付费的 GPT API 聚合平台 [https://www.dmxapi.cn/rmb](https://www.dmxapi.cn/rmb "https://www.dmxapi.cn/rmb")
-
-各种模型的代理商
-
-​
-
-​
-
-
 ### 常用 AI 工具
 AI 工具：集成了多个模型，内部可以选择多个模型进行任务处理。
 
@@ -585,7 +555,7 @@ AI 工具：集成了多个模型，内部可以选择多个模型进行任务�
 
 #### 开发工具
 
-GPT：核心AI工具，支持全部功能，需要付费
+chatGPT：核心AI工具，支持全部功能，需要付费
 
 Monica：浏览器插件，国外出品，效果不错
 
@@ -650,6 +620,115 @@ CodeGeex：编辑器插件，支持代码编写
 * 帆软数据：[https://help.fanruan.com/finebi/doc-view-1206.html](https://help.fanruan.com/finebi/doc-view-1206.html "https://help.fanruan.com/finebi/doc-view-1206.html") 面向企业级的BI分析工具，通过AI模型对企业的销售数据、供应链数据等进行分析和可视化处理，帮助企业进行决策和优化。主要是企业分析经营报告等。
 
 * 讯飞听见：[https://www.iflyrec.com/](https://www.iflyrec.com/ "https://www.iflyrec.com/") SaaS 平台，专注于语音转文字，其模型基于科大讯飞的语音识别技术，能够实时转录会议记录，支持多方言识别（支持视频音频提取文字等，主要是音视频分析）。
+
+
+### Monica
+Monica是Chrome扩展程序，是AI辅助工具。
+
+作用：可以与Monica随时随地聊天，Monica可以帮助您轻松创建文案，并将文本插入任何位置。
+
+免费版本：这个插件每天提供30次免费查询。
+
+付费版本：每月 60 元，有更多的查询次数，因为官方的 chatGPT4 需要 token 和注册。
+
+操作：打开侧栏的快捷键是 command + M。
+
+账户信息：
+
+> ID：3f094d409dd941bea8032dba22d7dded
+>
+> 邮箱：<michael18811380328@gmail.com>
+>
+> 姓名：Michael An
+>
+> 账户付费信息：[https://monica.im/billing](https://monica.im/billing "https://monica.im/billing")
+
+目前其他大模型可以代替这个，日常使用不多
+
+​
+
+
+### Cursor
+编写代码工具
+
+### chatGPT
+[https://chatgpt.com/](https://chatgpt.com/ "https://chatgpt.com/")
+
+账户信息：谷歌邮箱登录
+
+免费版：可以基本问答
+
+付费版本：[https://chatgpt.com/#pricing](https://chatgpt.com/#pricing "https://chatgpt.com/#pricing") 支持深度问答，支持 Sora 生成视频，支持复杂的生成图片，支持 Codex 生成代码。官方价格是每月30刀。
+
+国内无法直接登录，需要VPN
+
+
+### 豆包
+问答平台
+
+
+### deepseek
+问答平台
+
+
+### POE
+这个账户使用谷歌邮箱登录，效果不错 [https://poe.com/chat/3g5krmx7rie573x6t6h](https://poe.com/chat/3g5krmx7rie573x6t6h "https://poe.com/chat/3g5krmx7rie573x6t6h")
+
+需要翻墙，类似豆包
+
+国外公司出品：[https://company.quora.com/](https://company.quora.com/ "https://company.quora.com/")
+
+
+### API 购买平台
+付费的 GPT API 聚合平台 [https://www.dmxapi.cn/rmb](https://www.dmxapi.cn/rmb "https://www.dmxapi.cn/rmb")
+
+各种模型的代理商
+
+​
+
+​
+
+
+### AI 的优缺点
+> 视频记录于2023年
+>
+> 视频链接：<https://www.bilibili.com/video/BV1VL411U7MU/?spm_id_from=333.337.search-card.all.click&vd_source=2d5bdee7ea59486ed4aa4a9b10020224>
+
+#### AI 的优势和劣势
+
+AI 优势：AI 在2023年大量发展，多家国内外AI厂商发布自己的产品，各种论文大发展，GPT 进化速度很快，功能很强大。使用过后，确实可以解决很多搜索引擎的工作，完成基本的考试和固定答案的问题。
+
+AI 不足：很多业界大佬联名，暂停大规模数据的训练，避免 AI 的负面问题。高级AI会影响人类思考，可能对很对职业取代，可能对人类文明造成影响。负面影响，AI 可能造成欺骗和错误。
+
+AI 就类似互联网，是把双刃剑，可以让强者更强，让弱者更弱。从社会的发展看，不会造成现有打工人的工作减轻，而是造成更明显的差异化。普通人要熟练使用 AI 工具。
+
+#### AI 对职业的影响
+
+目前 AI 主要可以取代的职业：初级的脑力劳动者（初级程序员，翻译，会计，小说网文，PPT word 制作，漫画和短视频制作），部分体力劳动者（自动驾驶取代司机）。
+
+目前 AI 无法取代的职业：体力劳动者（运动员，建筑工人，需要身体素质和成本），高级的脑力劳动者（外科医生，常年经验）。
+
+
+### 大模型在产品中的应用
+#### 大模型接入办公场景
+
+微软作为大模型应用落地的先行者，所有传统应用或者系统，都将接入coplilot，让AI大模型成为系统中的真正的智能助手。
+
+国内腾讯元宝，字节豆包，也都在尝试将大模型接入办公场景。
+
+所以未来任何系统，基于大模型的 copilot 都将是必要的组成部分，everything with copilot。
+
+#### 大模型重塑软件开发
+
+基于大模型的低代码平台或者代码生成平台。
+
+**低代码平台：产品经理直接以对话形式，生成前后端代码。​**目前主要是针对前端开发，腾讯内部已经基于大模型构建了一款自然语言交互的低代码平台，目前已经基本具备了靠对话就能生成前后端代码，并且靠对话就能优化修改功能的能力，也就是说产品经理可以直接通过该平台生成可以直接上线的网站。
+
+**代码辅助开发平台：程序员使用AI辅助生成代码，​**github copilot 也可以以插件的形式集成到 vscode、Androidstudio、xcode中，未来Androidstudio、xcode应该会发布自己更强大，并且和开发工具融合更好的copilot。
+
+从此我们就能看到，大模型一方面在重塑我们的开发工具，另一方面也在重塑软件开发的工作方式。
+
+软件开发的核心工作内容也将**从关注代码的细节，转变成了如何将大功能拆分成更小粒度的功能（架构师）​**，从而可以方便交给大模型直接生成代码。
 
 
 ### 不同大模型的区别
@@ -1461,6 +1540,184 @@ Transformer架构：
 * 智能文件管理：在桌面操作系统的文件管理前端界面，AI可以根据文件的类型、内容、创建时间等多维度信息进行分类整理，还能通过对用户使用文件习惯的分析，预测用户可能需要查找的文件，将其在前端界面突出显示或者提供快捷访问方式，提高文件管理的便捷性和效率。
 
 
+### AI 概率模型
+AI 给出的答案，是推理的答案，是一个概率结果，不是准确的计算结果。
+
+可能同一个问题，给不同的 AI，或者多次给同一个 AI 回答的结果都不一样。
+
+实战经验：
+
+* 对于不精确的场景：使用AI并解决问题即可（例如一个网页可以有多种思路实现）
+
+* 对于精确的场景：AI 多重验证，总结出概率最高的结果
+
+
+### AIGC
+总结：AIGC: 生成式人工智能，包括AI绘画，AI 对话（chatGPT）
+
+AIGC指内容生成式人工智能，指的是一种AI的类型，包括图像，文本，音频等内容生成式AI。
+
+这里包括了目前比较火热的AI绘画以及基于大语言模型的AI对话。
+
+
+### 大模型是什么
+总结：大模型：和 charGPT 有关，就是很多参数的神经网络处理器。
+
+大模型主要是指大语言模型（LLM），但是大模型并不单单指LLM。
+
+首先我们要理解大模型的概念，我们首先对这个词拆分来看，大是什么意思？模型又指代什么？
+
+首先我们来理解下模型，所谓模型通俗的讲是一个基于神经网络构建好的一个处理器，它能够根据输入产生相应的预测或者输出内容。而这个模型中是有多层神经网络，每层神经网络有很多神经元，而每个神经元可以理解为一个函数y= F(x)，它可以通过调整参数来控制输出。
+
+所以在训练模型的时候，就是通过输入数据，并监督输出结果，来不断地调节每个神经元的参数，从而最终训练出输出结果与实际偏差最小的模型。
+
+我们常听到哪个公司训练了一个大模型具备600亿参数，或者千亿的参数，这个就是所谓的大，指代的是参数量上亿级别，而这些参数就是存储知识和信息的变量，参数越多，记住的知识越多，输出结果更准确。
+
+大模型特征：
+
+1、不稳定（答案不完全对，并不是到数据库中找到对应的答案）；
+
+2、不全面（保密训练集的内容不能获取）
+
+
+### 大模型的原理
+大语言模型是基于transfrmer架构，它是一种神经网络架构，是一个专门用于自然语言处理的编码-解码器架构，也是目前AIGC底层最核心的深度学习模型类型。
+
+核心能力就是将输入的单词以向量的形式传递给该神经网络，然后通过该网络的编码解码以及自注意力机制（self-attention），建立起每个单词之间联系的权重。
+
+宏观上讲，在基于该架构进行训练时，输入的每句话中的每个单词，都会和已经编码在模型中的单词进行相关性的计算，并把相关性又编码叠加在每个单词中。
+
+以下面的文本为例，一旦将以下文本喂给模型，那么前面这些词与it之间的相关性权重就会增加。
+
+The animal didn’t cross the street because it was too tired
+
+![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585132394.webp)
+
+![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585137663.webp)
+
+所以说大语言模型其实是一个概率模型，它只是基于你的输入预测你的输出。而并不是去数据库检索数据。包括“1+1=2”这样的数学问题也是通过投喂数据训练出来的，只是因为1+1接下来出现2的概率最大，所以大模型才会输出答案为2。
+
+上面讲到了大语言模型的核心架构和工作原理，而如果想要大模型学习到足够多的世界知识，就需要大量的数据训练，从而才能足够全能且回答的足够准确，而GPT 全称 Generative Pre-trained Transformer，就是通过大量数据预训练后的模型。GPT3的参数达到了1750亿，而在这已经预训练好的模型上只需要给少量的case就很容易学到这几个case的特征。
+
+参考：
+
+[https://mp.weixin.qq.com/s/160En7hlpfUzyno-gqx85A](https://mp.weixin.qq.com/s/160En7hlpfUzyno-gqx85A "https://mp.weixin.qq.com/s/160En7hlpfUzyno-gqx85A")
+
+[https://mp.weixin.qq.com/s/IR0flZGOyul9BHuDYPnljg](https://mp.weixin.qq.com/s/IR0flZGOyul9BHuDYPnljg "https://mp.weixin.qq.com/s/IR0flZGOyul9BHuDYPnljg")
+
+
+### 大模型的特征
+第一个特征就是幻觉，不稳定（创造性）。因为大模型是概率模型，只是预测回答。所以回答并非百分百正确，哪怕是模型不知道的问题，比如某个企业内部的信息，并没有投喂给他，它也会按照概率去编造一个信息出来。所以大模型的答案不能百分百全信，但是这也算是大模型的一个优势所在，因此对于创造性的任务，大模型就很擅长，比如写小说。
+
+第二个特征知识欠缺。众所周知，chatgpt的数据截止2021年9月。那在这之后的信息它无从知晓。所以预训练模型所掌握的知识就只能停留在某一刻为止。同样的，一些非公开数据，比如企业内部数据，应用内数据等，也是无法被gpt所知晓的。
+
+
+### 思维链
+任何数学问题也只不过是类似人类的快思考，直接记答案。
+
+大模型并不擅长解决逻辑问题，如果想要大模型更精确的解决逻辑问题，那就可以让大模型解释其推理过程，从而实现更加精准的答案。
+
+可以通过 few shot 的方式引导大模型进行推理（一步一步提示）。
+
+还可以通过提示语就是“请一步步思考下”，这也能让大模型展示自己的推理过程，并输出更精确的答案。
+
+​
+
+
+### token 上限是什么
+在chatgpt 里面 prompts 有效，但是一旦对话过长，prompts会失效，而且gpt会忘了之前在聊啥。
+
+主要是因为chatgpt在请求时有token上限限制，在处理对话的时候，只是将一定数量的上下文对话传递给了模型，所以随着对话越来越长，前面的对话内容就会丢失。
+
+技术层面：每次输入内容后，需要把整个对话列表（例如之前的100条对话）都传递给大模型进行运算。如果列表过多过长，大模型超出 token 上线，就会出现丢失内容（和人类思维类似，如果聊天内容很多，就会忘记了开始说过的话了）。
+
+参考：[https://learnprompting.org/zh-Hans/docs/basics/instructions](https://learnprompting.org/zh-Hans/docs/basics/instructions "https://learnprompting.org/zh-Hans/docs/basics/instructions")
+
+
+### Embedding
+前面使用大模型的技巧，主要还是基于大模型已有知识能力来解决问题。但是我们也介绍了大模型的缺陷之一就是知识欠缺，企业内部的信息库，个人的信息库，大模型无从知晓。如果想要大模型学习到这部分的知识，用api把所有文本投喂给大模型不太可能，因为gpt的接口调用有token上限限制。继续投喂这些数据进行训练也不太可能，性价比太低。
+
+如果要解决这个问题，Embedding 就是最佳的解决方案，所谓Embedding 简单理解就是把文本向量化，通过向量化，把文本转换成具备了数学意义的数据，我们也就能利用向量数据来计算文本之间的相关性。
+
+通常本地知识库构建的架构和流程如下：
+
+1. 将本地知识库文本进行整理分块，并进行向量化，向量数据存储在向量数据库。
+
+2. 用户输入的文本向量化，并在向量数据库进行相似性匹配，最终匹配出topN的文本块。
+
+3. 采用合适的prompts加上上一步搜索到的文本一并输入给大模型。
+
+4. 利用大模型的语义理解能力和知识问答的能力，生成并总结答案。
+
+利用Embedding的能力，我们就可以构建基于大模型的本地知识库检索。
+
+![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585876799.webp)
+
+
+### Fine tune
+提示工程中介绍了 few-shot 的方式指导大模型的输出。这是一种在大模型之上约束大模型输出的方式之一，但是如果我们对于模型的要求足够垂直，**就是要符合特定场景的要求进行回答**，比如大模型就是一个翻译模型，我输入中文，它只输出英文。
+
+那我们就可以用 fine\_tune 微调。所谓微调，就是以预训练大模型作为基座，再投喂一批少量特定的数据集，就能微调大模型，从而让大模型能以我们提供的数据集的规则或内容回答问题。
+
+比如以下就是chatgpt微调接口要求的json数据集，通过投喂这些少量的结构化数据，就能微调出我们自己需要的大模型。
+
+​
+
+大模型微调有哪些好处呢？openai官方文档也罗列了以下几点：
+
+![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585921353.webp)
+
+
+### ReAct
+ReAct，就是 Reason+Action，翻译过来就是推理+行动。利用COT推理简单逻辑问题基本是没有问题，但是面对复杂的需要依赖更多事实\*信息的问题，就需要尝试在推理过程中，去获取更多帮助推理的知识和事实信息。\*
+
+langchain在执行一个任务的时候如果把它传给大模型的第一个prompts打印出来，就会发现它在提示中提供了几个上面这种框架的样本，这个框架基于thought-action-observe一步一步去得到最终的答案，这其实类似人类的思考方式，我们在解决一个问题的时候，如果脑子中没有现成的答案，那就需要先去查资料，然后根据查的资料再去思考整合，然后循环这个过程，最终得到推理出来的答案。而这个提示样本框架也是一样，action就是执行调用对应的工具，seach就是去调用搜索API，并将搜索结果显示为observe，然后循环这三步，直到查询到最终结果。
+
+![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585979947.webp)
+
+而就在6月初，openai提供的api更新了function\_call，它就能够指定模型在对应的场景去调用我们自己定义的方法或者api。从而也就可以实现chatgpt +plugins的效果。
+
+
+### Agent 是什么
+Agent智能体的发展
+
+智能体：广义上是指任何系统中能够思考并与环境交互，独立且具有相互合作功能的实体。智能体不仅仅是指人，蚂蚁，蜜蜂这些，同样可以指代AI系统，而目前基于AI大模型涌现了一些智能体雏形：
+
+* 个体型智能体，比如 auto-GPT。
+
+* 群体性智能体，比如 Generative Agent。
+
+个体型智能体：就是能够利用感知、决策、行动这几个基本步骤来解决复杂问题，理论上只要给它一个目标，Agent就能够自动完成它。AutoGPT是一款拥有强大工具集的强大模型，并具有从错误中学习并不断纠正的能力。它采用推理、计划、批判、规划、执行的无限循环逻辑去执行任务最终以达到目标。
+
+社会型Agent（群体型Agent）：由不同的社会角色Agent构成，每个角色都专注于一个“职业”，使整体社会成为一个高效的动态稳定体。Generative Agents项目的灵感来自《TheSims 模拟人生》系列游戏, 25个拥有身份设定、模拟人类行为的Agents组成，构建了一个虚拟小镇。每个Agent在感知(Perceiving)和行动(Acting)之外，还有扩展的记忆(Memory)、规划(Planning)和反思(Reflection)三个子模块。 通过结合大语言模型与拟人的功能架构，使它们能够自由活动，真正模拟小镇的运作。
+
+
+### Agent架构
+一个基于AI大模型的Agent架构应该包括以下部分：
+
+* 规划（Planning）
+
+子目标与分解（Subgoal and decomposition）：Agent将大型任务分解为更小、更易于 处理的子目标，从而实现对复杂任务的高效处理。
+
+* 反思与完善（Reflection and refinement）：
+
+代理可以对过去的行动进行自我批评和自我反思，从错误中吸取教训，并为未来的步骤进行改进，从而提高最终结果的质量。
+
+* 记忆（Memory）
+
+短期记忆（Short-term memory）：所有上下文学习都是利用模型的短期记忆来学习。
+
+长期记忆（Long-term memory）：为Agent提供了在长时间保留和回忆信息的能力， 通常通过利用外部向量存储和快速检索来实现。
+
+* 工具的使用（Tool use）
+
+Agent学会调用外部API获取模型权重中缺失的额外信息（通常在预训练后很难更 改），包括当前信息、代码执行能力、访问专有信息源等。
+
+![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769586324652.webp)
+
+基于Agent概念和框架，AI大模型未来的发展大概率会出现各种智能Agent以及基于Agent集群的大型Agent。基于这些Agent，系统可以实现自动化，自适应性。而未来的应用及系统架构也可能逐渐发展成AI\_based system,也就是基于Agent展开的应用架构，这或许会颠覆现有的传统应用架构。
+
+
 ### 提示词注意点
 提示词注意事项
 
@@ -1477,6 +1734,8 @@ Transformer架构：
 把选中部分中的 msgid 后面的英文字符串，翻译成希腊语，填入 msgstr "" 中，其他的不要修改，空行不要删除，其他代码不要修改。
 
 按照实际测试，每次选中翻译的部分在100行左右（20句）太多上下文可能造成网络错误等问题，其他用户测试模型不超过1000句上下文。具体还取决于使用什么工具和模型。
+
+进阶：先使用脚本去除无关内容，这样可以减少上下文数量和干扰信息，这样就能支持更多的翻译字符串。
 
 
 ### 项目预设-集成第三方库
@@ -1615,5 +1874,113 @@ Transformer架构：
 \- 自动同步多个组件间的状态更新
 
 \- 示例用法：const \[theme, setTheme] = useLocalStorage('theme', 'light')
+
+
+### 提示词的要点
+角色：希望模型扮演的角色（你是一个 python 程序员，我是一个 C 程序员）
+
+指令：指定您希望语言模型执行的任务或指令（帮我用 python 写一段代码，功能是贪吃蛇）
+
+上下文：包含相关信息或额外上下文，以帮助语言模型更好地响应。（例如很多预设的提示词，或者选中的代码，或者图片）
+
+输入数据：您输入的内容或问题。（指定指令的格式）
+
+输出指示：指定您需要的输出类型或格式。（代码，图片，文本，视频等，字数长度格式等）
+
+
+### AIGC 十大必看
+B站 AIGC 系列介绍，主要是诙谐幽默的应用
+
+[https://www.bilibili.com/medialist/detail/ml2246137165?listgroupid=210003\&spm\_id\_from=333.1272.0.0](https://www.bilibili.com/medialist/detail/ml2246137165?listgroupid=210003\&spm_id_from=333.1272.0.0 "https://www.bilibili.com/medialist/detail/ml2246137165?listgroupid=210003\&spm_id_from=333.1272.0.0")
+
+
+### 一张图AI绘画100次，还看的出来是谁吗
+这个视频介绍了，让 AI 生成1张图片，经过100次迭代后，最后就变成了大众脸
+
+[https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+AI 根据用户的反馈确定回答答案的正确与否，那么最后审美就趋近于大众脸（开源公共的 AI）
+
+
+### ChatGPT | 牛X在哪？谁会失业？
+[https://www.bilibili.com/video/BV1rj41137cr/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1rj41137cr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1rj41137cr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+图灵测试：判断对面是一个人还是机器的测试
+
+早期个人助手的逻辑：模式匹配，就是 if-else 的处理模式，根据用户输入内容，直接匹配，给出答案。
+
+机器学习：
+
+
+### 中国的ChatGPT
+[https://www.bilibili.com/video/BV1814y1F7Rk/](https://www.bilibili.com/video/BV1814y1F7Rk/ "https://www.bilibili.com/video/BV1814y1F7Rk/")
+
+消息面：微软已经解散元宇宙团队，全面发展 ChatGPT 大模型团队，反映出大企业 AI 研究方向的变化。
+
+传统的互联网是搜索引擎为主导，不同行业有不同的门户网站，搜索引擎检索并做索引，人工输入内容直接搜索网页。
+
+新的 AI 大模型加持下，直接输入问题，返回答案，那么就不需要那么多网站和应用。
+
+或许，未来发展到后期，就不需要这么多网站，而是直接大家在大模型中输入自己的信息，然后大模型进行检索学习，那么产品推广的模式也会发生翻天覆地的变化，前端开发的模式也逐渐变化，因为大家都不需要，也不会直接访问那么多产品的网站了，就像智能手机取代了电话+收音机+手电筒+地图，微信取代了打卡+发红包+短信等等。
+
+​
+
+
+### ChatGPT整合进Office
+微软把 ChatGPT 内置到了 Office，可以根据用户指令，自动生成 Word，生成 PPT，然后对某些细节进行微调，同时也支持会议总结等智能办公体系。
+
+[https://www.bilibili.com/video/BV14o4y1z7oq/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV14o4y1z7oq/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV14o4y1z7oq/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+类似智能手机取代传统的钟表，照相机等功能，AI 助手可以取代秘书助理等多个辅助工作。
+
+
+### AI绘画又进化了
+AI 可以完成多种风格的绘画创作，包括进一步的视频
+
+[https://www.bilibili.com/video/BV1X24y1n77u/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1X24y1n77u/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1X24y1n77u/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+
+### AI绘画-启动/修复/更新/模型下载管理
+这里介绍了一个 AI 绘画的工具（Windows 版本的），2026年看看能否搞一个最新版本的工具
+
+[https://www.bilibili.com/video/BV1ne4y1V7QU/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1ne4y1V7QU/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1ne4y1V7QU/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+
+### 让ChatGPT带我练7天
+[https://www.bilibili.com/video/BV1wT411e7Bx/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1wT411e7Bx/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1wT411e7Bx/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+一个健身博主使用 ChatGPT 给自己规划的健身训练计划，看 AI 能否替代健身教练。
+
+AI 根据已有的很多答案，给出一个概率最高的答案，不一定适合每一个人（例如让普通人锻炼蝶泳等高难度动作）
+
+解决方案：给 AI 预设（你是一个健身教练），给自己预设（我是一个0基础的普通人，年龄，身体素质），然后不断调整细节。AI 可以很好的完成 90% 的重复工作，剩下的 10% 需要专业人员进行微调，短期内无法取代 100% 满足的健身教练，也很难取代健身之外的各种情绪价值。
+
+
+### 让AI来画评论区？完成的瞬间我惊呆了
+[https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+AI 绘画的结果，取决于提示词的准确性（AI 产品经理课程中的描述）
+
+需要写好提示词，然后才能让 AI 充分学习并处理任务（当然也需要一个更高级的模型）
+
+对于热门的关键词比较好画，对于冷门的领域和词汇，AI 发挥的不是很稳定。
+
+
+### AIGC 快速上手
+B站博主娱乐系列
+
+[https://www.bilibili.com/medialist/detail/ml2281122165?listgroupid=210003\&spm\_id\_from=333.1272.0.0](https://www.bilibili.com/medialist/detail/ml2281122165?listgroupid=210003\&spm_id_from=333.1272.0.0 "https://www.bilibili.com/medialist/detail/ml2281122165?listgroupid=210003\&spm_id_from=333.1272.0.0")
+
+
+### GPT4为何会颠覆现有工作流
+50分钟长视频
+
+[https://www.bilibili.com/video/BV1MY4y1R7EN/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1MY4y1R7EN/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1MY4y1R7EN/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+
+### AI 绘画教程
+[https://www.bilibili.com/read/cv21939146/?spm\_id\_from=333.788.comment.all.click\&opus\_fallback=1](https://www.bilibili.com/read/cv21939146/?spm_id_from=333.788.comment.all.click\&opus_fallback=1 "https://www.bilibili.com/read/cv21939146/?spm_id_from=333.788.comment.all.click\&opus_fallback=1")
+
+ComfyUI V3
 
 

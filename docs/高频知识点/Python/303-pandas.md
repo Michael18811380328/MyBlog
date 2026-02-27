@@ -2,6 +2,8 @@
 
 Python 统计库，pandas 是一个快速、强大、灵活且易于使用的开源数据分析和操作工具。
 
+Pandas 是一个强大的数据分析库，可以进行数据的清洗、处理、分析和可视化。
+
 [https://pandas.pydata.org/getting\_started.html](https://pandas.pydata.org/getting_started.html "https://pandas.pydata.org/getting_started.html")
 
 问题 1：安装 pandas 时出现环境错误

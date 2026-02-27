@@ -1,6 +1,6 @@
 # JS笔记 
 
- 2026-1-12
+ 2026-2-27
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -2290,5 +2290,54 @@ substring(start, end)
 slice(start, end)
 
 如果替换，直接把 substr() 改成 substring(start, start + length) 即可，然后需要测试
+
+   
+## 0905 new AbortController() 是什么意思
+
+
+`new AbortController()` 是 JavaScript 中用于**取消异步操作**的一个核心 API
+
+它是 ES2017 引入的标准特性，最常见的场景就是取消网络请求（比如 fetch）
+
+```javascript
+// 1. 创建 AbortController 实例
+const controller = new AbortController();
+
+// 2. 获取控制器的信号（用于绑定异步操作）
+const signal = controller.signal;
+
+// 3. 发起带取消信号的网络请求
+fetch('https://jsonplaceholder.typicode.com/todos/1', { signal })
+  .then(response => response.json())
+  .then(data => console.log('请求成功:', data))
+  .catch(error => {
+    // 4. 捕获取消请求的异常（关键：区分「取消」和「其他错误」）
+    if (error.name === 'AbortError') {
+      console.log('请求被主动取消了');
+    } else {
+      console.log('请求出错:', error);
+    }
+  });
+
+// 5. 模拟「500毫秒后取消请求」（比如用户点击了「取消」按钮）
+setTimeout(() => {
+  controller.abort(); // 调用 abort 方法，触发取消操作
+}, 500);
+```
+
+常用 API
+
+```javascript
+const controller = new AbortController();
+
+controller.signal
+// 一个 AbortSignal 对象，作为「信号载体」传递给异步操作，异步操作会监听这个信号的状态。
+
+controller.abort()
+// 调用后会将 signal 的状态标记为「已中止」，并触发绑定的异步操作取消。
+// 取消后会抛出 AbortError 异常，需要在 catch 中判断并处理（避免和普通错误混淆）。
+```
+
+​
 
   

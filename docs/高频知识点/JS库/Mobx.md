@@ -12,7 +12,9 @@
 
 3 redux 是不可变状态 immutable，mobx 是可变状态管理
 
-主要的逻辑都是：store 设置初始值，首次渲染 render 组件。用户触发 event，函数调用 actions，触发 store 的变化，然后自动更新 View 层。
+主要的逻辑都是：store 设置初始值，首次渲染 render 组件。
+
+用户触发 event，函数调用 actions，触发 store 的变化，然后自动更新 View 层。
 
 <https://www.zhihu.com/question/277530559>
 

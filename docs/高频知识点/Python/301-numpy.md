@@ -2,7 +2,11 @@
 
 [https://numpy.org/](https://numpy.org/ "https://numpy.org/")
 
-NumPy 是使用 Python 进行科学计算的基础包。 它包含除其他外
+NumPy 是使用 Python 进行科学计算的基础包。&#x20;
+
+NumPy 提供了多维数组、矩阵计算等高效的科学计算功能
+
+它包含除其他外
 
 * 强大的 N 维数组对象
 

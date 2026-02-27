@@ -1,6 +1,6 @@
 # Linux笔记 
 
- 2026-1-12
+ 2026-2-27
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -132,6 +132,36 @@ tree -N -I "*.svg|*.png|*.jpg|*.gif|*.xmind" > tree-res.md
 ```
 
 
+
+   
+## 0907 docker 如何查看不同容器的 IP
+
+
+docker 不同容器类似一个虚拟机，对应具体的 IP
+
+1、docker ps 找到容器的 ID
+
+2、docker inspect ID，获取容器的信息，找到下面的部分
+
+这三个字段都属于 **Docker 内网（默认是 bridge 网桥网络）​** 的配置，不是宿主机的公网 / 内网配置，仅在 Docker 宿主机和同属该网络的容器之间生效。
+
+```text
+"NetworkSettings": {
+  "Networks": {
+    "bridge": {
+      "IPAddress": "172.17.0.2",  # 容器的私有 IP 地址，其他同网络的容器可以通过这个 IP 直接访问该容器
+      "Gateway": "172.17.0.1",
+      "Subnet": "172.17.0.0/16"
+    }
+  }
+}
+```
+
+`IPAddress` 是容器的内网唯一标识，用于同网络内的直接通信——其他容器或者宿主机，可以访问这个
+
+`Gateway` 是容器的内网出口，负责转发容器与外部的网络流量
+
+`Subnet` 是内网地址池，限定 IP 分配范围并实现网络隔离
 
    
 ## 0802 docker 概念和作用
@@ -314,7 +344,7 @@ done
 
 
    
-## 0876 linux 常用命令字典
+## 0876 linux 常用命令
 
 
 Linux 后台开发常用命令

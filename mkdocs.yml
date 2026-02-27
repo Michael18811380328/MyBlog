@@ -11,8 +11,6 @@ theme:
     - bash
     - javascript
     - python
-  palette:
-    primary: "deep orange"
   features:
     - navigation.tabs
     - navigation.sections
@@ -113,7 +111,7 @@ nav:
         - '计算机资格考试-笔记': '计算机学习笔记-归档/计算机资格考试-笔记.md'
         - '软件工程-笔记': '计算机学习笔记-归档/软件工程-笔记.md'
 
-    - 高频知识点/JS库:
+    - JS库:
         - '@antv_g2': '高频知识点/JS库/@antv_g2.md'
         - '@babel_cli': '高频知识点/JS库/@babel_cli.md'
         - '@babel_core': '高频知识点/JS库/@babel_core.md'
@@ -139,7 +137,6 @@ nav:
         - 'Ant Design': '高频知识点/JS库/Ant Design.md'
         - 'Fusion Design': '高频知识点/JS库/Fusion Design.md'
         - 'GreaseMonkey': '高频知识点/JS库/GreaseMonkey.md'
-        - 'JavaScript 生态系统': '高频知识点/JS库/JavaScript 生态系统.md'
         - 'MD5': '高频知识点/JS库/MD5.md'
         - 'Material-UI': '高频知识点/JS库/Material-UI.md'
         - 'Mobx': '高频知识点/JS库/Mobx.md'
@@ -206,7 +203,6 @@ nav:
         - 'file-saver': '高频知识点/JS库/file-saver.md'
         - 'form-data': '高频知识点/JS库/form-data.md'
         - 'fs-extra': '高频知识点/JS库/fs-extra.md'
-        - 'g3 和 echarts 的区别': '高频知识点/JS库/g3 和 echarts 的区别.md'
         - 'glamor': '高频知识点/JS库/glamor.md'
         - 'grunt': '高频知识点/JS库/grunt.md'
         - 'gulp': '高频知识点/JS库/gulp.md'
@@ -238,7 +234,6 @@ nav:
         - 'less-loader': '高频知识点/JS库/less-loader.md'
         - 'less': '高频知识点/JS库/less.md'
         - 'lodash': '高频知识点/JS库/lodash.md'
-        - 'luckysheet': '高频知识点/JS库/luckysheet.md'
         - 'merge': '高频知识点/JS库/merge.md'
         - 'mini-css-extract-plugin': '高频知识点/JS库/mini-css-extract-plugin.md'
         - 'mockjs 模拟数据': '高频知识点/JS库/mockjs 模拟数据.md'
@@ -303,10 +298,8 @@ nav:
         - 'whatwg-fetch': '高频知识点/JS库/whatwg-fetch.md'
         - 'workbox-webpack-plugin': '高频知识点/JS库/workbox-webpack-plugin.md'
         - 'zepto': '高频知识点/JS库/zepto.md'
-        - '可视化的工具和库': '高频知识点/JS库/可视化的工具和库.md'
-        - '绘图库 echarts': '高频知识点/JS库/绘图库 echarts.md'
 
-    - 高频知识点/Python:
+    - Python:
         - '00-readme': '高频知识点/Python/00-readme.md'
         - '01-循环': '高频知识点/Python/01-循环.md'
         - '02-String-API': '高频知识点/Python/02-String-API.md'
@@ -332,22 +325,18 @@ nav:
         - '111-docker-compose': '高频知识点/Python/111-docker-compose.md'
         - '12-difflib': '高频知识点/Python/12-difflib.md'
         - '13-Python 版本管理': '高频知识点/Python/13-Python 版本管理.md'
-        - '14-unittest': '高频知识点/Python/14-unittest.md'
         - '15-pathlib': '高频知识点/Python/15-pathlib.md'
         - '16-logging': '高频知识点/Python/16-logging.md'
         - '17-datetime': '高频知识点/Python/17-datetime.md'
         - '18-Python3 多线程': '高频知识点/Python/18-Python3 多线程.md'
         - '19-gevent': '高频知识点/Python/19-gevent.md'
         - '20-greenlet': '高频知识点/Python/20-greenlet.md'
-        - '201-requests': '高频知识点/Python/201-requests.md'
         - '202-trafilatura': '高频知识点/Python/202-trafilatura.md'
-        - '203-nltk': '高频知识点/Python/203-nltk.md'
         - '204-soupsieve': '高频知识点/Python/204-soupsieve.md'
         - '205-pyjwt': '高频知识点/Python/205-pyjwt.md'
         - '206-selenium': '高频知识点/Python/206-selenium.md'
         - '207-networkx': '高频知识点/Python/207-networkx.md'
         - '208-yarl': '高频知识点/Python/208-yarl.md'
-        - '209-Scrapy': '高频知识点/Python/209-Scrapy.md'
         - '21-multiprocessing': '高频知识点/Python/21-multiprocessing.md'
         - '210-websocket-client': '高频知识点/Python/210-websocket-client.md'
         - '211-SimpleHTTPServer': '高频知识点/Python/211-SimpleHTTPServer.md'
@@ -363,7 +352,6 @@ nav:
         - '307-PyMySQL': '高频知识点/Python/307-PyMySQL.md'
         - '308-sqlalchemy': '高频知识点/Python/308-sqlalchemy.md'
         - '309-urllib3': '高频知识点/Python/309-urllib3.md'
-        - '310-Beautiful Soup': '高频知识点/Python/310-Beautiful Soup.md'
         - '311-拟合和过拟合': '高频知识点/Python/311-拟合和过拟合.md'
         - '312-Pillow': '高频知识点/Python/312-Pillow.md'
         - '313-pytesseract': '高频知识点/Python/313-pytesseract.md'
@@ -407,7 +395,7 @@ nav:
         - '706-微信机器人': '高频知识点/Python/706-微信机器人.md'
         - '707-常见问题': '高频知识点/Python/707-常见问题.md'
 
-    - 高频知识点/React:
+    - React:
         - '@excalidraw_excalidraw': '高频知识点/React/@excalidraw_excalidraw.md'
         - '@testing-library_react': '高频知识点/React/@testing-library_react.md'
         - 'Ant Design': '高频知识点/React/Ant Design.md'
@@ -444,7 +432,7 @@ nav:
         - 'valtio': '高频知识点/React/valtio.md'
         - 'zustand': '高频知识点/React/zustand.md'
 
-    - 高频知识点/Vue:
+    - Vue:
         - 'YesPlayMusic': '高频知识点/Vue/YesPlayMusic.md'
         - 'ant-design-vue': '高频知识点/Vue/ant-design-vue.md'
         - 'arco-design-vue': '高频知识点/Vue/arco-design-vue.md'
@@ -458,7 +446,6 @@ nav:
         - 'pure-admin_vue-pure-admin': '高频知识点/Vue/pure-admin_vue-pure-admin.md'
         - 'quasar': '高频知识点/Vue/quasar.md'
         - 'streamsaver': '高频知识点/Vue/streamsaver.md'
-        - 'thingsboard-ui-vue3': '高频知识点/Vue/thingsboard-ui-vue3.md'
         - 'tiny-vue': '高频知识点/Vue/tiny-vue.md'
         - 'tui-image-editor': '高频知识点/Vue/tui-image-editor.md'
         - 'v-viewer': '高频知识点/Vue/v-viewer.md'
@@ -479,7 +466,7 @@ nav:
         - 'wangeditor': '高频知识点/Vue/wangeditor.md'
         - 'zyronon_douyin': '高频知识点/Vue/zyronon_douyin.md'
 
-    - 高频知识点/计算机知识点:
+    - 计算机知识点:
         - 'Android-笔记': '高频知识点/计算机知识点/Android-笔记.md'
         - 'BOM-笔记': '高频知识点/计算机知识点/BOM-笔记.md'
         - 'CSS-笔记': '高频知识点/计算机知识点/CSS-笔记.md'
@@ -504,8 +491,8 @@ nav:
         - '软件工程-笔记': '高频知识点/计算机知识点/软件工程-笔记.md'
         - '运营-笔记': '高频知识点/计算机知识点/运营-笔记.md'
 
-    - 高频知识点/项目总结:
+    - 项目总结:
         - '项目总结': '高频知识点/项目总结/项目总结.md'
 
-    - 高频知识点/高频单词:
+    - 高频单词:
         - '高频单词表-笔记': '高频知识点/高频单词/高频单词表-笔记.md'

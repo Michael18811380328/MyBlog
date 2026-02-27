@@ -1,19 +1,11 @@
 
   # 小白debug运维
   ### 小白 debug
-这里收录一些没有系统知识点的 B 站视频笔记和总结，可能就是前端杂谈，或者服务器杂谈，在于扩展视野
-
-​
-
-偏向服务器运维，和 AI 关联不大
+小白debug：偏向服务器运维
 
 [https://space.bilibili.com/302188068/lists?sid=4617929\&spm\_id\_from=333.788.0.0](https://space.bilibili.com/302188068/lists?sid=4617929\&spm_id_from=333.788.0.0 "https://space.bilibili.com/302188068/lists?sid=4617929\&spm_id_from=333.788.0.0")
 
 ​
-
-这个可以看一下，和 AI 有关
-
-[https://www.bilibili.com/video/BV1QEJ6zcEpe?spm\_id\_from=333.788.videopod.sections\&vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1QEJ6zcEpe?spm_id_from=333.788.videopod.sections\&vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1QEJ6zcEpe?spm_id_from=333.788.videopod.sections\&vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
 
 
 ### 00 redis 简介

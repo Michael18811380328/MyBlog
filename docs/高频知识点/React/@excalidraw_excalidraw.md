@@ -1,7 +1,5 @@
 # @excalidraw/excalidraw
 
-这是 react 的库，不是 VUE 的库
-
 下载量 82,496
 
 星标 80K

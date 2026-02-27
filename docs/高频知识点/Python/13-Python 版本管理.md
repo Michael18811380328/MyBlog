@@ -32,7 +32,7 @@ ls | grep python
 
 个人开发，优先使用最新的稳定版，自己开发建议用虚拟环境，顺便切换环境
 
-使用 conda 管理 python 版本环境，可以使用anaconda或者miniconda工具。
+使用 conda 管理 python 版本环境，可以使用 anaconda 或者 miniconda 工具。
 
 安装好了工具之后查看：
 
@@ -46,7 +46,7 @@ conda -V
 conda create -n deeplearning python=3.6    
 ```
 
-创建一个名称为deeplearning的虚拟环境，环境中python版本=3.6
+创建一个名称为 deeplearning 的虚拟环境，环境中python版本=3.6
 
 切换虚拟环境：
 
