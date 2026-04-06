@@ -1,6 +1,6 @@
 # CSS笔记 
 
- 2026-2-27
+ 2026-4-1
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -582,24 +582,22 @@ stroke-width=1 也不是有效的 CSS 语法，第一个需要改成 stroke-widt
 * **易于控制**：使用 `rem` 可以避免 `em` 在嵌套元素中尺寸累积的问题，使布局更加易于控制。
 
    
-## 0768 tailwind 怎么使用
+## 0768 tailwind
 
 
-tailwind 顺风，是一个 UI 框架，类似 reactstrap 部分 css 功能
+tailwind (顺风) 是一个 UI 框架，类似 reactstrap 部分 css 功能
 
-！！！注意：下面，2025年最新版本是 4.1.11 版本
+！！！注意：下面，2026年最新版本是 4.2 版本，看文档是否是最新版
 
-英文文档：[https://tailwindcss.com/](https://tailwindcss.com/ "https://tailwindcss.com/") 针对不同框架（vite 或者 CDN 提供了不同的安装和编译方式）
+英文文档(V4.2)：[https://tailwindcss.com/](https://tailwindcss.com/ "https://tailwindcss.com/") 针对不同框架（vite 或者 CDN 提供了不同的安装和编译方式）
 
-中文链接（教程3版本）：[https://www.tailwindcss.cn/docs/installation](https://www.tailwindcss.cn/docs/installation "https://www.tailwindcss.cn/docs/installation")
+中文链接（v3.4.17）：[https://www.tailwindcss.cn/docs/installation](https://www.tailwindcss.cn/docs/installation "https://www.tailwindcss.cn/docs/installation")
 
 特点：框架内部预定义了一套 css 类名，程序员可以使用类名操作样式，不需要复杂的组件层级
 
-优点：简单易操作，不需要 webpack 预编译预定义样式，基本的样式就足够美观；
+优点：简单易操作，不需要 webpack 预编译预定义样式，基本的样式就足够美观；使用 AI 可以很好的写样式，可以快速简介的完成 HTML 的编辑。
 
-缺点：需要记住具体样式对应的类名；css 简洁了，HTML 中的类名就很长；适合通用样式，不适合具体细节样式（例如设置5px这种）使用 AI 可以很好的写样式
-
-​
+缺点：需要记住具体样式对应的类名；css 简洁了，HTML 中的类名就很长；适合通用样式，不适合具体特殊样式（例如5px）。
 
    
 ## 0247 如何实现文本超出显示省略号
@@ -627,7 +625,7 @@ white-space: nowrap; 段落不换行，一行展示；
 
 
    
-## 0250 grid 中 gap 怎么使用
+## 0250 grid 中 gap 是什么
 
 
 gap属性是用来设置网格行与列之间的间隙，该属性是 row-gap() 和 column-gap 的简写形式。

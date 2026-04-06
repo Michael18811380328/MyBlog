@@ -1,6 +1,5 @@
-
-  # Python全栈开发
-  ### 课程介绍
+# Python开发
+### 课程介绍
 [https://www.bilibili.com/video/BV1wD4y1o7AS/](https://www.bilibili.com/video/BV1wD4y1o7AS/ "https://www.bilibili.com/video/BV1wD4y1o7AS/")
 
 本课程内容基础，老师讲的比较慢

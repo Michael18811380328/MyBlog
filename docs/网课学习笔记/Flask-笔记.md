@@ -1,6 +1,5 @@
-
-  # Flask
-  ### 课程介绍
+# Flask
+### 课程介绍
 网易云课堂视频课程：2024 年新的课程链接：<https://study.163.com/course/courseMain.htm?courseId=1004091002>
 
 学习目标：熟悉 python 环境搭建和基本语法，了解 flask 的设计原理，可以做一个简单项目；可以对接一个前后端项目。

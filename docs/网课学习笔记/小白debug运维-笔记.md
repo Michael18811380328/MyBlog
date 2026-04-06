@@ -1,6 +1,5 @@
-
-  # 小白debug运维
-  ### 小白 debug
+# 小白debug运维
+### 小白 debug
 小白debug：偏向服务器运维
 
 [https://space.bilibili.com/302188068/lists?sid=4617929\&spm\_id\_from=333.788.0.0](https://space.bilibili.com/302188068/lists?sid=4617929\&spm_id_from=333.788.0.0 "https://space.bilibili.com/302188068/lists?sid=4617929\&spm_id_from=333.788.0.0")

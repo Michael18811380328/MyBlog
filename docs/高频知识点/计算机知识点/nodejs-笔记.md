@@ -1,6 +1,6 @@
 # nodejs笔记 
 
- 2026-2-27
+ 2026-4-1
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -511,15 +511,20 @@ workb();
 ## 0638 node-log4js
 
 
-nodeJS 日志工具
+log4js是Node.js的日志库，提供比console.log更丰富的功能，支持日志级别、多输出目标和自定义格式。
 
 [https://www.npmjs.com/package/log4js](https://www.npmjs.com/package/log4js "https://www.npmjs.com/package/log4js")
+
+```text
+npm install log4js
+```
 
 周下载量 400万，常用，可以创建不同级别的日志
 
 ```javascript
 const log4js = require("log4js");
 
+// 配置文件
 log4js.configure({
   appenders: { cheese: { type: "file", filename: "cheese.log" } },
   categories: { default: { appenders: ["cheese"], level: "error" } },
@@ -527,12 +532,48 @@ log4js.configure({
 
 const logger = log4js.getLogger("cheese");
 
+logger.debug('调试信息');
+logger.info('普通信息');
+logger.warn('警告信息');
+logger.error('错误信息');
+
 logger.trace("Entering cheese testing");
 logger.debug("Got cheese.");
 logger.info("Cheese is Comté.");
 logger.warn("Cheese is quite smelly.");
 logger.error("Cheese is too ripe!");
 logger.fatal("Cheese was breeding ground for listeria.");
+```
+
+文件输出设置
+
+```javascript
+log4js.configure({
+  appenders: {
+    file: { type: 'file', filename: 'logs/app.log' }
+  },
+  categories: {
+    default: { appenders: ['file'], level: 'info' }
+  }
+});
+```
+
+日期滚动文件配置
+
+```javascript
+log4js.configure({
+  appenders: {
+    dateFile: {
+      type: 'dateFile',
+      filename: 'logs/app',
+      pattern: 'yyyy-MM-dd.log',
+      alwaysIncludePattern: true
+    }
+  },
+  categories: {
+    default: { appenders: ['dateFile'], level: 'info' }
+  }
+});
 ```
 
 ​
@@ -603,16 +644,38 @@ await client.disconnect();
 ## 0654 nodemon
 
 
-nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.&#x20;
+官网链接：
 
-当文件变化后，会自动重启 node 应用。
+<https://nodemon.io/>
 
-<https://www.npmjs.com/package/nodemon>
+[https://www.npmjs.com/package/nodemon](https://www.npmjs.com/package/nodemon "https://www.npmjs.com/package/nodemon")
+
+Nodemon 会监测代码的变动并热启动服务器，适合于 node 开发环境，可以取代传统的 node。
+
+Nodemon 是一个实用工具，它会监测源文件的任何更改并自动重启服务器。非常适合开发环境使用。可以通过 \[npm]\(<https://npmjs.org/package/nodemon>) 进行安装。
+
+只需使用 \`nodemon\` 代替 \`node\` 来运行您的代码，现在当您的代码发生更改时，进程将自动重启。请先获取 nodejs 然后在终端中运行：
 
 ```text
+npm install -g nodemon
+
 nodemon ./server.js localhost 8080
 ```
 
-​
+功能特性
+
+* 自动重启应用程序
+
+* 检测默认文件扩展名进行监测
+
+* 默认支持 node 和 coffeescript，但也可以轻松运行任何可执行文件（如 python、make 等）
+
+* 忽略特定文件或目录
+
+* 监测特定目录
+
+* 适用于服务器应用程序、一次性运行工具和 REPL
+
+* 可在 node 应用中作为模块引入使用
 
   

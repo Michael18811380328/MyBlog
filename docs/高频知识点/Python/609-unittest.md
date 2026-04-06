@@ -2,9 +2,7 @@
 
 [https://docs.python.org/zh-cn/3/library/unittest.html](https://docs.python.org/zh-cn/3/library/unittest.html "https://docs.python.org/zh-cn/3/library/unittest.html")
 
-#### unittest 入门用法
-
-unittest 是 python的单元测试框架
+unittest 是 python 内置的的单元测试框架
 
 #### 简介
 
@@ -167,17 +165,7 @@ assertLess(a, b)
 assertLessEqual(a, b) 
 ```
 
-#### 正则表达式
-
-```
-检测正则是否匹配给定的text
-
-# 检测r.search(s)
-assertRegexpMatches(s, r) 
-
-# 检测not r.search(s)
-assertNotRegexpMatches(s, r) 
-```
+​
 
 #### 检测字符串
 
@@ -191,105 +179,6 @@ assertMultiLineEqual(a, b)
 ```
 # 检测lists
 assertListEqual(a, b) 
-```
-
-#### Test\_fixtures
-
-#### 方法固定装置：
-
-> 如果要对一个模块中的每一个测试函数都做同样的初始化操作和结尾清除等操作，那么创建n个测试用例就得写n遍一样的代码，为了减少重复的代码，可以使用下面两个函数：
-
-* setUp()
-  每次执行测试用例之前调用。无参数，无返回值。该方法抛出的异常都视为error，而不是测试不通过。没有默认的实现
-
-* tearDown()
-
-> 每次执行测试用例之后调用。无参数，无返回值。测试方法抛出异常，该方法也正常调用，该方法抛出的异常都视为error，而不是测试不通过。只要setUp()调用成功，该方法才会被调用。没有默认的实现。通过setup 和 tesrDown组装一个module成为一个固定的测试装置。
-
-```
-class TestMathFunc(unittest.TestCase):
-    def setUp(self):
-        print "start test {0}...".format(self._testMethodName)
-
-    def test_add(self):
-        self.assertEqual(3, add(1, 2))
-
-    def tearDown(self):
-        print "finish test."
-
-# 运行结果
-python -m unittest test_math_func
-start test test_add...
-finish test.
-.
-----------------------------------------------------------------------
-Ran 4 tests in 0.000s
-
-OK
-```
-
-注意：如果setup运行抛出错误，则测试用例代码则不会执行。但是，如果setpu执行成功，不管测试用例是否执行成功都会执行teardown
-
-#### class固定装置
-
-> 测试类在运行前需要调用其他类做一些初始化, 例如创建数据库连接,创建socket等
-
-* setUpClass()
-  一个类方法在单个类测试之前运行。setUpClass作为唯一的参数被调用时,必须使用classmethod()作为装饰器
-
-* tearDownClass()
-  一个类方法在单个类测试之后运行。setUpClass作为唯一的参数被调用时,必须使用classmethod()作为装饰器
-
-> socket\_util.py
-
-```
-class SocketUtil():
-    def __init__(self):
-        print "SocketUtil init"
-
-    def open_sock(self):
-        print "socket opened"
-
-    def close_sock(self):
-        print "socket closed"
-```
-
-> test\_math\_func.py
-
-```
-import unittest
-from math_func import *
-from socket_util import *
-
-class TestMathFunc(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        print "setUpClass ..."
-        cls._conn = SocketUtil()
-
-    def test_add(self):
-        self.assertEqual(3, add(1, 2))
-
-    @classmethod
-    def tearDownClass(cls):
-        print "tearDownClass ..."
-        cls._conn.close_sock()
-```
-
-> python -m unittest -v test\_math\_func
-
-```
-setUpClass ...
-SocketUtil init
-test_add (test_math_func.TestMathFunc) ... ok
-tearDownClass ...
-socket closed
-
-----------------------------------------------------------------------
-Ran 1 test in 0.000s
-
-OK
 ```
 
 ​

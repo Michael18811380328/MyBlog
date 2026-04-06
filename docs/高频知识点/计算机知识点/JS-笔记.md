@@ -1,6 +1,6 @@
 # JS笔记 
 
- 2026-2-27
+ 2026-4-1
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -534,7 +534,7 @@ call 由于传入的是多个参数，性能比 apply 稍微好一点（需要�
 
 
    
-## 0051 Object.defineProperty 怎么使用？
+## 0051 Object.defineProperty
 
 
 <https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty>
@@ -1794,8 +1794,6 @@ let value = '[]'
 let reg = new RegExp(escapeRegExp(value), 'ig');
 console.log(reg); // /\[\]/gi
 ```
-
-​
 
 ​
 

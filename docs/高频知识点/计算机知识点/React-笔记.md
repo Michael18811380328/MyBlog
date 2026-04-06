@@ -1,6 +1,6 @@
 # React笔记 
 
- 2026-2-27
+ 2026-4-1
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -316,7 +316,7 @@ raect报错解决，componentWillReceivePorps 将要废弃，那么使用 getDer
 e.nativeEvent.stopImmediatePropagation() 表示阻止当前事件的冒泡，以及这个 dom 身上的其他的所有事件的冒泡。
 
    
-## 0151 ref 的三种创建方式，怎么使用
+## 0151 ref 的三种创建方式
 
 
 Rem的三种创建方式
@@ -869,41 +869,67 @@ Mobx 提供的 API 更灵活、更直观，模板代码更少。它允许你直�
 
 
    
-## 0370 什么是React上下文
+## 0370 什么是 React Context 上下文
 
 
-React Context 是一项功能，它提供了一种在组件树中传递数据的方法，而无需在每一层手动传递 props。
+问题提出：在大型组件内部，如果组件层级很多， props 从根组件一直传递到子组件，每一层都必须传，出现 props drilling 的现象，不方便维护。
 
-它允许您创建一个全局状态，树中的任何组件都可以访问该状态，无论其位置如何。
+解决：使用 Context 上下文，直接在顶层组件注入变量，在底层组件任何位置都可以提取到变量，避免逐层传参。
 
-当您需要在多个未通过 props 直接连接的组件之间共享数据时，上下文就非常有用。
+操作步骤：
 
-React Context API 由三个主要部分组成：
-
-1. createContext（创建上下文）： 该函数用于创建新的上下文对象。
-2. Context.Provider： 该组件用于为上下文提供值。它封装了需要访问该值的组件。
-3. Context.Consumer 或 useContext 钩子： 该组件或钩子用于从上下文中获取值。它可以在上下文提供者的任何组件中使用。
-
-通过使用 React Context，可以避免 props 透传（通过多级组件传递props），并在更高层次上轻松管理状态，从而使代码更有条理、更高效。[了解更多](https://link.zhihu.com/?target=https%3A//react.dev/learn/passing-data-deeply-with-context)
-
-在典型的 React 应用程序中，数据是使用 props 从上到下（从父组件到子组件）传递的。但是，这种使用方法对于某些类型的 props（例如全局属性 语言、界面主题）来说可能过于繁琐，因为这些 props 必须传递给应用程序中的许多组件。
-
-上下文提供了一种在组件间共享此类数据的方法，而无需明确地将 props 传递到树的每一层。 树的每一级传递 props。当上下文值发生变化时，调用 useContext 的组件总是会被重新渲染。上下文值发生变化时，调用 useContext 的组件总是会被重新渲染。如果重新渲染组件的成本很高，可以使用 [memoization](https://www.zhihu.com/search?q=memoization&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A3248392880%7D) 对其进行优化。
+1、在工具函数中，新建 UserContext LangContext ArticleContext 等全局需要传递的参数
 
 ```javascript
-const App = () => {
-  const theme = useContext(ThemeContext);
+import React, { createContext } from 'react';
 
-  return (
-    <div style={{ color: theme.palette.primary.main }}>
-      Some div
-    </div>
-  );
-}
+const UserContext = createContext({ name: 'Mike', age: '20' });
 
+const LangContext = createContext({ langName: 'English', langCode: 'en' });
+
+export { UserContext, LangContext };
 ```
 
+2、在项目上层组件中进行注入（包裹上层组件，并增加 value 用于传递具体的参数）
 
+```javascript
+import React from 'react';
+import { UserContext, LangContext } from './utils/contexts';
+
+render() {
+    return (
+        <UserContext.Provider value={{ name: 'Tom', age: '30' }}>
+            <LangContext.Provider value={{ langName: 'Chinese', LangCode: 'zh-cn' }}>
+                <App>
+                    <Head/>
+                    <Body/>
+                </App>
+            </LangContext.Provider>
+        </UserContext.Provider>
+    );
+}
+```
+
+3、在使用的叶子组件中，获取对应的属性
+
+```javascript
+import React, { useContext } from 'react';
+import { UserContext, LangContext } from './utils/contexts';
+
+const user = useContext(UserContext);
+const langObj = useContext(LangContext);
+
+console.log(user.name, user.age)
+const { langName, langCode } = langObj;
+```
+
+疑问和解答：
+
+1、根组件的 value 变化后，子组件是否会自动重新渲染？这个和 props 是一样的，如果 value 是简单变量（字符串），那么会触发重新渲染；如果是复杂变量（对象，数组），取决于变量的内存地址是否变化。
+
+2、context 实际优化：
+
+如果 UserContext 是一个复杂的对象，如果某个属性更新时，会触发全部对象更新，性能不好。此时可以进行拆分 context，多个 context 存放属性（UserNameContext, UserAvatarContext ）避免子组件的全部渲染，子组件内部可以使用 useMemo 缓存变量，使用 useCallback 缓存函数，减少不必要的性能开支（避免不必要的渲染）。
 
    
 ## 0372 什么是自定义钩子
@@ -998,6 +1024,221 @@ React 和 VUE 对比
 * 小项目使用 vue，大项目使用 react；国际化项目使用 react；国内项目使用 vue；react 和对应的类型控制，团队人多时便于合作；vue 写法比较灵活，如果注释不完善，可能理解有一定困难。
 
 其他参考：<https://juejin.cn/post/6844903668446134286>
+
+   
+## 0909 自定义 hooks 的使用场景
+
+
+问题提出：如果多个组件内部有相同的逻辑（网络请求，计数器，定时器），代码重复
+
+解决方案：可以提取成一个自定义 hooks。
+
+操作步骤（例如发出请求，或者更新某个状态）：
+
+1、新建一个自定义 hooks，使用 useState 维护内部状态，使用 useEffect 处理副作用，对外暴露 state 和函数
+
+例如下面的站点维护
+
+```javascript
+import React, { useState } from 'react';
+
+const useStation = () => {
+  
+  const [stations, setStations] = useState([]);
+
+  const clearStation = () => {
+    setStations([]);
+  }
+
+  const addStation = (station) => {
+    let newStations = stations.slice(0);
+    newStations.push(station);
+    setStations(newStations);
+  }
+
+  const deleteStation = (stationID) => {
+    let newStations = stations.slice(0);
+    let index = stations.find(item => item.id === stationID);
+    if (index > -1) {
+      newStations.splice(index, 1);
+      setStations(newStations);
+    }
+  }
+
+  return {
+    stations,
+    clearStation,
+    addStation,
+    deleteStation,
+  };
+
+}
+
+export default useStation;
+
+```
+
+例如网络请求
+
+```javascript
+import React, { useState, useEffect } from 'react';
+
+function useFetch(url) {
+  
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    // 先设置默认状态
+    setData(null);
+    setLoading(true);
+    setError(null);
+    // 异步请求数据
+    const fetchData = async () => {
+      try {
+        // 模拟请求延迟，实际项目中使用 fetch/axios
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const mockData = {
+          id: 1,
+          title: 'React 自定义 Hook',
+          content: '自定义 Hook 可以复用逻辑'
+        };
+        setData(mockData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [url]);
+  
+  return {
+    data,
+    loading,
+    error,
+  };
+}
+
+export default useFetch;
+
+```
+
+2、在具体业务组件中，直接使用 自定义 hook 就可以拿到返回值。这样就避免在业务组件内部实现网络请求，或者数据增减的具体细节操作。
+
+app.js
+
+```javascript
+import React from 'react';
+import useFetch from './useFetch';
+import useStation from './useStation';
+
+const { data, loading, error } = useFetch('http://api.whitehouse.com/user/');
+
+const { stations, clearStation, addStation, deleteStation } = useStation();
+
+
+if (loading) {
+  return (
+    <Loading/>
+  );
+}
+
+if (error) {
+  return (
+    <ErroeMsg value={error} />
+  );
+}
+
+if (data) {
+  return (
+    <div>{data}</div>
+  );
+}
+```
+
+projects-dialog.js
+
+```javascript
+import React from 'react';
+import useFetch from './useFetch';
+﻿
+const { data, loading, error } = useFetch('http://api.whitehouse.com/projects/');
+﻿
+﻿﻿if (loading) {
+  return (
+    <Loading/>
+  );
+}
+﻿
+if (error) {
+  return (
+    <ErroeMsg value={error} />
+  );
+}
+﻿
+if (data) {
+  return (
+    <div>{data}</div>
+  );
+}
+```
+
+books-dialogs.js
+
+```javascript
+import React from 'react';
+import useFetch from './useFetch';
+﻿
+const { data, loading, error } = useFetch('http://api.whitehouse.com/books/');
+﻿
+﻿﻿if (loading) {
+  return (
+    <Loading/>
+  );
+}
+﻿
+if (error) {
+  return (
+    <ErroeMsg value={error} />
+  );
+}
+﻿
+if (data) {
+  return (
+    <div>{data}</div>
+  );
+}
+```
+
+注意事项：
+
+1、自定义 hook 必须以 useXXX 命名
+
+2、自定义 hook 必须用在函数组件内部或者嵌套其他 hook，不能用在类组件或者其他工具函数中。
+
+   
+## 0908 JSX 本质是什么
+
+
+JSX 定义：JavaScript XML，是 React 提供的语法糖，允许在 JS 中写 HTML 结构。
+
+本质：本质是 JS 不是 HTML，最终会被 `@babel/plugin-transform-react-jsx` 编译为 `React.createElement()` 调用。
+
+```javascript
+// JSX 编译后的本质（等价代码）
+
+// return React.createElement(
+//   'div',
+//   { className: 'app-container' },
+//   React.createElement('h1', null, 'Hello React & JSX'),
+//   React.createElement('input', { type: 'text', placeholder: 'JSX 必须闭合标签' }),
+//   React.createElement('p', { style: { color: 'red', fontSize: '16px' } }, 'JSX 本质是 React.createElement')
+// );
+```
+
+​
 
    
 ## 0875 React 库什么时候不需要引入

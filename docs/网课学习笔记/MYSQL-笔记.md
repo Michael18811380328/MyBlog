@@ -1,6 +1,5 @@
-
-  # MYSQL
-  ### 1-01.MySQL课程介绍
+# MYSQL
+### 1-01.MySQL课程介绍
 课程来源：哔哩哔哩
 
 集成后文档比较大，加载图片可能服务器返回 503 错误，所以可以点击链接访问原始网页：<https://cloud.seatable.cn/dtable/external-links/621babd7e22b4ceb88ec/>

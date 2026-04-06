@@ -1,6 +1,5 @@
-
-  # AI 大模型
-  ### 如何学习入门的 GPT
+# AI 大模型
+### 如何学习入门的 GPT
 <https://www.zhihu.com/question/599713780/answer/3055040756>
 
 介绍了如何入门学习 GPT 和 LLM
@@ -1659,23 +1658,23 @@ The animal didn’t cross the street because it was too tired
 
 那我们就可以用 fine\_tune 微调。所谓微调，就是以预训练大模型作为基座，再投喂一批少量特定的数据集，就能微调大模型，从而让大模型能以我们提供的数据集的规则或内容回答问题。
 
-比如以下就是chatgpt微调接口要求的json数据集，通过投喂这些少量的结构化数据，就能微调出我们自己需要的大模型。
+比如以下就是 chatgpt 微调接口要求的json数据集，通过投喂这些少量的结构化数据，就能微调出我们自己需要的大模型。
 
-​
-
-大模型微调有哪些好处呢？openai官方文档也罗列了以下几点：
+大模型微调有哪些好处 openai 官方文档也罗列了以下几点：
 
 ![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585921353.webp)
 
 
 ### ReAct
-ReAct，就是 Reason+Action，翻译过来就是推理+行动。利用COT推理简单逻辑问题基本是没有问题，但是面对复杂的需要依赖更多事实\*信息的问题，就需要尝试在推理过程中，去获取更多帮助推理的知识和事实信息。\*
+ReAct，就是 Reason+Action，翻译过来就是推理+行动。利用COT推理简单逻辑问题基本是没有问题，但是面对复杂的需要依赖更多事实信息的问题，就需要尝试在推理过程中，去获取更多帮助推理的知识和事实信息。
 
 langchain在执行一个任务的时候如果把它传给大模型的第一个prompts打印出来，就会发现它在提示中提供了几个上面这种框架的样本，这个框架基于thought-action-observe一步一步去得到最终的答案，这其实类似人类的思考方式，我们在解决一个问题的时候，如果脑子中没有现成的答案，那就需要先去查资料，然后根据查的资料再去思考整合，然后循环这个过程，最终得到推理出来的答案。而这个提示样本框架也是一样，action就是执行调用对应的工具，seach就是去调用搜索API，并将搜索结果显示为observe，然后循环这三步，直到查询到最终结果。
 
+openai提供的api更新了function\_call，它就能够指定模型在对应的场景去调用我们自己定义的方法或者api。从而也就可以实现chatgpt +plugins的效果。
+
 ![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585979947.webp)
 
-而就在6月初，openai提供的api更新了function\_call，它就能够指定模型在对应的场景去调用我们自己定义的方法或者api。从而也就可以实现chatgpt +plugins的效果。
+​
 
 
 ### Agent 是什么
@@ -1692,26 +1691,16 @@ Agent智能体的发展
 社会型Agent（群体型Agent）：由不同的社会角色Agent构成，每个角色都专注于一个“职业”，使整体社会成为一个高效的动态稳定体。Generative Agents项目的灵感来自《TheSims 模拟人生》系列游戏, 25个拥有身份设定、模拟人类行为的Agents组成，构建了一个虚拟小镇。每个Agent在感知(Perceiving)和行动(Acting)之外，还有扩展的记忆(Memory)、规划(Planning)和反思(Reflection)三个子模块。 通过结合大语言模型与拟人的功能架构，使它们能够自由活动，真正模拟小镇的运作。
 
 
-### Agent架构
+### Agent 架构
 一个基于AI大模型的Agent架构应该包括以下部分：
 
-* 规划（Planning）
+* 规划（Planning）子目标与分解（Subgoal and decomposition）：Agent将大型任务分解为更小、更易于 处理的子目标，从而实现对复杂任务的高效处理。
 
-子目标与分解（Subgoal and decomposition）：Agent将大型任务分解为更小、更易于 处理的子目标，从而实现对复杂任务的高效处理。
+* 反思与完善（Reflection and refinement）：代理可以对过去的行动进行自我批评和自我反思，从错误中吸取教训，并为未来的步骤进行改进，从而提高最终结果的质量。
 
-* 反思与完善（Reflection and refinement）：
+* 记忆（Memory）短期记忆（Short-term memory）：所有上下文学习都是利用模型的短期记忆来学习。长期记忆（Long-term memory）：为Agent提供了在长时间保留和回忆信息的能力， 通常通过利用外部向量存储和快速检索来实现。
 
-代理可以对过去的行动进行自我批评和自我反思，从错误中吸取教训，并为未来的步骤进行改进，从而提高最终结果的质量。
-
-* 记忆（Memory）
-
-短期记忆（Short-term memory）：所有上下文学习都是利用模型的短期记忆来学习。
-
-长期记忆（Long-term memory）：为Agent提供了在长时间保留和回忆信息的能力， 通常通过利用外部向量存储和快速检索来实现。
-
-* 工具的使用（Tool use）
-
-Agent学会调用外部API获取模型权重中缺失的额外信息（通常在预训练后很难更 改），包括当前信息、代码执行能力、访问专有信息源等。
+* 工具的使用（Tool use）Agent学会调用外部API获取模型权重中缺失的额外信息（通常在预训练后很难更改），包括当前信息、代码执行能力、访问专有信息源等。
 
 ![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769586324652.webp)
 
@@ -1888,28 +1877,12 @@ Agent学会调用外部API获取模型权重中缺失的额外信息（通常在
 输出指示：指定您需要的输出类型或格式。（代码，图片，文本，视频等，字数长度格式等）
 
 
-### AIGC 十大必看
-B站 AIGC 系列介绍，主要是诙谐幽默的应用
-
-[https://www.bilibili.com/medialist/detail/ml2246137165?listgroupid=210003\&spm\_id\_from=333.1272.0.0](https://www.bilibili.com/medialist/detail/ml2246137165?listgroupid=210003\&spm_id_from=333.1272.0.0 "https://www.bilibili.com/medialist/detail/ml2246137165?listgroupid=210003\&spm_id_from=333.1272.0.0")
-
-
 ### 一张图AI绘画100次，还看的出来是谁吗
 这个视频介绍了，让 AI 生成1张图片，经过100次迭代后，最后就变成了大众脸
 
 [https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
 
 AI 根据用户的反馈确定回答答案的正确与否，那么最后审美就趋近于大众脸（开源公共的 AI）
-
-
-### ChatGPT | 牛X在哪？谁会失业？
-[https://www.bilibili.com/video/BV1rj41137cr/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1rj41137cr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1rj41137cr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
-
-图灵测试：判断对面是一个人还是机器的测试
-
-早期个人助手的逻辑：模式匹配，就是 if-else 的处理模式，根据用户输入内容，直接匹配，给出答案。
-
-机器学习：
 
 
 ### 中国的ChatGPT
@@ -1966,10 +1939,90 @@ AI 绘画的结果，取决于提示词的准确性（AI 产品经理课程中�
 对于热门的关键词比较好画，对于冷门的领域和词汇，AI 发挥的不是很稳定。
 
 
-### AIGC 快速上手
-B站博主娱乐系列
+### 9 个插件实例自动完成任务
+[https://www.bilibili.com/video/BV1Sk4y1x7r2/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Sk4y1x7r2/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Sk4y1x7r2/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
 
-[https://www.bilibili.com/medialist/detail/ml2281122165?listgroupid=210003\&spm\_id\_from=333.1272.0.0](https://www.bilibili.com/medialist/detail/ml2281122165?listgroupid=210003\&spm_id_from=333.1272.0.0 "https://www.bilibili.com/medialist/detail/ml2281122165?listgroupid=210003\&spm_id_from=333.1272.0.0")
+介绍了不同类型的 ChatGPT 插件，可以用来完成特定场景的功能（类似现在的智能体），包括图片创造，文字创作，编写代码。这些的前提是用户需要能判断 AI 生成的结果是否正确，是否是好的结果。
+
+自己可以尝试使用 chatGPT 的插件
+
+
+### 学会如何把ChatGPT接入Siri
+[https://www.bilibili.com/video/BV1G24y1n76y/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1G24y1n76y/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1G24y1n76y/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+chatGPT 和 Siri 进行组合后，可以辅助更好的调用 Siri
+
+
+### 王炸级的AI工具
+[https://www.bilibili.com/video/BV1Bv4y1L79V/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Bv4y1L79V/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Bv4y1L79V/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+AI绘画、AI写作、代码、语音生成，现在支持的 AIGC 很多方面
+
+个人实际使用中，AI 调用都需要额外收费，那么这部分收费是否能获得足够的工作回报？这是个值的思考的问题（例如微软的 Azure AI 可以生成用户配音，那么这些做成短视频，能否获得预期的回报？）
+
+
+### 30个AI工具可以让AI帮你干活
+[https://www.bilibili.com/video/BV1m54y1g7CP/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1m54y1g7CP/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1m54y1g7CP/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+介绍了多个 AI 工具用于 AIGC 领域，主要是2023年的，现在已经过时了
+
+
+### AI语音
+[https://www.bilibili.com/video/BV1eL411T7rz/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1eL411T7rz/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1eL411T7rz/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+收费：科大讯飞，魔音工坊
+
+免费：微软 Azure AI&#x20;
+
+
+### ChatGPT + Midjourney画一幅水墨画
+[https://www.bilibili.com/video/BV1ms4y157kJ/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1ms4y157kJ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1ms4y157kJ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+ChatGPT：<https://chat.openai.com/>
+
+Midjourney：<https://www.midjourney.com/>
+
+使用 AIGC 关键是精确需求，一步步的引导，避免AI的想法和个人的想法不一致。
+
+目前的情况，还是通过不同的软件分步骤进行描述：使用通用 ChatGPT 把想法转换成具体的实现细节，然后通过专门的 AI，把具体细节文字实现成多媒体，这样就实现了 AIGC 创作效果。
+
+
+### 200万人排队用的 Notion AI
+[https://www.bilibili.com/video/BV1sY411Y7RL/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1sY411Y7RL/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1sY411Y7RL/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+Notion AI 可以完成基本的 AI 写作，类似 sdoc-editor 中嵌入的 AI 功能。
+
+好处：速度快，写通用类型的短文很快，95%的内容正确（剩下5%的内容不一定正确），建议使用严格的限定词语。
+
+弊端：写的内容不一定完美符合需求，某些敏感信息，某些行业信息不能完成。
+
+
+### 在家训练使用轻量级低成本 chatGPT
+[https://www.bilibili.com/video/BV1H84y1J79h/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1H84y1J79h/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1H84y1J79h/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+介绍了一个 github 项目，让大模型简化轻量化，[https://github.com/hpcaitech/ColossalAI](https://github.com/hpcaitech/ColossalAI "https://github.com/hpcaitech/ColossalAI")
+
+可以在性能较弱的电脑，本地部署较好的大模型
+
+目前星标不少
+
+看未来能否在 ollama 上本地部署对应的大模型
+
+
+### ChatGPT 牛X在哪
+[https://www.bilibili.com/video/BV1rj41137cr/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1rj41137cr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1rj41137cr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+30分钟
+
+图灵测试：判断对面是一个人还是机器的测试
+
+早期个人助手的逻辑：模式匹配，就是 if-else 的处理模式，根据用户输入内容，直接匹配，给出答案。
+
+可以总结出来，固定模式的事情，都可以被 AI 取代（如果一个复杂问题，可以分成多个简单重复的步骤，每一步都是逻辑性思考和分析，那么可以说可以被 AI 取代）
+
+1、如何用 AI 去减少人的工作，例如洗衣服？
+
+2、如何去搞懂 AI 不能做的部分，例如晾衣服？或者说洗衣工就被淘汰了？
 
 
 ### GPT4为何会颠覆现有工作流
@@ -1977,10 +2030,25 @@ B站博主娱乐系列
 
 [https://www.bilibili.com/video/BV1MY4y1R7EN/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1MY4y1R7EN/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1MY4y1R7EN/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
 
+文案链接：
 
-### AI 绘画教程
-[https://www.bilibili.com/read/cv21939146/?spm\_id\_from=333.788.comment.all.click\&opus\_fallback=1](https://www.bilibili.com/read/cv21939146/?spm_id_from=333.788.comment.all.click\&opus_fallback=1 "https://www.bilibili.com/read/cv21939146/?spm_id_from=333.788.comment.all.click\&opus_fallback=1")
+[https://www.modevol.com/episode/clf9d5kni0zo301mm6tkl9t87](https://www.modevol.com/episode/clf9d5kni0zo301mm6tkl9t87 "https://www.modevol.com/episode/clf9d5kni0zo301mm6tkl9t87")
 
-ComfyUI V3
+这份文档围绕ChatGPT展开全面科普，核心从原理、训练过程、核心能力、社会影响及应对方向等维度展开
+
+具体内容如下：
+
+一、核心工作原理
+ChatGPT的本质功能是“单字接龙”（自回归生成），即依据任意长度的上文，通过自身模型生成下一个字，长文本回答则是将生成的字不断融入上文、反复接龙的结果。其生成结果受上文和模型（核心“大脑”）影响，模型需通过训练调整：让模型依照学习材料做单字接龙，不断优化参数，使其能按概率抽样生成符合预期的下一字。
+
+与搜索引擎不同，ChatGPT并非检索已有信息，而是通过学习语言规律“生成”内容，因此具备泛化能力，能应对未见过的提问，但也存在易混淆记忆、胡编乱造、内容无法直接增删改查、高度依赖优质学习材料的短板。
+
+二、三大训练阶段
+1\. **开卷有益（无监督学习）​**：让模型学习海量互联网文本，扩充词汇、语言知识和世界信息，成为“懂王鹦鹉”。GPT系列从GPT-1（1.17亿参数、5GB数据）迭代到GPT-3（1750亿参数、45TB数据），规模跃升使其掌握多领域语言规律，但存在回答不受约束、易输出不当内容的问题。
+2\. **模板规范（有监督学习）​**：用人工编写的优质对话范例训练模型，矫正不规范回答习惯，明确“该说什么、不该说什么”，同时让模型学会理解指令和例子，掌握思维链推理能力，成为“懂规矩的博学鹦鹉”，但也可能导致回答模板化、限制创造力。
+3\. **创意引导（强化学习）​**：通过人类对模型自由回答的评分调整模型，引导其生成符合人类价值取向的创新性回答，最终成为“既懂规矩又有创意的博学鹦鹉”。
+
+三、社会冲击与核心价值
+ChatGPT的里程碑意义并非产品本身，而是验证了大语言模型的可行性，推动全球布局该技术。大语言模型的核心价值在于精通语言且存储海量人类知识，能大幅提升群体协作中“创造、继承、应用知识”的语言处理效率，可应用于搜索、办公、教育、开发、客服等全行业场景。它也对现有人才培养模式提出挑战：传统“传授既有知识”的教育模式已难以适应时代，未来需转向培养学习能力和创造能力，以应对技术变革带来的就业市场变化。
 
 
