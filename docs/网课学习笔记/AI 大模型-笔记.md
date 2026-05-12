@@ -1,18 +1,4 @@
 # AI 大模型
-### 如何学习入门的 GPT
-<https://www.zhihu.com/question/599713780/answer/3055040756>
-
-介绍了如何入门学习 GPT 和 LLM
-
-介绍了 GPT1-4的论文和主要变化，深度学习等概念，论文阅读难度比较大。
-
-整体上需要扎实的 Python 基础，扎实的数据结构和算法基础，扎实的统计概率基础等。
-
-直接学习核心原理比较困难，学习思维以及 python 基本的逻辑是很重要的。
-
-个人目标：AI 如何提升程序员的工作效率？如何在其他场景中使用这个技术？最好应用在自己的项目中（或者自己写一个 AI 聊天项目）
-
-
 ### 使用 Assistant 搭建 AI 助手
 这是一个付费课程的体验课，后续系列课程付费，这节课大概了解了 Assistant API 和基础概述
 
@@ -455,16 +441,14 @@ trainer.train()
 ​
 
 
-### 大模型概念
+### 大模型
 大模型 Large-scale Model / Large Model
 
-大模型：LLM 是基于深度学习训练的模型（类似一个函数集）
+大模型：LLM 是基于深度学习训练的模型（类似一个函数集），大模型是指具有大规模、高维度、复杂性强等特点的机器学习模型。随着数据量的增加和计算能力的提升，大模型在自然语言处理、计算机视觉、语音识别等领域得到了广泛应用。大模型的训练需要大量的数据和计算资源，同时也需要对模型进行优化和压缩，以便在实际应用中能够高效地运行。
 
-AI 大模型的价值：已经在艺术创作（文字，图片）获得很多成就，大模型数据集可以出售，也提供了很多新岗位
+AI 大模型的价值：已经在艺术创作（文字，图片）获得很多成就，大模型数据集可以出售，也提供了很多新岗位。
 
-大模型是指具有大规模、高维度、复杂性强等特点的机器学习模型。随着数据量的增加和计算能力的提升，大模型在自然语言处理、计算机视觉、语音识别等领域得到了广泛应用。大模型的训练需要大量的数据和计算资源，同时也需要对模型进行优化和压缩，以便在实际应用中能够高效地运行。在自然语言处理领域，大模型一般指大规模语言模型。
-
-提示词：Prompt 如何向大模型提问题，或者做出引导，让大模型更好的使用
+提示词：Prompt，如何向大模型提问题，或者做出引导，让大模型更好的使用。
 
 
 ### 使用说明
@@ -477,211 +461,72 @@ AI 大模型的价值：已经在艺术创作（文字，图片）获得很多�
 ​
 
 
-### AI 开发工具使用-前端篇
-视频：[https://www.bilibili.com/video/BV1F8L8zuEaE/](https://www.bilibili.com/video/BV1F8L8zuEaE/ "https://www.bilibili.com/video/BV1F8L8zuEaE/")
+### AI 写代码
+主要功能：
 
-主要介绍一个外行人员如何借用 AI 工具完成前端编码，只是工具介绍，没有细节介绍
+1、项目规划和搭建（Builder Generator 模式切换）
 
-主要工具：
+2、解释代码，对陌生项目进行讲解（先整体讲解，然后分模块进行解释，包括方法中的每一行代码）
 
-* Cursor 比较贵 Claude 3.7 Sonnet 模型（适合写代码）或者 GPT-4o 模型；
+3、细节代码补全（js sql java）
 
-* TRAE 比较便宜 deepseek 模型，GPT-4o 模型；
+4、生成单元测试
 
-注意 TRAE 有2个版本，国外版本功能更强大 [www.trae.ai](http://www.trae.ai)&#x20;
-
-​
-
-
-### AI 开发工具使用-后端篇
-在 idea 编辑器中，安装通义灵码插件后进行后端代码实现
-
-[https://www.bilibili.com/video/BV1T5jPz7EyS?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224\&spm\_id\_from=333.788.player.player\_end\_recommend\_autoplay](https://www.bilibili.com/video/BV1T5jPz7EyS?vd_source=2d5bdee7ea59486ed4aa4a9b10020224\&spm_id_from=333.788.player.player_end_recommend_autoplay "https://www.bilibili.com/video/BV1T5jPz7EyS?vd_source=2d5bdee7ea59486ed4aa4a9b10020224\&spm_id_from=333.788.player.player_end_recommend_autoplay")
-
-讲的比较粗糙浮躁，主要是介绍工具能做什么，不涉及细节内容
-
-具体需要选择哪个模型？不同模型之间的差距？
-
-功能：生成代码（sql java）、解释代码、生成测试，如何搭建一个新项目，对陌生项目进行讲解（先整体讲解，然后分模块进行解释，包括方法中的每一行代码）
+5、排查问题
 
 ​
 
 
-### AI 实战练习
-在个人项目中使用
+### 项目中应用 AI 的场景
+项目背景：我们的产品功能是：智能化表格管理、文件管理，工单管理。
 
-* [x] 1、AI 优化代码，优化工具函数和 Leetcode 代码（重构）
+#### 后端
 
-- [x] 2、AI 单元测试，测试 Leetcode 部分，增加测试覆盖率等
+##### 1、AI 搜索，增强搜索能力
 
-* [x] 3、AI 直接完成功能，逐步提示，增加更多上下文（Cursor 可以直接写一个组件或者多个组件）——自己使用这个完成了 AI-chat 小项目的实现
+早期：elasticSearch 需要建立索引，Java 内核比较重。
+
+现在：在 Go zincsearch 基础上改动，需要的资源更少。
+
+技术细节：文本的分词和分析等，然后计算不同文档的匹配度，进行语义搜索（我们内部有大量的表格和文件，首先对已有的表格和文件进行向量化，这部分需要专门写，所以市场上面已有的工具不能满足）。
+
+#### 前端
+
+##### 1、AI 助手，赋能传统数据
+
+早期逻辑是：用户需要直接操作表格，输入内容，点击按钮，或者进行复杂操作，统计数据，费时费力。
+
+现在我们增加了 AI 助手，根据用户的自然语言描述，使用开源大模型，然后转换成对应的代码，执行对应的 API 或者功能（统计某人本周的任务，统计表格整体的信息，以统计图形式展现出来），大批量处理表格的数据，实现了传统软件赋能。
+
+技术细节：用户自然语言输入，通过自然语言分析，调用大模型，根据大模型的返回值，调用对应的 API
+
+##### 2、AI 识别，智能管理图片
+
+早期：只能上传照片（网盘）
+
+现在：上传图片并进行分析，然后增加元数据，以表格等多种视图管理图片信息
+
+技术细节：识别发票图片，然后进行填写，避免用户手动录入数据。我们内部的技术实现调用了图片识别接口（还有其他身份证，驾照，发票识别等等）。市场上有一些开源的工具，例如前端的 tesseract 可以进行识别，但是准确率不是很高，所以我们基于开源的数据进行了改进。
+
+#### 开发层面
+
+使用 OpenCode 进行项目规划，使用 Trea AI 进行代码分析等。
 
 
-### 前端破局 AI 应用开发落地
-AI 场景落地应用：[https://www.bilibili.com/video/BV1Ez421i7G6/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Ez421i7G6/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Ez421i7G6/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224") 1个小时的概况视频（其他的付费）废话很多，就是一个付费课程的公开课（前端架构师+AI 的课程）
-
-#### 1.前端\&AI，前端人借助 AI 错位竞争
-
-AI不仅是解决技术问题，还能解决产品和个人发展问题
-
-#### 2.AI 开发重难点与成本分析
-
-#### 3.前端AI方向导引
-
-#### 4.LLM落地场景介绍——个人开发者
+### 不同人数团队如何使用 AI
+##### AI+个人开发者
 
 例如 LLM 做 Prompt 工程师，借助个人在某些专业上的能力，创建对应领域的智能体，创建文案写故事，对接下游短视频自动生成，可以进行大量变现操作。
 
-#### 5.LLM落地场景介绍——小型团队
+##### AI+小型团队
 
-需求分析，用户调研，字节系AI应用场景与引擎编排流程，针对小型团队及初创公司，推荐利用AI进行需求分析、文档优化、会议纪要提炼、客服机器人（RAG模式）、内容生成工具、数据报告可视化等高效工具开发，强调通过整合企业数据与智能体技术提升业务效率，实现低成本、快速落地。
+需求分析，用户调研，AI应用场景与引擎编排流程，针对小型团队及初创公司，推荐利用AI进行需求分析、文档优化、会议纪要提炼、客服机器人（RAG模式）、内容生成工具、数据报告可视化等高效工具开发，强调通过整合企业数据与智能体技术提升业务效率，实现低成本、快速落地。
 
-#### 6.LLM落地场景介绍——大型企业
+##### AI+大型企业
 
-字节系AI场景落地应用与引擎编排流程，通过飞书文档、Imagic AI、猿辅导等案例，展示AI能力与业务深度融合，利用多维表、Canvas技术实现高效数据可视化与性能优化，并构建AI开发平台，集成网关、实时计算等模块，支持5分钟快速部署，显著提升大型企业AI工程化开发效率。
-
-#### 7.LLM落地场景介绍——跨行业
+AI场景落地应用与引擎编排流程，通过飞书文档、Imagic AI、猿辅导等案例，展示AI能力与业务深度融合，利用多维表、Canvas技术实现高效数据可视化与性能优化，并构建AI开发平台，集成网关、实时计算等模块，支持5分钟快速部署，显著提升大型企业AI工程化开发效率。
 
 ​
-
-​
-
-
-### 常用 AI 工具
-AI 工具：集成了多个模型，内部可以选择多个模型进行任务处理。
-
-​
-
-#### 开发工具
-
-chatGPT：核心AI工具，支持全部功能，需要付费
-
-Monica：浏览器插件，国外出品，效果不错
-
-Codeium: 编辑器插件，支持代码编写，功能强大很实用，辅助编程，查询资料（阅读代码，代码 review等）
-
-GitHub Copilot：编辑器插件，支持代码编写
-
-CodeGeex：编辑器插件，支持代码编写
-
-#### 通用助手
-
-* 秘塔搜索：[https://metaso.cn/](https://metaso.cn/ "https://metaso.cn/") 搜索质量较好，适合专业学术搜索（上海秘塔网络科技 AI 公司）
-
-* 文心一言：[https://yiyan.baidu.com/](https://yiyan.baidu.com/ "https://yiyan.baidu.com/") 百度出品问答助手，基于国内百家号等，免费版 3.5 质量一般，付费版 4.0没有尝试。由百度开发，使用文心模型。该模型在中文理解和生成方面表现出色，经过大量中文文本数据的训练，能够生成高质量的中文内容，擅长文学创作、数理逻辑推理、多模态内容生成等，例如可以根据用户的描述生成图文结合的内容。
-
-* 橙篇：[https://cp.baidu.com/](https://cp.baidu.com/ "https://cp.baidu.com/") 百度出品写作助手，中文写作没问题
-
-* 豆包：[https://www.doubao.com/chat/coding](https://www.doubao.com/chat/coding "https://www.doubao.com/chat/coding") 字节跳动，支持问答，搜索，AIGC 图像和文本，编程阅读
-
-* 星火大模型：[https://xinghuo.xfyun.cn/desk](https://xinghuo.xfyun.cn/desk "https://xinghuo.xfyun.cn/desk") 科大讯飞开发，在语音识别与合成、跨平台应用方面表现突出。其模型经过大量语音数据和文本数据的训练，在教育场景中，如生成PPT、医疗健康数据分析、实时语音转文字等方面有较好的应用。界面类似豆包。目前生成图片也不太完美。问答搜索还可以。
-
-* 智谱清言：[https://chatglm.cn/main/alltoolsdetail?lang=zh](https://chatglm.cn/main/alltoolsdetail?lang=zh "https://chatglm.cn/main/alltoolsdetail?lang=zh") 由清华大学开发，使用智谱模型。它在中英双语对话、长文本处理方面能力较强，支持20万字输入，擅长学术翻译、法律分析、API文档解析等，还可进行个性化助手定制。文字和学术搜索没有问题，但是绘图还是不完美。
-
-* 通义千问：[https://bailian.console.aliyun.com/#/home](https://bailian.console.aliyun.com/#/home "https://bailian.console.aliyun.com/#/home") 阿里云自主研发的大模型，基于Qwen系列模型，如Qwen2.5、Qwen - Max等。通义千问具备强大的语言及多模态数据处理能力，可用于文字创作、翻译服务、对话模拟等多种场景。
-
-* 天工AI：[https://www.tiangong.cn/chat/universal/016](https://www.tiangong.cn/chat/universal/016 "https://www.tiangong.cn/chat/universal/016") 能进行全网搜索、代码编程、虚拟社交等。在创意写作方面，如诗歌、故事创作，以及AI绘画与音乐生成、多模态内容整合等领域有一定的能力，具体使用的模型由其开发团队进行训练和优化。——目前在升级中？？？可能未来不能用
-
-#### DeepSeek
-
-* 基本信息：DeepSeek APP是杭州深度求索人工智能基础技术研究有限公司于2025年1月10日推出的AI助手。用户安装后可免费体验与DeepSeek - V3模型互动交流。它支持中国大陆手机号码、微信与Apple ID（仅限iOS）一键登录，同一账号内历史对话记录与网页端同步。
-
-* 技术优势：核心技术优势包括自然语言处理（NLP）、机器学习与深度学习、大数据分析、个性化推荐、智能交互、跨平台整合以及安全性与隐私保护。
-
-* 主要功能：具备强大的逻辑推理和问题解决能力，能处理复杂的查询和任务；可进行高质量的文本分析、翻译、摘要生成等任务；在图像识别、视频内容分析等领域具有高精度；能准确识别和合成语音，支持多语言和方言；可根据用户行为和偏好，提供个性化内容推荐；能高效处理和分析大规模数据，挖掘数据中的模式和趋势；支持文本、图像、语音等多种模态的数据融合和学习；智能助手和聊天机器人可实现实时的自然语言交互，快速响应用户需求，还支持深度思考和搜索同时进行。
-
-#### 豆包
-
-* 基本信息：是字节跳动公司基于云雀模型开发的AI智能体。2023年8月17日，公测版本上架，有网页端、iOS和安卓客户端。2024年5月15日，字节跳动宣布豆包大模型正式开启对外服务。
-
-* 模型构成：豆包大模型包括豆包通用模型pro、豆包通用模型lite、豆包·角色扮演模型、豆包·语音识别模型、豆包·语音合成模型、豆包·声音复刻模型、豆包·文生图模型、豆包·Function Call模型、豆包·向量化模型。
-
-* 主要功能：能回答各种问题并进行对话，帮助用户获取信息。其功能丰富，涵盖智能对话，支持多轮对话，包括生活咨询、知识问答、情感交流等；可进行文本生成，撰写文章、邮件、脚本、诗歌等，并支持风格定制；具备多语言处理能力，可进行中英文互译、多语种基础对话；还能提供代码辅助，生成代码片段、调试建议、技术文档解释等。在办公场景中可用于会议纪要生成、PPT大纲设计、Excel公式编写等；学习方面能进行解题思路分析、知识点总结、论文润色等；创意创作上可实现故事续写、营销文案、短视频脚本策划等，还能根据用户历史交互进行个性化内容推荐。此外，支持图像理解，可上传图片进行描述、内容提取；部分版本支持语音交互，支持语音输入与合成朗读。
-
-#### 图像与设计工具
-
-* 通义万相：[https://tongyi.aliyun.com/wanxiang/creation](https://tongyi.aliyun.com/wanxiang/creation "https://tongyi.aliyun.com/wanxiang/creation") 基于阿里的通义模型开发，是一款文生图、风格化图像生成工具，擅长电商产品图设计、艺术风格迁移，如将图片转换为国风、二次元等风格。这个需要点数（花钱）。目前测试绘制图片，结果不一定正确。测试生成瓦蕾莎图片错误。
-
-* Nolibox画宇宙：[https://creator.nolipix.com/](https://creator.nolipix.com/ "https://creator.nolipix.com/") 主要用于艺术创作辅助，通过其背后的AI模型生成抽象画，激发设计元素灵感。看 SaaS 页面应该是 VUE 做的。主要可以选择不同画家的绘制风格（例如毕加索，张大千）测试生成瓦蕾莎图片错误。
-
-* 佐糖：[https://picwish.cn/](https://picwish.cn/ "https://picwish.cn/") 专注于图像修复与增强，利用相关模型实现老照片修复、低分辨率图片无损放大等功能。类似PS 抠图和修复的功能，创作功能不多。
-
-#### 办公与效率工具
-
-* Boardmix博思AI白板：[https://boardmix.cn/](https://boardmix.cn/ "https://boardmix.cn/") 可实现智能PPT生成、思维导图绘制等功能，通过其内置的AI模型对输入的文本内容进行分析和处理，自动生成结构化的会议纪要、流程图等。——就是一个白板绘图工具，可以使用AI进行优化
-
-* 秘塔写作猫：[https://xiezuocat.com/?](https://xiezuocat.com/? "https://xiezuocat.com/?") 主要用于文本校对、多语言翻译，其模型在学术论文润色、自媒体文案优化方面有较好的表现，能够识别和纠正文本中的语法错误、拼写错误，并对文本的语言表达进行优化。这个是秘塔搜索出的另一个工具。实际测试用户需要排队。
-
-#### 垂直领域工具
-
-* 同花顺问财：[https://www.iwencai.com/unifiedwap/home/index](https://www.iwencai.com/unifiedwap/home/index "https://www.iwencai.com/unifiedwap/home/index") 是金融数据分析工具，利用相关AI模型对金融市场数据进行分析和预测，能够提取财报关键指标，对股票趋势进行预测等。
-
-* 帆软数据：[https://help.fanruan.com/finebi/doc-view-1206.html](https://help.fanruan.com/finebi/doc-view-1206.html "https://help.fanruan.com/finebi/doc-view-1206.html") 面向企业级的BI分析工具，通过AI模型对企业的销售数据、供应链数据等进行分析和可视化处理，帮助企业进行决策和优化。主要是企业分析经营报告等。
-
-* 讯飞听见：[https://www.iflyrec.com/](https://www.iflyrec.com/ "https://www.iflyrec.com/") SaaS 平台，专注于语音转文字，其模型基于科大讯飞的语音识别技术，能够实时转录会议记录，支持多方言识别（支持视频音频提取文字等，主要是音视频分析）。
-
-
-### Monica
-Monica是Chrome扩展程序，是AI辅助工具。
-
-作用：可以与Monica随时随地聊天，Monica可以帮助您轻松创建文案，并将文本插入任何位置。
-
-免费版本：这个插件每天提供30次免费查询。
-
-付费版本：每月 60 元，有更多的查询次数，因为官方的 chatGPT4 需要 token 和注册。
-
-操作：打开侧栏的快捷键是 command + M。
-
-账户信息：
-
-> ID：3f094d409dd941bea8032dba22d7dded
->
-> 邮箱：<michael18811380328@gmail.com>
->
-> 姓名：Michael An
->
-> 账户付费信息：[https://monica.im/billing](https://monica.im/billing "https://monica.im/billing")
-
-目前其他大模型可以代替这个，日常使用不多
-
-​
-
-
-### Cursor
-编写代码工具
-
-### chatGPT
-[https://chatgpt.com/](https://chatgpt.com/ "https://chatgpt.com/")
-
-账户信息：谷歌邮箱登录
-
-免费版：可以基本问答
-
-付费版本：[https://chatgpt.com/#pricing](https://chatgpt.com/#pricing "https://chatgpt.com/#pricing") 支持深度问答，支持 Sora 生成视频，支持复杂的生成图片，支持 Codex 生成代码。官方价格是每月30刀。
-
-国内无法直接登录，需要VPN
-
-
-### 豆包
-问答平台
-
-
-### deepseek
-问答平台
-
-
-### POE
-这个账户使用谷歌邮箱登录，效果不错 [https://poe.com/chat/3g5krmx7rie573x6t6h](https://poe.com/chat/3g5krmx7rie573x6t6h "https://poe.com/chat/3g5krmx7rie573x6t6h")
-
-需要翻墙，类似豆包
-
-国外公司出品：[https://company.quora.com/](https://company.quora.com/ "https://company.quora.com/")
-
-
-### API 购买平台
-付费的 GPT API 聚合平台 [https://www.dmxapi.cn/rmb](https://www.dmxapi.cn/rmb "https://www.dmxapi.cn/rmb")
-
-各种模型的代理商
 
 ​
 
@@ -709,29 +554,33 @@ AI 就类似互联网，是把双刃剑，可以让强者更强，让弱者更�
 
 
 ### 大模型在产品中的应用
-#### 大模型接入办公场景
+#### 大模型+办公场景
 
-微软作为大模型应用落地的先行者，所有传统应用或者系统，都将接入coplilot，让AI大模型成为系统中的真正的智能助手。
+微软：所有传统应用或者系统，都将接入 coplilot，让AI大模型成为系统中的真正的智能助手。实际包括 github + copilot 实现代码管理，Azure + Office 办公套件，实现 AI 辅助办公。
 
-国内腾讯元宝，字节豆包，也都在尝试将大模型接入办公场景。
+腾讯：腾讯元宝，插入到微信QQ等办公软件中，进行聊天对话等操作，应用在编辑文档中，安排会议中。
 
-所以未来任何系统，基于大模型的 copilot 都将是必要的组成部分，everything with copilot。
+目前趋势，各种办公产品都加入 AI 模块。
 
-#### 大模型重塑软件开发
+​
 
-基于大模型的低代码平台或者代码生成平台。
+#### 大模型+软件开发
 
-**低代码平台：产品经理直接以对话形式，生成前后端代码。​**目前主要是针对前端开发，腾讯内部已经基于大模型构建了一款自然语言交互的低代码平台，目前已经基本具备了靠对话就能生成前后端代码，并且靠对话就能优化修改功能的能力，也就是说产品经理可以直接通过该平台生成可以直接上线的网站。
+**低代码平台：产品经理直接生成前后端代码（​以自然语言对话形式）。​**目前主要是针对前端开发，腾讯内部已经基于大模型构建了一款自然语言交互的低代码平台，目前已经基本具备了靠对话就能生成前后端代码，并且靠对话就能优化修改功能的能力，也就是说产品经理可以直接通过该平台生成可以直接上线的网站。
 
-**代码辅助开发平台：程序员使用AI辅助生成代码，​**github copilot 也可以以插件的形式集成到 vscode、Androidstudio、xcode中，未来Androidstudio、xcode应该会发布自己更强大，并且和开发工具融合更好的copilot。
+**代码生成开发平台：程序员使用AI辅助生成代码。​**github copilot 也可以以插件的形式集成到 vscode、Androidstudio、xcode中，未来Androidstudio、xcode应该会发布自己更强大，并且和开发工具融合更好的copilot。这个目前是主要的使用场景。
 
-从此我们就能看到，大模型一方面在重塑我们的开发工具，另一方面也在重塑软件开发的工作方式。
+软件开发的核心工作内容，也将**从关注代码的细节，转变成了如何将大功能拆分成更小粒度的功能（架构师）​**，转变成了如何将需求转换成实际功能（产品经理），从而可以方便交给大模型直接生成代码。
 
-软件开发的核心工作内容也将**从关注代码的细节，转变成了如何将大功能拆分成更小粒度的功能（架构师）​**，从而可以方便交给大模型直接生成代码。
+​
+
+总结：大模型重塑我们的开发工具，重塑软件开发的工作方式和流程。
+
+​
 
 
 ### 不同大模型的区别
-通常是一个公司或者组织，发布很多 AI 模型，适应于不同场景（通用AI，代码编辑，图片制作，逻辑推理等场景）。
+一个公司或者组织，发布 AI 模型（有不同的版本），适应于不同场景（通用AI，代码编辑，图片制作，逻辑推理等场景）。
 
 一个 AI 工具，会选择使用的模型，例如 github copilot 可以选择下面的模型。
 
@@ -741,23 +590,21 @@ AI 就类似互联网，是把双刃剑，可以让强者更强，让弱者更�
 
 #### 开发公司
 
-* Claude 3.5 Sonnet：由Anthropic公司开发。
+* Claude：Anthropic
 
-* Gemini 2.0 Flash：是美国谷歌公司发布的人工智能大模型。
+* Gemini ：谷歌。
 
-* GPT 4o：由OpenAI开发。
+* GPT：OpenAI。
 
-* o3-mini：属于OpenAI，微软Copilot的“深度思考”功能曾采用o3-mini-high模型。
+* 文心一言：百度
 
-* 文心一言4.0：是百度公司推出的知识增强大语言模型。
+* 通义千问：阿里
 
-* 通义千问：由阿里云开发，所属公司为阿里巴巴集团。
+* 星火：科大讯飞
 
-* 讯飞星火4.0turbo：由科大讯飞公司推出。
+* 智谱：由智谱AI开发（北京智谱华章）。
 
-* 智谱GLM-Zero：由智谱AI（北京智谱华章科技有限公司）开发。
-
-性能对比和使用情况
+不同版本的性能对比和使用情况
 
 | 模型名称              | 性能差异                                                          | 适用情况                                   |
 | ----------------- | ------------------------------------------------------------- | -------------------------------------- |
@@ -907,278 +754,84 @@ Anthropic AI的Claude 3系列包含Claude 3 Haiku、Claude 3 Sonnet和Claude 3 O
 * kimi Chat：长文本上下文能力国内一流，适合办公族、文字工作者和研究者。2025年1月20日发布的K1.5多模态思考模型，性能对标OpenAI o1满血版，可解决复杂数学问题、编程调试、多模态数据分析等深度推理任务，产品界面简约，有聊天框常用语、Kimi +智能体等实用功能。
 
 
-### 集群智能
-集群智能（Swarm Intelligence）
-
-在某群体中，若存在众多无智能的个体，它们通过相互之间的简单合作，所表现出来的智能行为。
-
-(1) 控制是分布式的，不存在中心控制。因而它更能够适应当前网络环境下的工作状态，并且具有较强的鲁棒性， 即不会由于某一个或几个个体出现故障，而影响集群对整个问题的求解。
-
-(2) 集群中的每个个体都能够改变环境，这是个体之间间接通信的一种方式，这种方式被称为激发工作。由于集群智能可以通过非直接通信的方进行信息的传输与合作，因而随着个体数目的增加，通信开销的增幅较小， 因此，它具有较好的可扩充性。
-
-(3) 集群中每个个体的能力或遵循的行为规则非常简单， 因而集群智能的实现比较方便，具有简单性的特点。
-
-(4) 集群表现出来的复杂行为，是通过简单个体的交互过程突现出来的智能(Emergent Intelligence) ， 因此，集群具有自组织性。群集智能可以在适当的进化机制引导下，通过个体交互以某种突现形式发挥作用。这是个体以及可能的个体智能难以做到的。
-
-集群智能主要有两种算法模式，分别是蚁群算法(Ant Colony System, 简称ACS) 和粒子群优化算法( Particle Swarm Optimization, 简称PSO) 。
-
-
-### 禁忌搜索算法
-[https://baike.baidu.com/item/%E7%A6%81%E5%BF%8C%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95/6436980](https://baike.baidu.com/item/%E7%A6%81%E5%BF%8C%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95/6436980 "https://baike.baidu.com/item/%E7%A6%81%E5%BF%8C%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95/6436980")
-
-避免了贪心算法造成了局部最优解
-
-禁忌（Tabu Search）算法是一种元启发式(meta-heuristic)随机搜索算法，它从一个初始可行解出发，选择一系列的特定搜索方向（移动）作为试探，选择实现让特定的目标函数值变化最多的移动。
-
-为了避免陷入局部最优解，TS搜索中采用了一种灵活的“记忆”技术，对已经进行的优化过程进行记录和选择，指导下一步的搜索方向，这就是Tabu表的建立。
-
-
-### 粒子群优化算法
-[https://baike.baidu.com/item/%E7%B2%92%E5%AD%90%E7%BE%A4%E4%BC%98%E5%8C%96/1352052](https://baike.baidu.com/item/%E7%B2%92%E5%AD%90%E7%BE%A4%E4%BC%98%E5%8C%96/1352052 "https://baike.baidu.com/item/%E7%B2%92%E5%AD%90%E7%BE%A4%E4%BC%98%E5%8C%96/1352052")
-
-粒子群优化（Particle Swarm Optimization,PSO），又称微粒群算法
-
-PSO算法最初是为了图形化的模拟鸟群优美而不可预测的运动。而通过对动物社会行为的观察，发现在群体中对信息的社会共享提供一个演化的优势，并以此作为开发算法的基础。
-
-
-### 模拟退火算法
-[https://baike.baidu.com/item/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/355508](https://baike.baidu.com/item/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/355508 "https://baike.baidu.com/item/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/355508")
-
-模拟退火算法来源于固体退火原理，是一种基于概率的算法，将固体加温至充分高，再让其徐徐冷却，加温时，固体内部粒子随温升变为无序状，内能增大，而徐徐冷却时粒子渐趋有序，在每个温度都达到平衡态，最后在常温时达到基态，内能减为最小。
-
-```javascript
-// 设定目前状态为s0，其能量E(s0)
-s:=s0;
-e:=E(s)
-
-//评估次数k
-k:=0
-
-//若还有时间（评估次数k还不到kmax）且结果还不够好（能量e不够低）则：
-while k<kmax and e>emax
-    sn:=neighbour(s)//随机选取一临近状态sn
-    en:=E(sn)//sn的能量为E(sn)
-    if random()<P(e,en,temp(k/kmax)) then//决定是否移至临近状态sn
-    //移至临近状态sn
-    s:=sn;
-    e:=en
-    //评估完成，次数k加一
-    k:=k+1
-returns//回转状态s
-```
+### 大模型是什么
+大模型：指大语言模型（LLM），就是很多参数的神经网络处理器。
 
 ​
 
-​
+模型：所谓模型，通俗的讲是一个基于神经网络构建好的一个处理器，它能够根据输入产生相应的预测或者输出内容。而这个模型中是有多层神经网络，每层神经网络有很多神经元，而每个神经元可以理解为一个函数y= F(x)，它可以通过调整参数来控制输出。
+
+在训练模型的时候，就是通过输入数据，并监督输出结果，来不断地调节每个神经元的参数，从而最终训练出输出结果与实际偏差最小的模型。
+
+大：我们常听到哪个公司训练了一个大模型具备600亿参数，或者千亿的参数，这个就是所谓的大，指代的是参数量上亿级别，而这些参数就是存储知识和信息的变量，参数越多，记住的知识越多，输出结果更准确。
+
+大模型特征：不稳定（答案不完全对，并不是到数据库中找到对应的答案）；不全面（保密训练集的内容不能获取）
 
 
 ### 向量空间模型
-[https://baike.baidu.com/item/%E5%90%91%E9%87%8F%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/4436202](https://baike.baidu.com/item/%E5%90%91%E9%87%8F%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/4436202 "https://baike.baidu.com/item/%E5%90%91%E9%87%8F%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/4436202")
+**向量空间模型 (Vector Space Model, VSM)​** 是信息检索与自然语言处理中最经典的**文本数学化表示模型。​**
 
-文本检索系统，向量空间模型 （或词组向量模型) 是一个应用于信息过滤，信息撷取，索引 以及评估相关性的代数模型
+核心是将非结构化的文本（文档查询）转化为高维空间中的向量，通过向量运算（如余弦相似度）来量化文本间的相关性。
 
-VSM概念简单，把对文本内容的处理简化为向量空间中的向量运算，并且它以空间上的相似度表达语义的相似度，直观易懂。当文档被表示为文档空间的向量，就可以通过计算向量之间的相似性来度量文档间的相似性。文本处理中最常用的相似性度量方式是余弦距离。就是文本的提取主成分，进一步推荐的算法。
+VSM 是**NLP 的基石**，虽被 Word2Vec、BERT 等深度学习模型超越（后者能捕捉语义与上下文），但仍是理解文本表示、相似度计算的入门必备知识。
 
-​
+#### 核心步骤（向量搜索）
+
+1. **构建词汇表**：对所有文档分词、去重，得到维度词典。
+
+2. **向量化**：将每个文档和查询转为 TF-IDF 权重向量。
+
+3. **相似度计算**：用余弦公式计算查询与所有文档的相似度。
+
+4. **排序返回**：按相似度得分降序，返回最相关文档。
+
+#### 优点
+
+* **直观易懂**：数学逻辑清晰，易于实现与解释。
+
+* **灵活高效**：支持部分匹配与相关性排序，优于布尔检索。
+
+* **数学基础强**：可直接应用线性代数工具（降维、聚类）。
+
+#### 缺点
+
+* **高维稀疏**：词汇表巨大，向量多为 0，计算与存储成本高。
+
+* **语义丢失**：忽略词序与上下文，无法理解一词多义、同义词。
+
+* **无法处理复杂语义**：难以捕捉深层语义关联（如 “苹果” 公司 vs 水果）。
+
+#### 应用
+
+* **信息检索**：早期搜索引擎、文献库的核心排序算法。
+
+* **文本分类 / 聚类**：将文本转为向量后，用 SVM、K-Means 等算法处理。
+
+* **推荐系统**：将用户画像、商品描述向量化，计算匹配度。
+
+* **自然语言处理**：作为文本特征提取的基础方法。
 
 
-### 项目中的 AI 应用
-项目使用
-
-项目背景：我们的项目是：智能化表格管理、智能化文件管理，用来管理大量的表格和文件。
-
-项目中 AI 主要是后端实现具体逻辑和算法（包括调用外部大模型），前端目前在 AI 技术上进行集成。
-
-##### 1、AI 助手，赋能传统数据
-
-早期逻辑是：用户需要直接操作表格，输入内容，点击按钮，或者进行复杂操作，统计数据，费时费力。
-
-现在我们增加了 AI 助手，根据用户的自然语言描述，使用开源大模型，然后转换成对应的代码，执行对应的 API 或者功能（统计某人本周的任务，统计表格整体的信息，以统计图形式展现出来），大批量处理表格的数据，实现了传统软件赋能。
-
-技术细节：用户自然语言输入，通过自然语言分析，调用大模型，根据大模型的返回值，调用对应的 API
-
-##### 2、AI 搜索，增强搜索能力
-
-早期：elasticSearch 需要建立索引，Java 内核比较重
-
-现在：在 Go zincsearch 基础上改动，需要的资源更少 [https://github.com/zincsearch/zincsearch](https://github.com/zincsearch/zincsearch "https://github.com/zincsearch/zincsearch")
-
-技术细节：前端调用实现 AI API，文本的分词和分析等，然后计算不同文档的匹配度。
-
-##### 3、AI 识别，智能管理图片
-
-早期：只能上传照片（网盘）
-
-现在：上传图片并进行分析，然后增加元数据，以表格等多种视图管理图片信息
-
-技术细节：识别发票图片，然后进行填写，避免用户手动录入数据。我们内部的技术实现调用了图片识别接口（还有其他身份证，驾照，发票识别等等）。市场上有一些开源的工具，例如前端的 tesseract 可以进行识别，但是准确率不是很高，所以我们基于开源的数据进行了改进。
-
-
-### 训练 LLM 大模型
+### 训练大模型
 需求: 我的某些需求，公开的模型不能免费完成，或者政策法律限制不能完成，需要训练自己的模型
 
-#### 思路1
+#### 思路1 调用公开大模型杰阔
 
-调用公开的 LLM 接口，给出一定关键词，然后完成润色，然后对接到文档项目中。
+这是常用的工作方式，调用公开的 LLM 接口，给出一定关键词，然后完成润色，然后对接到文档项目中。
 
-局限
+局限：国内公开的 LLM 接口可能存在限制，根据相关法律，不能满足需求；国外公开的大模型，存在登录问题。
 
-* 国内公开的 LLM 接口可能存在限制，根据相关法律，不能满足需求
-
-* 国外公开的大模型，存在登录问题。
-
-#### 思路2
+#### 思路2 自己训练大模型
 
 自己训练模型，然后把已有语料喂给模型，然后设置边界值等，这样自由度更高。
 
-局限：
+局限：个人技术有限，还不熟悉具体的细节；硬件条件有限，训练大模型性能有困难；已有语料欠缺，可能训练后的效果不及预期（类似线性回归方程，样本量较小精度有偏差）。
 
-* 个人技术有限，还不熟悉具体的细节；
+本地训练大模型难度大：自己训练内部的大模型，需要消耗较多的硬件，而且性能和效果也不是很好。
 
-* 硬件条件有限，训练大模型性能有困难；
+总结：
 
-* 已有语料欠缺，可能训练后的效果不及预期（类似线性回归方程，样本量较小精度有偏差）。
-
-未来有机会可以尝试
-
-
-### 遗传算法
-[https://baike.baidu.com/item/%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95/838140](https://baike.baidu.com/item/%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95/838140 "https://baike.baidu.com/item/%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95/838140")
-
-一、遗传算法概述
-
-遗传算法（Genetic Algorithm, GA）是一种模拟生物在自然环境中的遗传和进化过程而形成的自适应全局优化搜索算法。由美国计算机科学家John H. Holland提出，并借鉴了达尔文的进化论和孟德尔的遗传学说。遗传算法通过模拟自然界的自然选择、遗传和变异等机制，对问题的解进行迭代更新，从而搜索最优解或近似最优解。
-
-遗传算法的基本思想是将问题的解表示为“染色体”，在算法中通常采用二进制编码或其他编码方式来表示，然后通过选择、交叉（杂交）和变异等操作，模拟生物的进化过程。在每一代中，根据个体在问题域中的适应度值（由适应度函数计算得出）和从自然遗传学中借鉴来的再造方法进行个体选择，产生一个新的近似解。这个过程导致种群中个体的进化，得到的新个体比原个体更能适应环境，最终逼近最优解。
-
-​
-
-二、遗传算法的基本原理包括
-
-适者生存：适应度高的个体更有可能被选择为下一代个体的基础。
-
-优胜劣汰：通过选择操作，适应度低的个体被淘汰，而适应度高的个体则被保留并有机会繁殖后代。
-
-交叉变异：交叉操作是指将两个个体的某些基因进行随机交换，从而产生新的个体；变异操作则是指将个体中的某些基因进行随机改变，以增加种群的多样性。
-
-选择操作：从当前种群中选择一部分个体作为下一代种群的基础。选择操作通常采用轮盘赌选择等方法，使适应度高的个体有更大的概率被选中。
-
-​
-
-三、遗传算法在人工智能中的应用
-
-遗传算法在人工智能领域具有广泛的应用，主要体现在以下几个方面：
-
-优化问题：遗传算法是一种有效的全局优化方法，可以用于求解诸如函数优化、神经网络训练、控制系统优化等非线性、多峰函数优化和多目标优化问题。
-
-机器学习：在机器学习领域，遗传算法被用于分类、回归、聚类等任务。通过模拟生物进化过程中的自然选择、遗传和变异等机制，遗传算法能够在训练数据中发现潜在的规律和特征，提高模型的预测性能。
-
-模式识别：在模式识别领域，遗传算法也有广泛应用，如手写数字识别、图像识别和语音识别等。通过将模式识别问题转化为优化问题，遗传算法可以在搜索空间中找到最优解，提高识别的准确性。
-
-人工生命：遗传算法在人工生命领域中的应用包括模拟生物进化、遗传变异和自然选择等过程，以及研究生物系统的自适应和自组织特性。
-
-组合优化：遗传算法中的遗传编码技术可以用于解决计算机科学中的组合优化问题，如旅行商问题（TSP）、作业调度等。通过将问题转化为遗传编码的形式，遗传算法可以在较短的时间内找到最优解或近似最优解。
-
-并行处理：遗传算法具有较好的并行性能，可以充分利用现代计算机的多核处理器和图形处理器等硬件资源，实现高效的并行计算。
-
-​
-
-案例
-
-遗传算法是一种模拟自然选择和自然遗传学过程的搜索和优化技术。
-
-以下是一个简单的遗传算法实现的例子，用于求解一个简单的函数最大值问题：
-
-```javascript
-function randomFloat(min, max) {
-  return Math.random() * (max - min) + min;
-}
- 
-function randomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
- 
-function fitnessFunction(dna) {
-  // 一个简单的目标函数，例如求和
-  return dna.reduce((a, b) => a + b, 0);
-}
- 
-function selection(population, fitnessScores) {
-  // 选择算法，这里使用比例选择
-  let selected = [];
-  let sumFitness = fitnessScores.reduce((a, b) => a + b, 0);
-  let cumulativeFitness = fitnessScores.reduce((a, b) => {
-    return a + (b / sumFitness);
-  }, 0);
-  for (let i = 0; i < population.length; i++) {
-    if (Math.random() < cumulativeFitness) {
-      selected.push(population[i]);
-    }
-  }
-  return selected;
-}
- 
-function crossover(parentA, parentB) {
-  // 交叉算法，这里使用单点交叉
-  let crossoverPoint = randomInt(0, parentA.length - 1);
-  return [
-    parentA.slice(0, crossoverPoint) + parentB.slice(crossoverPoint),
-    parentB.slice(0, crossoverPoint) + parentA.slice(crossoverPoint)
-  ];
-}
- 
-function mutation(dna) {
-  // 变异算法，简单地随机替换基因
-  let dnaCopy = dna.slice();
-  let mutationRate = 0.01;
-  for (let i = 0; i < dnaCopy.length; i++) {
-    if (Math.random() < mutationRate) {
-      dnaCopy[i] = randomInt(-100, 100);
-    }
-  }
-  return dnaCopy;
-}
- 
-function generatePopulation(populationSize, dnaLength) {
-  let population = [];
-  for (let i = 0; i < populationSize; i++) {
-    population.push(Array.from({length: dnaLength}, () => randomInt(-100, 100)));
-  }
-  return population;
-}
- 
-function getFitnessScores(population) {
-  return population.map(fitnessFunction);
-}
- 
-function getBestDNA(population, fitnessScores) {
-  let bestFitness = Math.max(...fitnessScores);
-  return population[fitnessScores.indexOf(bestFitness)];
-}
- 
-function runGA(populationSize, dnaLength, generationCount) {
-  let population = generatePopulation(populationSize, dnaLength);
-  let fitnessScores;
-  for (let i = 0; i < generationCount; i++) {
-    fitnessScores = getFitnessScores(population);
-    let newPopulation = [];
-    while (newPopulation.length < populationSize) {
-      let parentA = selection(population, fitnessScores)[0];
-      let parentB = selection(population, fitnessScores)[0];
-      let children = crossover(parentA, parentB);
-      newPopulation.push(mutation(children[0]), mutation(children[1]));
-    }
-    population = newPopulation;
-  }
-  return getBestDNA(population, fitnessScores);
-}
- 
-let bestDNA = runGA(100, 100, 1000); // 100个个体，每个个体100个基因，迭代
-```
-
-​
+**不管是公司还是个人，主要调用其他大公司的 API，类似云服务器一样，而不是自己搭建大模型，还需要额外的维护费用。​**
 
 
 ### Data Warehouse 数据仓库
@@ -1227,7 +880,7 @@ let bestDNA = runGA(100, 100, 1000); // 100个个体，每个个体100个基因�
 总之，数据仓库是一种用于存储和管理数据的系统，旨在支持商业智能和数据分析。
 
 
-### LLM 基本概念
+### 大模型基本术语和概念
 本文介绍了 LLM 的基本概念，通俗易懂
 
 英文原文链接：[https://towardsdatascience.com/understanding-llms-from-scratch-using-middle-school-math-e602d27ec876](https://towardsdatascience.com/understanding-llms-from-scratch-using-middle-school-math-e602d27ec876 "https://towardsdatascience.com/understanding-llms-from-scratch-using-middle-school-math-e602d27ec876")
@@ -1394,7 +1047,9 @@ Transformer架构：
 
 
 ### metadata 元数据
-元数据（Metadata）是描述数据的数据。它提供了关于数据的背景信息，帮助用户理解数据的含义、结构和关系。
+元数据（Metadata）是描述数据的数据。
+
+它提供了关于数据的背景信息，帮助用户理解数据的含义、结构和关系。
 
 ​
 
@@ -1540,49 +1195,35 @@ Transformer架构：
 
 
 ### AI 概率模型
-AI 给出的答案，是推理的答案，是一个概率结果，不是准确的计算结果。
+AI 给出的答案，是推理的答案，是一个概率结果，不是准确的计算或者搜索结果。
 
-可能同一个问题，给不同的 AI，或者多次给同一个 AI 回答的结果都不一样。
+可能同一个问题，给不同的 AI，或者多次给同一个 AI，回答的结果都不一样。
 
 实战经验：
 
-* 对于不精确的场景：使用AI并解决问题即可（例如一个网页可以有多种思路实现）
+* 对于不精确的场景：使用 AI 并解决问题即可（例如一个网页可以有多种思路实现）
 
-* 对于精确的场景：AI 多重验证，总结出概率最高的结果
+* 对于精确的场景：多个 AI 多次验证，总结出概率最高的结果
+
+* 对于特定的问题：国内使用国内的 AI，国外使用国外的 AI，各取所长
 
 
 ### AIGC
-总结：AIGC: 生成式人工智能，包括AI绘画，AI 对话（chatGPT）
+AIGC: 内容生成式人工智能，包括AI 图像，文本，音频，视频，对话
 
-AIGC指内容生成式人工智能，指的是一种AI的类型，包括图像，文本，音频等内容生成式AI。
-
-这里包括了目前比较火热的AI绘画以及基于大语言模型的AI对话。
+​
 
 
-### 大模型是什么
-总结：大模型：和 charGPT 有关，就是很多参数的神经网络处理器。
+### 大模型的不足
+第一个不足就是幻觉，不稳定（创造性）。因为大模型是概率模型，只是预测回答。所以回答并非百分百正确，哪怕是模型不知道的问题，比如某个企业内部的信息，并没有投喂给他，它也会按照概率去编造一个信息出来。所以大模型的答案不能百分百全信，但是这也算是大模型的一个优势所在，因此对于创造性的任务，大模型就很擅长，比如写小说。
 
-大模型主要是指大语言模型（LLM），但是大模型并不单单指LLM。
-
-首先我们要理解大模型的概念，我们首先对这个词拆分来看，大是什么意思？模型又指代什么？
-
-首先我们来理解下模型，所谓模型通俗的讲是一个基于神经网络构建好的一个处理器，它能够根据输入产生相应的预测或者输出内容。而这个模型中是有多层神经网络，每层神经网络有很多神经元，而每个神经元可以理解为一个函数y= F(x)，它可以通过调整参数来控制输出。
-
-所以在训练模型的时候，就是通过输入数据，并监督输出结果，来不断地调节每个神经元的参数，从而最终训练出输出结果与实际偏差最小的模型。
-
-我们常听到哪个公司训练了一个大模型具备600亿参数，或者千亿的参数，这个就是所谓的大，指代的是参数量上亿级别，而这些参数就是存储知识和信息的变量，参数越多，记住的知识越多，输出结果更准确。
-
-大模型特征：
-
-1、不稳定（答案不完全对，并不是到数据库中找到对应的答案）；
-
-2、不全面（保密训练集的内容不能获取）
+第二个不足知识欠缺。众所周知，chatgpt的数据截止2021年9月。那在这之后的信息它无从知晓。所以预训练模型所掌握的知识就只能停留在某一刻为止。同样的，一些非公开数据，比如企业内部数据，应用内数据等，也是无法被gpt所知晓的。
 
 
-### 大模型的原理
-大语言模型是基于transfrmer架构，它是一种神经网络架构，是一个专门用于自然语言处理的编码-解码器架构，也是目前AIGC底层最核心的深度学习模型类型。
+### Transformer 架构
+大语言模型是基于 Transformer 架构，它是一种神经网络架构，是一个专门用于自然语言处理的编码-解码器架构，也是目前最核心的**深度学习模型类型**。
 
-核心能力就是将输入的单词以向量的形式传递给该神经网络，然后通过该网络的编码解码以及自注意力机制（self-attention），建立起每个单词之间联系的权重。
+核心能力：将输入的单词，以向量的形式，传递给该神经网络，然后通过该网络的编码解码，以及自注意力机制（self-attention），建立起每个单词之间联系的权重。
 
 宏观上讲，在基于该架构进行训练时，输入的每句话中的每个单词，都会和已经编码在模型中的单词进行相关性的计算，并把相关性又编码叠加在每个单词中。
 
@@ -1594,21 +1235,13 @@ The animal didn’t cross the street because it was too tired
 
 ![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585137663.webp)
 
-所以说大语言模型其实是一个概率模型，它只是基于你的输入预测你的输出。而并不是去数据库检索数据。包括“1+1=2”这样的数学问题也是通过投喂数据训练出来的，只是因为1+1接下来出现2的概率最大，所以大模型才会输出答案为2。
+所以，大语言模型，其实是一个概率模型。
 
-上面讲到了大语言模型的核心架构和工作原理，而如果想要大模型学习到足够多的世界知识，就需要大量的数据训练，从而才能足够全能且回答的足够准确，而GPT 全称 Generative Pre-trained Transformer，就是通过大量数据预训练后的模型。GPT3的参数达到了1750亿，而在这已经预训练好的模型上只需要给少量的case就很容易学到这几个case的特征。
+它只是基于你的输入，预测你的输出。而并不是去数据库检索数据。
 
-参考：
+包括“1+1=2”这样的数学问题，也是通过投喂数据训练出来的，只是因为1+1接下来出现2的概率最大，所以大模型才会输出答案为2。
 
-[https://mp.weixin.qq.com/s/160En7hlpfUzyno-gqx85A](https://mp.weixin.qq.com/s/160En7hlpfUzyno-gqx85A "https://mp.weixin.qq.com/s/160En7hlpfUzyno-gqx85A")
-
-[https://mp.weixin.qq.com/s/IR0flZGOyul9BHuDYPnljg](https://mp.weixin.qq.com/s/IR0flZGOyul9BHuDYPnljg "https://mp.weixin.qq.com/s/IR0flZGOyul9BHuDYPnljg")
-
-
-### 大模型的特征
-第一个特征就是幻觉，不稳定（创造性）。因为大模型是概率模型，只是预测回答。所以回答并非百分百正确，哪怕是模型不知道的问题，比如某个企业内部的信息，并没有投喂给他，它也会按照概率去编造一个信息出来。所以大模型的答案不能百分百全信，但是这也算是大模型的一个优势所在，因此对于创造性的任务，大模型就很擅长，比如写小说。
-
-第二个特征知识欠缺。众所周知，chatgpt的数据截止2021年9月。那在这之后的信息它无从知晓。所以预训练模型所掌握的知识就只能停留在某一刻为止。同样的，一些非公开数据，比如企业内部数据，应用内数据等，也是无法被gpt所知晓的。
+如果想要大模型学习到足够多的世界知识，就需要大量的数据训练，从而才能足够全能且回答的足够准确
 
 
 ### 思维链
@@ -1633,10 +1266,42 @@ The animal didn’t cross the street because it was too tired
 参考：[https://learnprompting.org/zh-Hans/docs/basics/instructions](https://learnprompting.org/zh-Hans/docs/basics/instructions "https://learnprompting.org/zh-Hans/docs/basics/instructions")
 
 
-### Embedding
-前面使用大模型的技巧，主要还是基于大模型已有知识能力来解决问题。但是我们也介绍了大模型的缺陷之一就是知识欠缺，企业内部的信息库，个人的信息库，大模型无从知晓。如果想要大模型学习到这部分的知识，用api把所有文本投喂给大模型不太可能，因为gpt的接口调用有token上限限制。继续投喂这些数据进行训练也不太可能，性价比太低。
+### rag 是什么
+RAG 是 Retrieval-Augmented Generation 的缩写，中文一般叫“检索增强生成”。
 
-如果要解决这个问题，Embedding 就是最佳的解决方案，所谓Embedding 简单理解就是把文本向量化，通过向量化，把文本转换成具备了数学意义的数据，我们也就能利用向量数据来计算文本之间的相关性。
+它是一种让大模型在回答问题前，先去外部资料里“查一查”，再基于查到的内容来生成答案的方法。
+
+​
+
+它解决什么问题
+
+\- 大模型本身不一定知道你的私有知识库、最新文档或公司内部资料。
+
+\- 直接让模型“凭记忆回答”容易出现幻觉，也就是编造看起来很对但其实不准确的内容。
+
+\- RAG 通过把“检索”接到“生成”前面，能让答案更可靠、更可追溯。
+
+​
+
+基本流程
+
+1\. 用户提问
+
+2\. 系统把问题转成检索
+
+3\. 去知识库、文档库、向量库或搜索引擎里找相关内容
+
+4\. 把检索到的内容连同问题一起喂给大模型
+
+5\. 大模型基于这些资料生成回答
+
+
+### Embedding
+前面使用大模型的技巧，主要还是基于大模型已有知识能力来解决问题。
+
+但是我们也介绍了大模型的缺陷之一就是知识欠缺，企业内部的信息库，个人的信息库，大模型无从知晓。如果想要大模型学习到这部分的知识，用api把所有文本投喂给大模型不太可能，因为gpt的接口调用有token上限限制。继续投喂这些数据进行训练也不太可能，性价比太低。
+
+如果要解决这个问题，Embedding 就是最佳的解决方案，Embedding 简单理解就是把**文本向量化**，通过向量化，把文本转换成具备了数学意义的数据，我们也就能利用向量数据来计算文本之间的相关性。
 
 通常本地知识库构建的架构和流程如下：
 
@@ -1672,13 +1337,13 @@ langchain在执行一个任务的时候如果把它传给大模型的第一个pr
 
 openai提供的api更新了function\_call，它就能够指定模型在对应的场景去调用我们自己定义的方法或者api。从而也就可以实现chatgpt +plugins的效果。
 
-![](https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585979947.webp)
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1769585979947.webp" alt="" title="" width="568" height="483" />
 
 ​
 
 
 ### Agent 是什么
-Agent智能体的发展
+Agent 智能体的发展
 
 智能体：广义上是指任何系统中能够思考并与环境交互，独立且具有相互合作功能的实体。智能体不仅仅是指人，蚂蚁，蜜蜂这些，同样可以指代AI系统，而目前基于AI大模型涌现了一些智能体雏形：
 
@@ -1710,13 +1375,13 @@ Agent智能体的发展
 ### 提示词注意点
 提示词注意事项
 
-* 阶段性：需求分成不同阶段，然后每一个阶段进行过程控制，让 AI 严格按照设计思路一步步来。如果一次性全部写出需求，那么不一定满足需求，中间某一步可能不正确（例如：确定产品需求——确定页面效果——数据库表——接口文档——后端代码——前端代码——联合调试）。
+1、阶段性：需求分成不同阶段，然后每一个阶段进行过程控制，让 AI 严格按照设计思路一步步来。如果一次性全部写出需求，那么不一定满足需求，中间某一步可能不正确（例如：确定产品需求——确定页面效果——数据库表——接口文档——后端代码——前端代码——联合调试）。
 
-* 精确性：严格按照设计文档，不能让自由发挥。避免乱写。
+2、精确性：严格按照设计文档，不能让自由发挥。避免乱写。能精确的地方就要精确。
 
-* 明确技术栈版本：AI 可能基于早期代码和文档进行训练，所以默认使用较早的技术。建议约定和目前项目相匹配的版本。 例如指定 \`React Router v6\`、使用 Tailwind CSS v3 实现响应式布局（可以给定 package.json 指定版本）。
+3、明确技术栈版本：AI 可能基于早期代码和文档进行训练，所以默认使用较早的技术。建议约定和目前项目相匹配的版本。 例如指定 \`React Router v6\`、使用 Tailwind CSS v3 实现响应式布局（可以给定 package.json 指定版本）。
 
-* 提供参考示例：给效果图，或者类似 Notion 的页面切换动画。
+4、提供参考示例：给效果图，或者类似 Notion 的页面切换动画。
 
 
 ### 批量翻译
@@ -1724,11 +1389,15 @@ Agent智能体的发展
 
 按照实际测试，每次选中翻译的部分在100行左右（20句）太多上下文可能造成网络错误等问题，其他用户测试模型不超过1000句上下文。具体还取决于使用什么工具和模型。
 
-进阶：先使用脚本去除无关内容，这样可以减少上下文数量和干扰信息，这样就能支持更多的翻译字符串。
+进阶：先使用脚本去除无关内容，这样可以减少上下文数量和干扰信息（数据清洗），这样就能支持更多的翻译字符串。
 
 
-### 项目预设-集成第三方库
-#### 在 React 项目中集成以下功能（建议增加版本号）
+### 项目预设-预设集成第三方库
+将 package.json 中的 核心依赖 + 版本号 告诉 AI
+
+```text
+请你使用 xxx 这些第三方库实现功能
+```
 
 * 使用 React Query 处理 API 请求缓存
 
@@ -1742,15 +1411,72 @@ Agent智能体的发展
 
 * 使用 Jest + React Testing Library 进行测试
 
-#### 使用 React Router 配置路由
+* 使用 React Router 配置路由
 
-* 实现登录页（/login）、首页（/）、用户详情页（/user/:id）
+实际的个人项目提示词：
 
-* 添加路由守卫，未登录用户访问受限路由时跳转登录页
+```text
+请基于 React 18 技术栈进行前端业务开发，项目需引入并使用以下第三方依赖库，严格结合各库核心能力进行功能编码，各库用途说明如下：
 
-* 配置导航菜单，高亮显示当前激活路由
+1. `react` / `react-dom`：项目核心基础框架，用于组件化开发、页面DOM渲染与视图构建；
+2. `react-app-polyfill`：提供浏览器兼容性补丁，兼容低版本浏览器语法与API；
+3. `@reduxjs/toolkit`、`react-redux`、`redux`：搭配实现全局状态管理，统一处理跨组件共享数据、全局状态缓存与异步状态逻辑；
+4. `antd`：使用React UI组件库，快速搭建后台系统、表单、弹窗、表格等通用业务页面；
+5. `classnames`：动态拼接、条件控制CSS类名，简化样式动态控制代码；
+6. `axios`：作为全局网络请求工具，处理前后端接口请求、请求响应拦截、接口统一封装；
+7. `dayjs`：轻量级日期工具库，处理项目内日期格式化、时间计算、日期对比等逻辑；
+8. `prop-types`：对React组件Props进行类型校验，提升代码稳定性与可维护性；
+9. `is-hotkey`：监听键盘按键组合，实现页面快捷键触发操作等交互功能；
+10. `js-cookie`：浏览器Cookie增删改查操作，用于登录凭证、轻量临时数据存储；
+11. `localforage`：封装IndexedDB等本地存储，实现大容量、异步本地数据持久化存储；
+12. `@antv/g2`：数据可视化图表库，开发折线图、柱状图、饼图等各类业务图表；
+13. `qrcode.react`：快速生成页面二维码组件，满足二维码展示、分享等场景；
+14. `react-icons`：统一管理项目图标，快速引入各类矢量图标，优化图标使用效率；
+15. `react-color`：提供拾色器组件，用于颜色选择、主题配色、自定义色值配置场景；
+16. `react-select`：使用高级定制化下拉选择组件，实现搜索、多选、异步下拉等复杂选择功能；
+17. `react-transition-group`：为组件挂载、卸载、切换添加过渡动画，提升页面交互体验；
+18. `react-intl-universal`：实现项目国际化多语言能力，支持多语言文本切换、文案国际化展示。
 
-* 使用 useNavigate 和 useParams 处理路由跳转和参数获取
+开发时需合理选用对应库能力，代码规范、功能贴合各库原生定位，不重复造轮子，最大化利用现有依赖完成业务开发。
+```
+
+实际的公司项目的提示词：
+
+```text
+请基于 React 18 技术栈进行前端业务开发，项目需引入并使用以下第三方依赖库，严格结合各库核心能力进行功能编码，各库用途说明如下：
+
+1. `react` / `react-dom`：项目核心基础框架，用于组件化开发、页面DOM渲染与视图构建；
+2. `@gatsbyjs/reach-router`：轻量级React路由库，负责项目页面路由跳转、路由匹配与导航管理；
+3. `@seafile/seafile-calendar`：Seafile定制日历组件，用于实现日程管理、日期选择、日历展示功能；
+4. `@seafile/seafile-editor`：Seafile官方富文本编辑器，支持文档编辑、格式化、内容排版等核心编辑能力；
+5. `@seafile/sea-email-editor`：Seafile定制邮件编辑器，用于实现邮件内容编辑、模板配置功能；
+6. `autoprefixer`：PostCSS插件，自动补全CSS浏览器前缀，解决样式兼容性问题；
+7. `axios`：基于Promise的HTTP客户端，统一处理项目网络请求、接口封装、响应拦截；
+8. `classnames`：动态条件拼接CSS类名，简化组件样式控制逻辑；
+9. `copy-to-clipboard`：轻量级复制工具，实现文本、链接、内容一键复制到剪贴板功能；
+10. `d3`：数据可视化库，用于绘制复杂图表、数据图形、自定义可视化交互界面；
+11. `dayjs`：轻量级日期处理库，用于日期格式化、时间计算、日期对比；
+12. `deep-copy`：深拷贝工具库，安全复制复杂对象/数组，避免引用类型数据污染；
+13. `embedding-atlas`：嵌入式图表/地图集成库，用于页面内嵌可视化图表、地图展示；
+14. `i18next` / `react-i18next` / `i18next-browser-languagedetector` / `i18next-http-backend`：国际化完整方案，实现多语言切换、自动检测浏览器语言、远程加载翻译资源；
+15. `is-hotkey`：键盘快捷键监听工具，实现组合按键检测、快捷键功能开发；
+16. `js-cookie`：浏览器Cookie操作库，用于Cookie的读取、设置、删除，存储轻量客户端数据；
+17. `jszip`：前端压缩/解压缩库，用于处理ZIP文件的创建、读取、解压操作；
+18. `prop-types`：React组件属性类型校验，提升代码健壮性与可维护性；
+19. `react-dnd` / `react-dnd-html5-backend`：React拖拽功能库，实现元素拖拽、拖放、排序等交互效果；
+20. `react-responsive`：响应式布局工具，根据设备屏幕尺寸动态渲染组件、适配移动端/PC端；
+21. `react-select`：高度可定制化下拉选择组件，支持搜索、多选、异步加载等高级下拉功能；
+22. `reactstrap`：基于Bootstrap的React UI组件库，提供按钮、表单、弹窗、布局等通用UI组件；
+23. `rmc-dialog`：移动端弹窗组件，用于提示框、确认框、模态框等弹窗交互；
+24. `rmc-feedback`：移动端触摸反馈组件，优化按钮、元素点击的交互体验；
+25. `rmc-tabs`：移动端标签页组件，实现顶部/底部tab切换、页面分类导航功能；
+26. `slugid`：生成唯一URL安全ID的工具，用于创建短链接、唯一标识；
+27. `unified`：文本处理抽象语法树工具，用于markdown/文本解析、转换、格式化处理。
+
+开发时需合理选用对应库能力，代码规范、功能贴合各库原生定位，不重复造轮子，最大化利用现有依赖完成业务开发。
+```
+
+​
 
 
 ### 项目开发-基础组件开发
@@ -1866,9 +1592,9 @@ Agent智能体的发展
 
 
 ### 提示词的要点
-角色：希望模型扮演的角色（你是一个 python 程序员，我是一个 C 程序员）
+角色：希望模型扮演的角色（你是一个 python 程序员）
 
-指令：指定您希望语言模型执行的任务或指令（帮我用 python 写一段代码，功能是贪吃蛇）
+指令：指定您希望语言模型（用 python 写代码）执行的任务或指令（功能是贪吃蛇）
 
 上下文：包含相关信息或额外上下文，以帮助语言模型更好地响应。（例如很多预设的提示词，或者选中的代码，或者图片）
 
@@ -1877,12 +1603,24 @@ Agent智能体的发展
 输出指示：指定您需要的输出类型或格式。（代码，图片，文本，视频等，字数长度格式等）
 
 
-### 一张图AI绘画100次，还看的出来是谁吗
-这个视频介绍了，让 AI 生成1张图片，经过100次迭代后，最后就变成了大众脸
+### GPT 是什么？
+GPT 全称 Generative Pre-trained Transformer
 
-[https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+通过大量数据预训练后的模型
 
-AI 根据用户的反馈确定回答答案的正确与否，那么最后审美就趋近于大众脸（开源公共的 AI）
+在这已经预训练好的模型上，只需要给少量的case，就很容易学到这几个 case 的特征
+
+下面是不同版本的参数数量
+
+* GPT‑1：**1 亿级**
+
+* GPT‑2：**1 亿～15 亿**
+
+* GPT‑3：**1750 亿**
+
+* GPT‑3.5：**200 亿～1750 亿**
+
+* GPT‑4：**1.8 万亿（MoE）​**
 
 
 ### 中国的ChatGPT
@@ -1907,14 +1645,8 @@ AI 根据用户的反馈确定回答答案的正确与否，那么最后审美�
 类似智能手机取代传统的钟表，照相机等功能，AI 助手可以取代秘书助理等多个辅助工作。
 
 
-### AI绘画又进化了
-AI 可以完成多种风格的绘画创作，包括进一步的视频
-
-[https://www.bilibili.com/video/BV1X24y1n77u/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1X24y1n77u/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1X24y1n77u/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
-
-
 ### AI绘画-启动/修复/更新/模型下载管理
-这里介绍了一个 AI 绘画的工具（Windows 版本的），2026年看看能否搞一个最新版本的工具
+一个 AI 绘画的工具（Windows 版本），2026年看看能否搞一个最新版本的工具
 
 [https://www.bilibili.com/video/BV1ne4y1V7QU/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1ne4y1V7QU/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1ne4y1V7QU/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
 
@@ -1929,22 +1661,16 @@ AI 根据已有的很多答案，给出一个概率最高的答案，不一定�
 解决方案：给 AI 预设（你是一个健身教练），给自己预设（我是一个0基础的普通人，年龄，身体素质），然后不断调整细节。AI 可以很好的完成 90% 的重复工作，剩下的 10% 需要专业人员进行微调，短期内无法取代 100% 满足的健身教练，也很难取代健身之外的各种情绪价值。
 
 
-### 让AI来画评论区？完成的瞬间我惊呆了
-[https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
-
-AI 绘画的结果，取决于提示词的准确性（AI 产品经理课程中的描述）
-
-需要写好提示词，然后才能让 AI 充分学习并处理任务（当然也需要一个更高级的模型）
-
-对于热门的关键词比较好画，对于冷门的领域和词汇，AI 发挥的不是很稳定。
-
-
 ### 9 个插件实例自动完成任务
 [https://www.bilibili.com/video/BV1Sk4y1x7r2/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Sk4y1x7r2/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Sk4y1x7r2/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
 
-介绍了不同类型的 ChatGPT 插件，可以用来完成特定场景的功能（类似现在的智能体），包括图片创造，文字创作，编写代码。这些的前提是用户需要能判断 AI 生成的结果是否正确，是否是好的结果。
+介绍了不同类型的 ChatGPT 插件，可以用来完成特定场景的功能（类似现在的智能体）
 
-自己可以尝试使用 chatGPT 的插件
+包括图片创造，文字创作，编写代码。
+
+用户需要能判断 AI 生成的结果是否正确，是否是好的结果。
+
+自己可以尝试使用 chatGPT 的插件。
 
 
 ### 学会如何把ChatGPT接入Siri
@@ -1958,7 +1684,9 @@ chatGPT 和 Siri 进行组合后，可以辅助更好的调用 Siri
 
 AI绘画、AI写作、代码、语音生成，现在支持的 AIGC 很多方面
 
-个人实际使用中，AI 调用都需要额外收费，那么这部分收费是否能获得足够的工作回报？这是个值的思考的问题（例如微软的 Azure AI 可以生成用户配音，那么这些做成短视频，能否获得预期的回报？）
+个人实际使用中，AI 调用都需要额外收费，那么这部分收费是否能获得足够的工作回报？这是个值的思考的问题
+
+（例如微软的 Azure AI 可以生成用户配音，那么这些做成短视频，能否获得预期的回报？）
 
 
 ### 30个AI工具可以让AI帮你干活
@@ -1966,35 +1694,21 @@ AI绘画、AI写作、代码、语音生成，现在支持的 AIGC 很多方面
 
 介绍了多个 AI 工具用于 AIGC 领域，主要是2023年的，现在已经过时了
 
+​
 
-### AI语音
-[https://www.bilibili.com/video/BV1eL411T7rz/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1eL411T7rz/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1eL411T7rz/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+4.AI写论文：<https://jenni.ai/；https://www.xiaomo.com/home>
 
-收费：科大讯飞，魔音工坊
+​
 
-免费：微软 Azure AI&#x20;
+7.AI画画：<https://yige.baidu.com/；https://www.gaoding.com/；>
 
+8.AI聊天：<https://openai.com/blog/chatgpt/；>
 
-### ChatGPT + Midjourney画一幅水墨画
-[https://www.bilibili.com/video/BV1ms4y157kJ/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1ms4y157kJ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1ms4y157kJ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+9.AI剪辑：<https://www.ibm.com/cn-zh/watson；https://aigc.yizhentv.com/；https://zenvideo.qq.com/；http://shanjian.tv/>
 
-ChatGPT：<https://chat.openai.com/>
+10.AI配音：<https://azure.microsoft.com/zh-cn/free/cognitive-services/>
 
-Midjourney：<https://www.midjourney.com/>
-
-使用 AIGC 关键是精确需求，一步步的引导，避免AI的想法和个人的想法不一致。
-
-目前的情况，还是通过不同的软件分步骤进行描述：使用通用 ChatGPT 把想法转换成具体的实现细节，然后通过专门的 AI，把具体细节文字实现成多媒体，这样就实现了 AIGC 创作效果。
-
-
-### 200万人排队用的 Notion AI
-[https://www.bilibili.com/video/BV1sY411Y7RL/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1sY411Y7RL/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1sY411Y7RL/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
-
-Notion AI 可以完成基本的 AI 写作，类似 sdoc-editor 中嵌入的 AI 功能。
-
-好处：速度快，写通用类型的短文很快，95%的内容正确（剩下5%的内容不一定正确），建议使用严格的限定词语。
-
-弊端：写的内容不一定完美符合需求，某些敏感信息，某些行业信息不能完成。
+11.AI换脸：<https://deepfakesweb.com/；https://faceswap.dev/；>
 
 
 ### 在家训练使用轻量级低成本 chatGPT
@@ -2007,6 +1721,44 @@ Notion AI 可以完成基本的 AI 写作，类似 sdoc-editor 中嵌入的 AI �
 目前星标不少
 
 看未来能否在 ollama 上本地部署对应的大模型
+
+
+### AI-绘画
+让 AI 生成1张图片，经过100次迭代后，最后就变成了大众脸
+
+[https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1Lg4y1E7nr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+AI 根据用户的反馈确定回答答案的正确与否，那么最后审美就趋近于大众脸（开源公共的 AI）
+
+
+### AI 绘画
+ChatGPT + Midjourney画一幅水墨画
+
+[https://www.bilibili.com/video/BV1ms4y157kJ/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1ms4y157kJ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1ms4y157kJ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+ChatGPT：<https://chat.openai.com/>
+
+Midjourney：<https://www.midjourney.com/>
+
+使用 AIGC 关键是精确需求，一步步的引导，避免AI的想法和个人的想法不一致。
+
+目前的情况，还是通过不同的软件分步骤进行描述：使用通用 ChatGPT 把想法转换成具体的实现细节，然后通过专门的 AI，把具体细节文字实现成多媒体，这样就实现了 AIGC 创作效果。
+
+
+### AI-绘画
+[https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1kN4y1N7Pf/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
+
+AI 绘画的结果，取决于提示词的准确性（AI 产品经理课程中的描述）
+
+需要写好提示词，然后才能让 AI 充分学习并处理任务（当然也需要一个更高级的模型）
+
+对于热门的关键词比较好画，对于冷门的领域和词汇，AI 发挥的不是很稳定。
+
+
+### AI-绘画
+AI 可以完成多种风格的绘画创作，包括进一步的视频
+
+[https://www.bilibili.com/video/BV1X24y1n77u/?vd\_source=2d5bdee7ea59486ed4aa4a9b10020224](https://www.bilibili.com/video/BV1X24y1n77u/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224 "https://www.bilibili.com/video/BV1X24y1n77u/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224")
 
 
 ### ChatGPT 牛X在哪
@@ -2050,5 +1802,59 @@ ChatGPT的本质功能是“单字接龙”（自回归生成），即依据任�
 
 三、社会冲击与核心价值
 ChatGPT的里程碑意义并非产品本身，而是验证了大语言模型的可行性，推动全球布局该技术。大语言模型的核心价值在于精通语言且存储海量人类知识，能大幅提升群体协作中“创造、继承、应用知识”的语言处理效率，可应用于搜索、办公、教育、开发、客服等全行业场景。它也对现有人才培养模式提出挑战：传统“传授既有知识”的教育模式已难以适应时代，未来需转向培养学习能力和创造能力，以应对技术变革带来的就业市场变化。
+
+
+### 向量数据集
+向量数据集：全是数字数组向量，专门给 AI 做检索、匹配、聚类
+
+向量数据集的用途：
+
+1. **RAG 知识库：​**把文档转成向量 → 构成向量数据集 → 用户提问时检索最相关的
+
+2. **以图搜图：​**所有图片转向量 → 建向量库 → 上传一张图找相似
+
+3. **推荐系统：​**用户、商品都转向量 → 匹配相似兴趣
+
+4. **语义搜索：​**不搜关键词，搜 “意思相近” 的内容
+
+**向量数据集**是你手里的原始数据（很多向量），**Milvus** 是专门存、查这些向量的**向量数据库。​**
+
+
+### Milvus 大模型向量数据库
+**Milvus** 指的是通过 python 操作 **Milvus**—— 专为 AI 打造的**开源高性能向量数据库，​专门用来存和查 “特征向量” 的数据库**。
+
+**PyMilvus 是**Milvus 的**官方 Python 客户端，​**提供全套 API：连接、建库、增删改查、索引、混合搜索。
+
+```python
+# 1.安装
+pip install pymilvus
+
+# 2.连接
+from pymilvus import connections, Collection, FieldSchema, CollectionSchema, DataType
+connections.connect(host='localhost', port='19530')
+
+# 3.建表（Collection）
+fields = [
+    FieldSchema(name="id", dtype=DataType.INT64, is_primary=True),
+    FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=512)
+]
+schema = CollectionSchema(fields)
+coll = Collection("my_docs", schema)
+
+# 4.建索引
+index_params = {"index_type": "HNSW", "metric_type": "L2"}
+coll.create_index("embedding", index_params)
+
+# 5.插入/搜索
+coll.insert([[1,2], [[...], [...]]])
+coll.load()
+coll.search(data=[query_vec], anns_field="embedding", limit=5)
+```
+
+和传统数据库的对比：
+
+* **MySQL/PostgreSQL**：存结构化数据，**精确匹配、范围查询**。
+
+* **Milvus（向量库）​**：存**高维向量**，做**相似性匹配（近似最近邻）​**。
 
 

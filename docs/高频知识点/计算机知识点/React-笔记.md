@@ -1,6 +1,6 @@
 # React笔记 
 
- 2026-4-1
+ 2026-5-10
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -1024,6 +1024,33 @@ React 和 VUE 对比
 * 小项目使用 vue，大项目使用 react；国际化项目使用 react；国内项目使用 vue；react 和对应的类型控制，团队人多时便于合作；vue 写法比较灵活，如果注释不完善，可能理解有一定困难。
 
 其他参考：<https://juejin.cn/post/6844903668446134286>
+
+   
+## 0910 React 严格模式
+
+
+**React 严格模式**（`<React.StrictMode>`）是 React 提供的**开发环境专用**的检查工具，用于在开发阶段提前暴露应用中的潜在问题、不安全代码和过时用法，帮助写出更健壮、符合最佳实践的代码。
+
+* **生效范围**：仅在 `development` 模式生效，**生产环境会自动移除**，不影响最终打包体积与运行表现。
+
+* **使用方式**：包裹根组件或局部组件树 \<React.StrictMode>
+
+严格模式中，会在开发环境**主动增加额外检查与重复调用**，以暴露问题（componentDidMount 阶段执行2次）
+
+可以使用 ref 避免重复请求
+
+```javascript
+const mounted = useRef(false);
+
+useEffect(() => {
+  if (mounted.current) return;
+  mounted.current = true;
+  // 只执行一次的请求
+  fetch('/api/data');
+}, []);
+```
+
+​
 
    
 ## 0909 自定义 hooks 的使用场景

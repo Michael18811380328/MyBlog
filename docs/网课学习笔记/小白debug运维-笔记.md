@@ -423,3 +423,7 @@ CodeWhisperer 经过数十亿行代码的训练，可以根据您的评论和现
 ✔****内置安全扫描
 
 
+### 系列4 硅基文明简史
+[https://space.bilibili.com/302188068/lists/7549462?type=season](https://space.bilibili.com/302188068/lists/7549462?type=season "https://space.bilibili.com/302188068/lists/7549462?type=season")
+
+
