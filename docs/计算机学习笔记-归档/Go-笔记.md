@@ -1,8 +1,8 @@
 # Go
 ### 0 介绍
-Go 语言被设计成一门应用于搭载 **Web 服务器，存储集群，巨型中央服务器**的系统编程语言。
+Go 语言应用于搭载 **Web 服务器，存储集群，巨型中央服务器**的系统编程语言。
 
-对于高性能分布式系统领域而言，Go 语言无疑比大多数其它语言有着更高的开发效率。
+对于高性能分布式系统领域而言，Go 有着更高的开发效率。
 
 它提供了海量并行的支持，适合游戏服务端的开发。
 
@@ -333,17 +333,17 @@ newSlice := append(slice, 4)
 
 
 ### go 版本介绍
-截至2024年11月，Go语言的最新稳定版本是Go 1.22。
+[https://github.com/golang/go](https://github.com/golang/go "https://github.com/golang/go")
 
-Go 1.22于2024年8月发布，带来了许多新特性和改进，例如内置的 slices、maps 等标准库函数的优化，以及对错误处理机制的一些改进等。
+使用 go version 查看版本号。
 
-* 近期版本较受欢迎：较新的版本（如Go 1.20、Go 1.21、Go 1.22）市场占有率呈上升趋势。因为新版本通常会修复旧版本的漏洞、提升性能、增加新特性。许多新启动的项目或者对性能和功能有较高要求的项目会优先选择较新的版本。例如，Go 1.20引入了显著的性能优化和一些新的语言特性，吸引了不少开发者升级。
+Go 1.20 是在 2023年2月正式发布。
 
-* 长期支持版本受青睐：Go官方会指定一些长期支持（LTS）版本，像Go 1.20就是LTS版本。企业级项目出于稳定性和维护成本的考虑，会更倾向于使用LTS版本，所以这类版本在企业应用中可能占有一定比例的市场份额。
+Go 1.22 于 2024年8月发布。
 
-实际项目，建议考虑支持 1.20 以后版本（Go 1.20 是在 2023 年 2 月 1 日正式发布），避免旧版本问题
+Go 1.26 于 2026年5月发布。
 
-本地环境安装的是  go 1.22.5 版本。
+本地安装至少在 1.20 版本后。
 
 
 ### go build 切换源
@@ -381,10 +381,13 @@ go get github.com/someuser/somepackage@v1.2.3
 
 #### 3. 清理未使用的依赖
 
-结合 `go mod tidy` 命令，`go get` 可以帮助清理项目中未使用的依赖。例如，先执行 `go get` 进行依赖更新，然后执行 `go mod tidy` 来移除未使用的依赖：收起sh
+结合 `go mod tidy` 命令，`go get` 可以帮助清理项目中未使用的依赖。
+
+例如，先执行 `go get` 进行依赖更新，然后执行 `go mod tidy` 来移除未使用的依赖。
 
 ```
 go get -u
+
 go mod tidy
 ```
 
@@ -394,7 +397,7 @@ go mod tidy
 
 * `-d`：只下载包，不进行安装或编译。
 
-* `-insecure`：允许使用不安全的协议（如 HTTP）进行下载，通常用于内部网络环境。
+* `-insecure`：允许使用不安全的协议（HTTP）进行下载，通常用于内部网络环境。
 
 
 ### go.mod 作用
@@ -412,30 +415,29 @@ module example.com/myproject
 module myproject
 ```
 
-这行代码表明该项目的模块路径为 `example.com/myproject`，其他项目可以通过这个路径来导入该项目的包。
+这行代码表明该项目的模块路径为 `example.com/myproject`，其他项目可以通过这个路径来导入该项目的包（相当于 package.json 中的 name）。
 
 #### 管理依赖版本
 
-`go.mod` 文件记录了项目所依赖的所有外部包及其版本信息。
+`go.mod` 文件，记录了项目所依赖的所有外部包及其版本信息（dependencies）。
 
 当你使用 `go get` 命令添加、更新或删除依赖时，`go.mod` 文件会相应地更新。例如：
 
 ```
 require (
     github.com/somepackage/somepackage v1.2.3
-    golang.org/x/net v0.0.0-20210226172049-e18ecbb05110
 )
 ```
 
-这里列出了项目依赖的两个包及其版本号。
+这里列出了项目依赖的包及其版本号。
 
 通过明确指定依赖版本，可以确保项目在不同环境中使用相同版本的依赖，避免因依赖版本不一致而导致的兼容性问题。
 
-目前用到这些功能，其他需要再使用
-
 
 ### go mod tidy 作用
-`go mod tidy` 是一个用于整理 Go 项目依赖的命令。它会根据项目中的代码，分析和调整项目的 `go.mod` 和 `go.sum` 文件，确保项目依赖的准确性和一致性。
+`go mod tidy` 是一个用于整理 Go 项目依赖的命令。
+
+它会根据项目中的代码，分析和调整项目的 `go.mod` 和 `go.sum` 文件，确保项目依赖的准确性和一致性。
 
 #### 1. 初始化项目依赖
 
@@ -453,26 +455,23 @@ require (
 ### go.sum 作用
 确保依赖的完整性，类似于 package-lock.json 文件
 
-`go.sum` 文件记录了项目所有依赖的哈希值，用于验证下载的依赖包是否与记录的版本一致。它包含了每个依赖包的不同版本的哈希信息
-
 `go.mod` 主要负责定义项目的模块信息和依赖版本（package.json），而 `go.sum` 则用于验证依赖的完整性和支持版本选择(package-lock.json)。
 
-在开发过程中，通常不需要手动修改 `go.sum` 文件，Go 工具链会自动更新它以保持与 `go.mod` 文件的一致性。
+`go.sum` 文件记录了项目所有依赖的哈希值，用于验证下载的依赖包是否与记录的版本一致。它包含了每个依赖包的不同版本的哈希信息。在开发过程中，通常不需要手动修改 `go.sum` 文件，Go 工具链会自动更新它以保持与 `go.mod` 文件的一致性。
 
 
 ### 常用 go 服务器框架
 常用的服务器框架对比
 
-|        | gin                                                                                                                                       | beego                                                                                             | echo                                                                                                    | martini                                                                                                                |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| github | [https://github.com/gin-gonic/gin](https://github.com/gin-gonic/gin "https://github.com/gin-gonic/gin")                                   | [https://github.com/beego/beego](https://github.com/beego/beego "https://github.com/beego/beego") | [https://github.com/labstack/echo](https://github.com/labstack/echo "https://github.com/labstack/echo") | [https://github.com/go-martini/martini](https://github.com/go-martini/martini "https://github.com/go-martini/martini") |
-| stars  | 77                                                                                                                                        | 30                                                                                                | 29                                                                                                      | 11                                                                                                                     |
-| 介绍     | Gin is a HTTP web framework written in Go (Golang). It features a Martini-like API with much better performance -- up to 40 times faster. | beego is an open-source, high-performance web framework for the Go programming language.          | High performance, minimalist Go web framework                                                           | Classy web framework for Go                                                                                            |
-|        | Gin是一个用Go（Golang）编写的HTTP web框架。它采用了类似Martini的API，性能更好，速度快40倍。                                                                             | beego是Go编程语言的开源、高性能web框架。                                                                         | 高性能、极简主义的Go web框架                                                                                       | Go的经典web框架，现在废弃不建议使用，改成 Gin 框架                                                                                         |
+| 名称        | gin                                                                                                                                       | beego                                                                                             | echo                                                                                                    | martini                                                                                                                |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| github 链接 | [https://github.com/gin-gonic/gin](https://github.com/gin-gonic/gin "https://github.com/gin-gonic/gin")                                   | [https://github.com/beego/beego](https://github.com/beego/beego "https://github.com/beego/beego") | [https://github.com/labstack/echo](https://github.com/labstack/echo "https://github.com/labstack/echo") | [https://github.com/go-martini/martini](https://github.com/go-martini/martini "https://github.com/go-martini/martini") |
+| 是否维护      | 正常                                                                                                                                        | 正常                                                                                                | 正常                                                                                                      | 停止维护                                                                                                                   |
+| stars     | 88.5                                                                                                                                      | 32.4                                                                                              | 32.4                                                                                                    | 11                                                                                                                     |
+| 介绍        | Gin is a HTTP web framework written in Go (Golang). It features a Martini-like API with much better performance -- up to 40 times faster. | beego is an open-source, high-performance web framework for the Go programming language.          | High performance, minimalist Go web framework                                                           | Classy web framework for Go                                                                                            |
+|           | Gin是一个用Go编写的HTTP web框架。它采用了类似Martini的API，性能更好，速度快40倍。                                                                                     | beego是Go编程语言的开源、高性能web框架。                                                                         | 高性能、极简主义的Go web框架                                                                                       | Go的经典web框架                                                                                                             |
 
-这里仅了解主要框架，不具体使用和学习
-
-学习和使用这些的基础，需要熟悉 golang 语法，同时熟悉服务器知识，目前暂时不具备
+学习和使用这些的基础，需要熟悉 golang 语法，同时熟悉服务器知识
 
 PS：martini 马提尼酒，gin 金酒
 

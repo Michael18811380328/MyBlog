@@ -1043,7 +1043,11 @@ weakmap 了解即可，实际没有使用，键只能是对象（对象，数组
 
 
 ### P5 Set（集合）
-set 集合和 map 映射的区别是：set.add(value), map.set(key, value)
+set 集合和 map 映射的区别是：
+
+set.add(value)
+
+map.set(key, value)
 
 #### 6.6.1 基本 API
 

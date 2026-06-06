@@ -1858,3 +1858,40 @@ coll.search(data=[query_vec], anns_field="embedding", limit=5)
 * **Milvus（向量库）​**：存**高维向量**，做**相似性匹配（近似最近邻）​**。
 
 
+### Skill 是什么？怎么用
+**Skill（Agent Skill）​**：放在特定目录下的**指令 + 模板 + 参考资料**文件夹，用来教 AI「在什么场景下、按什么规范、用什么模板」来写代码。
+
+Prompt：每次聊天都要重写一遍，临时生效。
+
+Skill：**写一次，到处用**，AI 会自动匹配场景加载，支持团队共享。
+
+#### 目录结构
+
+```text
+xxx-skill/
+├─ SKILL.md          # 必须：技能说明+触发条件+详细规则
+├─ assets/           # 可选：模板、代码片段
+└─ references/       # 可选：官方文档、约束、事实清单
+```
+
+放置路径：项目根路径或者设备根路径
+
+```text
+你的项目/.github/skills/技能名/
+
+~/.copilot/skills/技能名/
+```
+
+#### 具体使用
+
+**GitHub Copilot、Claude Code、Cursor** 等，是一个开放标准（agentskills.io）。
+
+1. 打开 VS Code，安装并登录 **GitHub Copilot** 扩展
+
+2. 打开 Copilot Chat 面板（右侧图标或 `Ctrl+Shift+I`）
+
+3. 点右上角**齿轮 ⚙️ → Skills**，能看到 `skills` 已被识别
+
+Copilot 识别到这些关键词 → 自动加载 `skills` → 按 `SKILL.md` 里的规则和模板生成代码
+
+

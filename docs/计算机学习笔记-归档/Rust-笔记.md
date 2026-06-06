@@ -1,8 +1,8 @@
 # Rust
 ### 00 介绍
-Rust 入门功能学习
+Rust 入门功能了解。目前项目使用不多，这个语言偏底层，暂时了解。
 
-因为最近有个第三方的工具是 rust 语言写的，同时这个语言最近也比较火，自己简要了解一下
+**Rust**是 Mozilla 主导开发的**系统级编程语言**：**内存安全、零成本抽象、高性能、并发安全**，被称为 “**安全又快的现代 C/C++ 替代品**”
 
 参考链接：[https://www.runoob.com/rust/rust-basic-syntax.html](https://www.runoob.com/rust/rust-basic-syntax.html "https://www.runoob.com/rust/rust-basic-syntax.html")
 
@@ -18,7 +18,7 @@ Rust 语言可以用于开发：
 
 这是一种编译型语言，需要先编译成二进制码，然后才能执行。
 
-目前项目使用不多，这个语言偏底层，暂时了解。
+​
 
 
 ### 01 环境搭建 cargo
@@ -315,9 +315,5 @@ fn calculate_length(s: &String) -> usize {
 ```
 
 ​
-
-
-### 09 切片
-[https://www.runoob.com/rust/rust-slice.html](https://www.runoob.com/rust/rust-slice.html "https://www.runoob.com/rust/rust-slice.html")
 
 
