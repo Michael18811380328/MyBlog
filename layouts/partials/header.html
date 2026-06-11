@@ -1,0 +1,8 @@
+<header class="site-header">
+  <a class="brand" href="{{ "/" | relURL }}">{{ .Site.Title }}</a>
+  <nav class="site-nav" aria-label="Primary">
+    {{ range .Site.Sections.ByTitle }}
+      <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+    {{ end }}
+  </nav>
+</header>

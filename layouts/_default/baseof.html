@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale | default site.Language.Lang | default "zh-CN" }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ with .Title }}{{ . }} · {{ end }}{{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    {{ partial "head.html" . }}
+  </head>
+  <body>
+    <div class="site-shell">
+      {{ partial "header.html" . }}
+      <main class="site-main">
+        {{ block "main" . }}{{ end }}
+      </main>
+      {{ partial "footer.html" . }}
+    </div>
+  </body>
+</html>

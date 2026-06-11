@@ -1,0 +1,20 @@
+baseURL = "http://localhost:1313/"
+languageCode = "zh-cn"
+title = "My Blog"
+contentDir = "docs"
+disableKinds = ["taxonomy", "term"]
+
+[params]
+  author = "Michael An"
+  description = "Michael An 的新版个人博客"
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+
+  [markup.highlight]
+    noClasses = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+    codeFences = true

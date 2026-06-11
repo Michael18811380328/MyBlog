@@ -1,0 +1,24 @@
+{{ define "main" }}
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">{{ .Section }}</p>
+      <h1>{{ or .Title .LinkTitle .File.ContentBaseName .File.LogicalName }}</h1>
+      <p class="lede">
+        {{ with .Date }}<time>{{ .Format "2006-01-02" }}</time>{{ end }}
+        {{ with .Params.tags }}{{ if gt (len .) 0 }} · {{ delimit . ", " }}{{ end }}{{ end }}
+      </p>
+      {{ with .Description }}<p class="lede">{{ . }}</p>{{ end }}
+    </header>
+
+    {{ with .TableOfContents }}
+      <aside class="toc">
+        <h2>目录</h2>
+        {{ . }}
+      </aside>
+    {{ end }}
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+  </article>
+{{ end }}
