@@ -1,6 +1,10 @@
 ---
-title: "My Blog"
-description: "Michael 的学习笔记博客"
+title: "学习笔记和感悟"
+description: "这里记录了我学习过程中的笔记和感悟"
 ---
 
-这里是我的学习笔记博客，内容按原来的目录结构组织，使用 Seafile 和 SeaTable 管理笔记内容，使用 Hugo 将 markdown 生成静态站点。
+本博客收录了丰富的学习笔记与感悟，涵盖计算机、经济学等领域。
+
+这些笔记不仅是知识的积累，更是学习过程中的思考与总结，为持续学习和实践应用提供了有益参考。
+
+博客使用 Seafile 和 SeaTable 管理内容，通过 Hugo 生成站点。
