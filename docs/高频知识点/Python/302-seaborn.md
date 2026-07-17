@@ -4,7 +4,9 @@ seaborn: statistical data visualization（统计数据可视化）
 
 [http://seaborn.pydata.org/](http://seaborn.pydata.org/ "http://seaborn.pydata.org/")
 
-Seaborn 是一个基于 matplotlib 的 Python 数据可视化库。 它提供了一个用于绘制有吸引力和信息丰富的统计图形的高级界面。
+Seaborn 是一个基于 matplotlib 的 Python 数据可视化库。&#x20;
+
+它提供了一个用于绘制有吸引力和信息丰富的统计图形的高级界面。
 
 有关库背后思想的简要介绍，您可以阅读介绍性说明。 访问安装页面以查看如何下载软件包。 您可以浏览示例库以了解您可以使用 seaborn 做什么，然后查看教程和 API 参考以了解操作方法。
 

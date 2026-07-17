@@ -1,6 +1,6 @@
 # JS笔记 
 
- 2026-5-10
+ 2026-7-17
 
  原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/
 
@@ -447,22 +447,20 @@ for (var i = 0; i < 3; i++) {
 ​
 
    
-## 0035 浏览器的缓存读取原则
+## 0035 浏览器几种缓存的使用场景
 
 
-浏览器有几种缓存
+浏览器有几种缓存，使用场景有哪些？
 
-cookie
+Cookie 主要用于身份验证和用户数据持久性。Cookie 与请求一起发送到服务器，并在响应时发送到客户端；因此，cookies 数据在每次请求时都会与服务器交换。服务器可以使用 cookie 数据向用户发送个性化内容。
 
-session
+localStorage：用于存储持久数据，除非用户手动将其从浏览器中删除，否则数据将终身存储。即使用户关闭窗口或选项卡，它也不会过期；
 
-localStorage
+sessionStorage：用于存储临时会话数据，页面重新加载后仍然存在，关闭浏览器选项卡时数据丢失。
 
-这些分别有什么特点，然后存储什么样的数据？
+IndexedDB：类似 NoSQL 的 key/value 数据库，它可以存储大量结构化数据，甚至是文件和 blob
 
-<https://zhuanlan.zhihu.com/p/581426460> 
-
-
+更多参考：<https://zhuanlan.zhihu.com/p/581426460>
 
    
 ## 0041 闭包的作用域，和函数中变量的提升
@@ -522,18 +520,6 @@ push方法的核心 推入一个具体的元素，同时 length+1。
 
 
    
-## 0048 call和apply的区别是什么？性能怎么样
-
-
-call 和 aplly 作用都是一个对象，使用另一个对象的方法
-
-其中 apply 传入的是一个数组或者伪数组，call 是传入多个参数作为使用函数的参数
-
-call 由于传入的是多个参数，性能比 apply 稍微好一点（需要解析数组或者伪数组）
-
-
-
-   
 ## 0051 Object.defineProperty
 
 
@@ -557,14 +543,6 @@ console.log(object1.property1);
 ```
 
 实际开发中使用不多，主要在框架中使用
-
-   
-## 0055 一个简单对象转换成数组去掉非法值
-
-
-遍历对象的键值对，然后判断键是否是有效的数字，parsent isNaN 然后放在数组中即可
-
-
 
    
 ## 0056 设计题设计一个对象具有很多的方法。可以进行链式调用
@@ -623,55 +601,9 @@ p.add(4).add(20).delete(10).getValue();
 ## 0058 箭头函数和普通函数的区别是什么？构造函数又是什么
 
 
-普通函数 普通的函数
+构造函数：ES5早期语法用构造函数创建一个组件，es6 使用类进行创建，函数名需要大写。
 
-构造函数 ES5用来创建一个组件，es6 使用类进行创建，函数名需要大写
-
-箭头函数 ES6 中类中的箭头函数，改变了实例中 this 的指向。默认 this 指向调用方法的对象，使用 箭头函数，可以让 this 始终指向原始的类（进一步获取其中的属性和方法）
-
-
-
-   
-## 0064 Promise.finally()如何实现
-
-
-Promise 执行后，可能 res 或者 catch 之后都会执行 finally 部分的代码
-
-原理是这样的，实际源码不清楚
-
-
-
-   
-## 0065 获取对象的属性点语法和中括号语法，哪个更好
-
-
-点语法效率稍微高一些，因为点语法，直接获取属性。中括号需要进行变量转换，转换成字符串，然后在获取属性。
-
-
-
-   
-## 0069 如何把字符串的大小写转换
-
-
-最好的办法是一句话，正则转换或者使用循环数组的方式，如果是大写转换成小写，否则转换成大写的形式
-
-let result = '';
-
-for (let i = 0; i \< str.lenght; i++) {
-
-  if (str\[i].isLower) {
-
-  result += str\[i].toUpper();
-
-} else {
-
-  result += str\[i].toLower();
-
-}
-
-}
-
-
+箭头函数：ES6 中类中的箭头函数，改变了实例中 this 的指向。默认 this 指向调用方法的对象，使用 箭头函数，可以让 this 始终指向原始的类（进一步获取其中的属性和方法）
 
    
 ## 0075 获取数组中第1个和第1万个项的时间
@@ -853,21 +785,16 @@ console.log 是同步执行的
 ## 0108 自己如何实现promise？
 
 
-<https://juejin.cn/post/6844903625769091079> 
+<https://juejin.cn/post/6844903625769091079>
 
 通过 promise 的基本使用，说明这是一个类，并且有 then 方法
 
 ```
 let p = new Promise();
 p.then(() => {}, () => {})
-
 ```
 
 参考链接，简化版本的代码如下（不考虑链式调用，finally, Promise.all）
-
-
-
-
 
    
 ## 0130 DOM 性能优化
@@ -1337,19 +1264,17 @@ script标签中的src属性，将请求参数和当前请求的回调函数名�
 
 \- encodeURI 转义特殊字符串（不转换某些符号，例如 http\:// 不转换）
 
-\- encodeURIComponennt 转义特殊字符串（特殊符号全部转换，例如 http\:// 会转换）
+\- encodeURIComponent 转义特殊字符串（特殊符号全部转换，例如 http\:// 会转换）
 
 \- 具体使用：我们在发送请求时，URL 中可能有参数含有特殊符号（例如文件名用户名等用户输入）需要使用 encodeURIComponent 转义，然后拼接成 URL
 
-<https://www.zhihu.com/question/21861899> 
+<https://www.zhihu.com/question/21861899>
 
-<https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/escape> 
+<https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/escape>
 
-<https://www.cnblogs.com/luckyuns/p/6396701.html> 
+<https://www.cnblogs.com/luckyuns/p/6396701.html>
 
-<https://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html> 
-
-
+<https://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html>
 
    
 ## 0268 JSON 的格式和方法
@@ -2177,7 +2102,7 @@ src/app.js
 
 ```javascript
 self.addEventListener('message', (e) => {
-  self.postMessage('workder is starting');
+  self.postMessage('worker is starting');
   const table = e.data;
 
   // 模拟大运算量（对象转换）
@@ -2188,7 +2113,7 @@ self.addEventListener('message', (e) => {
   }
   console.timeEnd();
 
-  self.postMessage('workder is ending');
+  self.postMessage('worker is ending');
 });
 ```
 

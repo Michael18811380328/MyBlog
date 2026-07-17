@@ -8,7 +8,7 @@
 
 * **推荐使用**：推荐，URL 处理更专业。
 
-```text
+```python
 from yarl import URL
 url = URL('https://example.com/path?query=1')
 print(url.host)  # example.com

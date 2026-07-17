@@ -1,4 +1,4 @@
-## 707-常见问题
+## 707-python 读取文件错误
 
 #### UnicodeDecodeError: 'utf8' codec can't decode byte 0x80 in position 3131: invalid start byte
 

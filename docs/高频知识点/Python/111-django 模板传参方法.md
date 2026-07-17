@@ -1,4 +1,4 @@
-## 114-django 模板传参方法
+## 111-django 模板传参方法
 
 一种是通过 views 直接传参，适合某个模板需要的参数(user.html)，例如 PROJECT\_ID
 

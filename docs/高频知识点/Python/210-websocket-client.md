@@ -8,7 +8,7 @@
 
 * **推荐使用**：推荐，WebSocket 客户端常用。
 
-```text
+```python
 import websocket
 def on_message(ws, message):
     print(message)
