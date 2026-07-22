@@ -1,4 +1,4 @@
-baseURL = "http://localhost:1313/"
+baseURL = "https://michael18811380328.github.io/MyBlog/"
 languageCode = "zh-cn"
 title = "我的笔记"
 contentDir = "docs"
@@ -6,7 +6,7 @@ disableKinds = ["taxonomy", "term"]
 
 [params]
   author = "Michael An"
-  description = "Michael An 的新版个人博客"
+  description = "Michael An 的个人博客"
 
 [markup]
   [markup.goldmark.renderer]
