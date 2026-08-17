@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>高频单词表-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#segment">segment</a></li>
+        <li><a href="#layout">layout</a></li>
+        <li><a href="#authorization">authorization</a></li>
+        <li><a href="#authentication">authentication</a></li>
+        <li><a href="#authorization-和-authentication-区别">authorization 和 authentication 区别</a></li>
+        <li><a href="#onward">onward</a></li>
+        <li><a href="#accommodate">accommodate</a></li>
+        <li><a href="#venue">venue</a></li>
+        <li><a href="#lease">lease</a></li>
+        <li><a href="#bid">bid</a></li>
+        <li><a href="#farewell">farewell</a></li>
+        <li><a href="#evaluation">evaluation</a></li>
+        <li><a href="#assume">assume</a></li>
+        <li><a href="#certificate">certificate</a></li>
+        <li><a href="#protocol">protocol</a></li>
+        <li><a href="#key-exchange">key exchange</a></li>
+        <li><a href="#certificate-transparency">certificate transparency</a></li>
+        <li><a href="#aggregation">aggregation</a></li>
+        <li><a href="#instinct">instinct</a></li>
+        <li><a href="#manipulation">manipulation</a></li>
+        <li><a href="#vigorous">vigorous</a></li>
+        <li><a href="#lane">lane</a></li>
+        <li><a href="#vain">vain</a></li>
+        <li><a href="#notion">notion</a></li>
+        <li><a href="#consciousness">consciousness</a></li>
+        <li><a href="#firewall">firewall</a></li>
+        <li><a href="#significantly">significantly</a></li>
+        <li><a href="#compromise">compromise</a></li>
+        <li><a href="#vulnerability">vulnerability</a></li>
+        <li><a href="#convention">convention</a></li>
+        <li><a href="#hatch">hatch</a></li>
+        <li><a href="#release">release</a></li>
+        <li><a href="#refactor">refactor</a></li>
+        <li><a href="#retrieve">retrieve</a></li>
+        <li><a href="#gradient">gradient</a></li>
+        <li><a href="#dominate">dominate</a></li>
+        <li><a href="#numerous">numerous</a></li>
+        <li><a href="#revised">revised</a></li>
+        <li><a href="#makes-this-a-breeze">makes this a breeze</a></li>
+        <li><a href="#convincing">convincing</a></li>
+        <li><a href="#annotations">annotations</a></li>
+        <li><a href="#consent">consent</a></li>
+        <li><a href="#mandatory">mandatory</a></li>
+        <li><a href="#fancier">fancier</a></li>
+        <li><a href="#invoice">invoice</a></li>
+        <li><a href="#arbitrary">arbitrary</a></li>
+        <li><a href="#pattern">pattern</a></li>
+        <li><a href="#sphere">sphere</a></li>
+        <li><a href="#deploy">deploy</a></li>
+        <li><a href="#tail-wind">tail wind</a></li>
+        <li><a href="#lighting-lightning">lighting lightning</a></li>
+        <li><a href="#match">match</a></li>
+        <li><a href="#privilege">privilege</a></li>
+        <li><a href="#campaign">campaign</a></li>
+        <li><a href="#gratitude">gratitude</a></li>
+        <li><a href="#insight">insight</a></li>
+        <li><a href="#considerable">considerable</a></li>
+        <li><a href="#copilot">copilot</a></li>
+        <li><a href="#dash">dash</a></li>
+        <li><a href="#dashboard">dashboard</a></li>
+        <li><a href="#assistive">assistive</a></li>
+        <li><a href="#immersive">immersive</a></li>
+        <li><a href="#gist">gist</a></li>
+        <li><a href="#interpret">interpret</a></li>
+        <li><a href="#workbench">workbench</a></li>
+        <li><a href="#azure">azure</a></li>
+        <li><a href="#tutorial">tutorial</a></li>
+        <li><a href="#possession">possession</a></li>
+        <li><a href="#seamless">seamless</a></li>
+        <li><a href="#synchronization">synchronization</a></li>
+        <li><a href="#effortlessly">effortlessly</a></li>
+        <li><a href="#programme-program-的区别">programme program 的区别</a></li>
+        <li><a href="#achemy">achemy</a></li>
+        <li><a href="#prune">prune</a></li>
+        <li><a href="#deploy-1">deploy</a></li>
+        <li><a href="#refine">refine</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h3 id="segment">segment</h3>
+<p>片段；线段；部分</p>
+<p>URL <strong>segments, layouts</strong>, and data are more often than not coupled (tripled?) together.</p>
+<p>URL片段、布局和数据通常是耦合在一起的（三倍？）</p>
+<p>URL 指的是界面 URL</p>
+<p>布局指的是组件结构 View</p>
+<p>数据指的是内部 Store 层</p>
+<p>所以 React-router 把 url - router - page - data 对应起来</p>
+<h3 id="layout">layout</h3>
+<p>布局；设计；排版</p>
+<p>He tried to recall the layout of the farmhouse.</p>
+<p>他想回忆那农舍的布局。</p>
+<h3 id="authorization">authorization</h3>
+<p>授权</p>
+<p>Can I see your authorization?</p>
+<p>我能看你的授权书吗？</p>
+<h3 id="authentication">authentication</h3>
+<p>认证</p>
+<p>A troublesome area is the management of the keys used for encryption and authentication.</p>
+<p>一个麻烦的领域是用于加密和身份验证的密钥的管理。</p>
+<h3 id="authorization-和-authentication-区别">authorization 和 authentication 区别</h3>
+<p>授权 和 认证 的区别</p>
+<p>认证和授权是两个重要的安全概念，用于保护系统和资源免受未经授权的访问</p>
+<p><strong>Authentication</strong> （认证）：</p>
+<ul>
+<li>
+<p>验证用户的身份，确保用户是谁：</p>
+</li>
+<li>
+<p>通过检查用户提供的凭据（如用户名、密码、指纹等）来确定用户的身份：如果用户的凭据正确，系统就会授予用户访问权限。</p>
+</li>
+</ul>
+<p><strong>Authorization</strong> （授权）：</p>
+<ul>
+<li>
+<p>用户是否有权，访问某个资源或执行某个操作。</p>
+</li>
+<li>
+<p>通过检查用户的角色、权限，来确定用户是否有权访问某个资源或执行某个操作：如果用户有权访问某个资源或执行某个操作，系统就会允许用户进行相应的操作。</p>
+</li>
+</ul>
+<p>简单来说，认证是确定用户是谁（用户名+密码登录认证），而授权是决定用户可以做什么（权限管理）。</p>
+<p>例如：</p>
+<ul>
+<li>
+<p>当你登录一个网站时，你需要提供用户名和密码来认证你的身份（authentication）。</p>
+</li>
+<li>
+<p>一旦你登录成功，网站会检查你的角色和权限，来决定你可以访问哪些页面或执行哪些操作（authorization）。</p>
+</li>
+</ul>
+<h3 id="onward">onward</h3>
+<p>向前的，继续的</p>
+<p>The bus continued onward.</p>
+<p>公交车继续前行。</p>
+<h3 id="accommodate">accommodate</h3>
+<p>容纳，供应</p>
+<p>I needed to accommodate to the new schedule.</p>
+<p>我需要适应新的时间表</p>
+<h3 id="venue">venue</h3>
+<p>发生地点；场所</p>
+<p>The venue was packed with 3 000 clubbers.</p>
+<p>会场被3 000名俱乐部会员挤得满满的。</p>
+<h3 id="lease">lease</h3>
+<p>出租，租用</p>
+<p>He took up a 10-year lease on the house.</p>
+<p>他租下了这栋房子，租期为10年。</p>
+<h3 id="bid">bid</h3>
+<p>出价；投标，竞标；努力争取；</p>
+<p>The bank announced its intention to bid。</p>
+<p>银行宣布了其投标意向。</p>
+<h3 id="farewell">farewell</h3>
+<p>告别；离去；</p>
+<p>farewell party 欢送会</p>
+<h3 id="evaluation">evaluation</h3>
+<p>评估</p>
+<p>This way, you can truly memoize the value and prevent unnecessary re-evaluation.</p>
+<p>这样，您可以真正记住值，并防止不必要的重新评估(use-Memo)</p>
+<h3 id="assume">assume</h3>
+<p>认为</p>
+<p>React doesn&rsquo;t assume that and still calls the function to check if the result has changed.</p>
+<p>React 并不这么认为，它仍然调用函数来检查结果是否发生了变化。</p>
+<h3 id="certificate">certificate</h3>
+<p>证书</p>
+<p>the connection to this site is using a valid, trusted certificate issued by Encryption EveryWhere DV TSL CA-G2</p>
+<p>与此站点的连接使用由Encryption EveryWhere DV TSL CA-G2颁发的有效、受信任的证书</p>
+<p>certificate 证书</p>
+<p>issued 发出;(正式)颁布</p>
+<p>这是网站证书和 SSL 安全部分</p>
+<h3 id="protocol">protocol</h3>
+<p>协议</p>
+<p>Protocol: 协议</p>
+<p>TSL 1.2：安全传输层协议，TLS(Transport Layer Security,传输层安全)是更为安全的升级版 SSL</p>
+<p>HTTPS = HTTP + SSL</p>
+<h3 id="key-exchange">key exchange</h3>
+<p>密钥交换</p>
+<p>Create a certificate based on the certificate authority that can perform key exchange.</p>
+<p>创建一个基于这个证书机构的证书，可以使用它交换密钥。</p>
+<h3 id="certificate-transparency">certificate transparency</h3>
+<p>证书透明度</p>
+<p>Certificate Transparency 简称CT，中文名：证书透明度</p>
+<p>是用于记录和监视SSL证书颁发的系统，其目的是为了监控CA或其他恶意人员伪造服务器证书</p>
+<p>由于各大CA受所有浏览器信任，它们中的任意一个证书颁发机构都有权为您的域名颁发证书，如果这些证书是恶意的，您的浏览器同样会无条件信任它。</p>
+<h3 id="aggregation">aggregation</h3>
+<p>聚合；总量;</p>
+<p>An Aggregation Algorithm Based on Group Numbers  基于分组序号的聚集算法</p>
+<h3 id="instinct">instinct</h3>
+<p>本能;直觉;天性</p>
+<p>Every human being have a basic instinct: to help each other out.</p>
+<p>人类有一种本能：帮助彼此走出困境。</p>
+<p>His first instinct was to run away.</p>
+<h3 id="manipulation">manipulation</h3>
+<p>操作；处理</p>
+<p>They make a lot of money by clever manipulation of the Stock Market. 他们巧妙地操纵股票市场而大赚其钱。</p>
+<p>DML：database Manipulation language 数据库操作语句</p>
+<h3 id="vigorous">vigorous</h3>
+<p>充满活力的</p>
+<p>Take vigorous exercise for several hours a week.</p>
+<p>每周做几个小时剧烈运动。</p>
+<p>a vigorous young man</p>
+<p>身强力壮的年轻人</p>
+<h3 id="lane">lane</h3>
+<p>小道；车道</p>
+<p>We drove along a muddy lane to reach the farmhouse.</p>
+<p>我们驾车沿泥泞的小路到达农舍。</p>
+<h3 id="vain">vain</h3>
+<p>徒劳的；自负的；</p>
+<p>The drafting committee worked through the night in a vain attempt to finish on schedule&hellip;</p>
+<p>起草委员会为按计划完成草案已通宵加班，但结果仍是徒劳。</p>
+<h3 id="notion">notion</h3>
+<p>观念；信念；理解</p>
+<p>I have to reject the notion that greed can be a good thing.</p>
+<p>我不能接受那种认为贪欲也可以是件好事的想法。</p>
+<p>notion == opinion</p>
+<p><em>notion: 指的是一种模糊的,变化莫测的想法,无可靠的基础,未经深思熟虑的观点</em>。</p>
+<h3 id="consciousness">consciousness</h3>
+<p>意识</p>
+<p>I can&rsquo;t remember any more─I must have lost consciousness .</p>
+<p>我想不起来了——我当时一定是失去了知觉。</p>
+<p>She did not regain consciousness and died the next day.</p>
+<p>她再也没有苏醒过来，第二天便去世了。（regain —— 再次得到；恢复）</p>
+<h3 id="firewall">firewall</h3>
+<p>防火墙</p>
+<h3 id="significantly">significantly</h3>
+<p>显著地；明显的</p>
+<p>WebpackDevServer 2.4.3 introduced a security fix that prevents remote  websites from potentially accessing local content through DNS rebinding</p>
+<p>However, it made several existing use cases such as development in cloud  environment or subdomains in development significantly more complicated</p>
+<p>然而，它使一些现有的案例（如云环境中的开发或开发中的子域）明显变得更加复杂</p>
+<h3 id="compromise">compromise</h3>
+<p>妥协；折中方案</p>
+<p>While we&rsquo;re investigating better solutions, for now we will take a  compromise.</p>
+<p>虽然我们正在研究更好的解决方案，但目前我们将采取折中方案。</p>
+<h3 id="vulnerability">vulnerability</h3>
+<p>漏洞；弱点</p>
+<p>Since our WDS configuration only serves files in the `public` folder we won&rsquo;t consider accessing them a vulnerability.</p>
+<p>由于我们的WDS配置只为“public”文件夹中的文件提供服务，因此我们不会将访问这些文件视为一个漏洞。</p>
+<h3 id="convention">convention</h3>
+<p>惯例;习俗;</p>
+<p>Instead, we establish a convention that only files in `public` directory get served.</p>
+<p>相反，我们建立了一个约定，即只有“公共”目录中的文件才能得到服务。（webpack dev server 开启服务后，可以访问 public 目录下面的文件。）</p>
+<p>Our build script will copy `public` into the `build` folder.（build 脚本将会把 public 目录拷贝到 build 目录。）</p>
+<h3 id="hatch">hatch</h3>
+<p>孵化；转义符</p>
+<p>Note that we only recommend to use `public` folder as an escape hatch for files like `favicon.ico`, `manifest.json`</p>
+<p>an escape hatch 转义符</p>
+<p>请注意，我们只建议将“public”文件夹用作“favicon.ico”、“manifest.json”等文件的转义符`</p>
+<h3 id="release">release</h3>
+<p>释放；发行</p>
+<p>传统行业指的是——释放</p>
+<blockquote>
+<p>He stopped and faced her, releasing her wrist.</p>
+<p>他停下来面对着她，放开了她的手腕。</p>
+</blockquote>
+<p>在软件、电影、唱片领域，——发布新版。</p>
+<blockquote>
+<p>He is releasing an album of love songs.</p>
+<p>他即将推出一张情歌专辑。</p>
+</blockquote>
+<h3 id="refactor">refactor</h3>
+<p>重构</p>
+<p>Unit test and refactor are two very important methods.</p>
+<p>单元测试和重构是两种非常重要的方法。</p>
+<h3 id="retrieve">retrieve</h3>
+<p>检索数据</p>
+<p>Retrieve = computing</p>
+<blockquote>
+<p>1</p>
+<p>Retrieve variable value by its name.</p>
+<p>按变量的名称检索变量值。</p>
+<p>2</p>
+<p>to retrieve information from the database</p>
+<p>从数据库检索资料</p>
+<p>3</p>
+<p>The program allows you to retrieve items quickly by searching under a keyword.</p>
+<p>这个程序通过关键词进行搜索，能让你迅速获取数据项。</p>
+</blockquote>
+<h3 id="gradient">gradient</h3>
+<p>梯度;渐变色;斜率;</p>
+<p>公路的坡度</p>
+<blockquote>
+<p>Numerical simulation study the gradient&rsquo;s impact on the tunnel fire </p>
+<p>坡度对隧道火灾影响的数值模拟研究</p>
+</blockquote>
+<p>数学的斜率，梯度</p>
+<p>颜色中的渐变色</p>
+<blockquote>
+<p>First, draw a gradient in the background layer. </p>
+<p>首先，得出一个梯度背景层</p>
+</blockquote>
+<h3 id="dominate">dominate</h3>
+<p>支配</p>
+<p>The book is expected to dominate the best-seller lists&hellip;</p>
+<p>这本书预计会占据畅销书排行榜的榜首。</p>
+<h3 id="numerous">numerous</h3>
+<p>很多的</p>
+<p>it has numerous improvements and new features. </p>
+<p>它有许多改进和新功能。</p>
+<h3 id="revised">revised</h3>
+<p>修订</p>
+<p>The completely revised form editor in block design offers new freedoms and additional functions for the design and use of web forms.</p>
+<p>块设计中经过完全修订的表单编辑器为网页表单的设计和使用提供了新的自由度和附加功能。</p>
+<h3 id="makes-this-a-breeze">makes this a breeze</h3>
+<p>让这一切变得轻而易举</p>
+<p> The extended editor for formatted text makes this a breeze.</p>
+<h3 id="convincing">convincing</h3>
+<p>有说服力的</p>
+<p>The numerous advantages of the block design are convincing</p>
+<p>块级设计的众多优点令人信服</p>
+<h3 id="annotations">annotations</h3>
+<p>注释</p>
+<p>the Annotations block can be used to place explanatory text in the form</p>
+<p>“注释”块可用于在表单中放置解释性文本</p>
+<h3 id="consent">consent</h3>
+<p>同意;允许</p>
+<p>This is helpful when you need to obtain consent, such as for terms of use or personal data processing.</p>
+<p>当您需要获得同意时，例如在使用条款或个人数据处理方面，这很有帮助。</p>
+<h3 id="mandatory">mandatory</h3>
+<p>强制的;法定的;义务的</p>
+<p> you can now make all fields in your form mandatory with one click.</p>
+<p>您现在可以一键使表单中的所有字段成为必填字段。</p>
+<h3 id="fancier">fancier</h3>
+<p>花哨的</p>
+<p>Fancier emails with HTML</p>
+<p>花哨的HTML邮件</p>
+<h3 id="invoice">invoice</h3>
+<p>发票；开发票</p>
+<p>an invoice for £250</p>
+<p>Invoice the goods to my account.</p>
+<h3 id="arbitrary">arbitrary</h3>
+<p>任意的</p>
+<p>These item sizes are arbitrary</p>
+<h3 id="pattern">pattern</h3>
+<p>模型；图案</p>
+<p>an irregular sleeping pattern 不规律的睡眠模式</p>
+<p>a pattern of diamonds and squares 菱形和正方形构成的图案</p>
+<p>参考：pattern、style、manner、mode 、model 的区别：<a href="https://zhuanlan.zhihu.com/p/472733767" title="https://zhuanlan.zhihu.com/p/472733767">https://zhuanlan.zhihu.com/p/472733767</a></p>
+<h3 id="sphere">sphere</h3>
+<p>球体</p>
+<p>To check whether a sphere contains a point we need to calculate the distance between the point and the sphere&rsquo;s center.</p>
+<p>检查一个球体是否包含一个点，我们需要计算点和球体中心的距离，是否大于球体的半径。</p>
+<p>（元素碰撞检测）</p>
+<h3 id="deploy">deploy</h3>
+<p>部署</p>
+<p>Installing, deploying and upgrading</p>
+<p>（软件的）安装、部署和升级</p>
+<h3 id="tail-wind">tail wind</h3>
+<p>顺风</p>
+<p>A stout tail wind was giving a friendly boost.</p>
+<p>一股强劲的顺风正在给予有利的推动。</p>
+<p>tail 是尾巴，wind 是风，组合起来是 tail wind 顺风</p>
+<p>​</p>
+<h3 id="lighting-lightning">lighting lightning</h3>
+<p>照明——闪电</p>
+<p>light 光</p>
+<p>lighting 照明</p>
+<p>eg: the cost of heating and lighting 取暖和照明成本</p>
+<p>lightning 闪电</p>
+<p>eg: lightning storm is ready 闪电风暴就绪</p>
+<h3 id="match">match</h3>
+<p>比赛；火柴；匹配</p>
+<p>名词</p>
+<p>比赛；火柴；竞赛；婚姻；敌手；相配的人（或物）；旗鼓相当的人；外观相同的东西</p>
+<p>to strike a match（划火柴）</p>
+<p>to win/lose a match （赢得比赛）</p>
+<p>动词</p>
+<p>相同；配对；相配；相似；适应；相一致；般配；使等同于；与…相匹敌；找相称(或相关)的人(或物)</p>
+<p>The two pieces match（这两片相似）</p>
+<p>Match my sweater（搭配我的毛衣）</p>
+<h3 id="privilege">privilege</h3>
+<p>特权</p>
+<p>Next privilege at 250 Reputation</p>
+<p>声誉达到 250 的特权</p>
+<h3 id="campaign">campaign</h3>
+<p>活动；运动</p>
+<p>in marketing campaigns</p>
+<p>在商业活动中</p>
+<p>这个不是指体育运动</p>
+<h3 id="gratitude">gratitude</h3>
+<p>感谢，感激</p>
+<p>I would like to express my gratitude to everyone for their hard work.</p>
+<h3 id="insight">insight</h3>
+<p>洞察力，了解</p>
+<p>He was a man with considerable insight.</p>
+<p>他是个富有洞察力的人。</p>
+<p>​</p>
+<h3 id="considerable">considerable</h3>
+<p>相当大的</p>
+<p>The project wasted a considerable amount of time and money.</p>
+<p>​</p>
+<h3 id="copilot">copilot</h3>
+<p>飞机副驾驶员</p>
+<p>pilot 是飞行员</p>
+<p>copilit 是飞行员的合作人，就是副驾驶员</p>
+<p>这里用于 AI 辅助工具</p>
+<h3 id="dash">dash</h3>
+<p>飞奔；猛冲</p>
+<p>Suddenly she dashed down to the cellar.</p>
+<p>她突然冲向地下室</p>
+<h3 id="dashboard">dashboard</h3>
+<p>仪表盘</p>
+<p>the part of a car in front of the driver that has instruments and controls in it</p>
+<h3 id="assistive">assistive</h3>
+<p>辅助的</p>
+<p>Necessity of Development of Higher Education of Assistive Technology in China</p>
+<p>论发展中国残疾人辅助技术高等教育的必要性</p>
+<h3 id="immersive">immersive</h3>
+<p>拟真的；虚拟现实的</p>
+<p>Research on User Experience of Immersive Web Navigation Design</p>
+<p>浅谈沉浸式网页导航设计的用户体验</p>
+<p>如果开启 AI immersive 功能，通常就是新建一个对话窗口进行辅助问答</p>
+<h3 id="gist">gist</h3>
+<p>要点；主旨；大意</p>
+<p>Then I interpreted the gist and purpose of this paper.</p>
+<p>接着，我解释了论文的主旨和目的。</p>
+<p>例如 <a href="https://gist.github.com/Michael18811380328" title="https://gist.github.com/Michael18811380328">https://gist.github.com/Michael18811380328</a></p>
+<h3 id="interpret">interpret</h3>
+<p>解释；说明</p>
+<p>She tried to interpret the meaning of his dream.</p>
+<h3 id="workbench">workbench</h3>
+<p>工作台</p>
+<p>Design on the computer workbench on the basis of ergonomics theory</p>
+<p>基于人机工程学的电脑工作台的设计</p>
+<h3 id="azure">azure</h3>
+<p>蔚蓝</p>
+<p>通常用在专有名词中：</p>
+<p>Azure OpenAI</p>
+<p>Azure lane 碧蓝航线</p>
+<p>An azure blue stone. 一块天蓝色的石头</p>
+<h3 id="tutorial">tutorial</h3>
+<p>教程</p>
+<h3 id="possession">possession</h3>
+<p>占有</p>
+<p>You will immediately <strong>cease and desist</strong> all use of the Software; 您将立即停止使用本软件</p>
+<p>and will destroy all copies of the software in your <strong>possession</strong>. 并将销毁您拥有的所有软件副本</p>
+<p>​</p>
+<p>cease 停止（书面正式的表达），彻底且永久性地停止，经过深思熟虑后停止</p>
+<p>desist 停止：在受到警告、劝诫等情况下停止某种不当或正在进行的行为</p>
+<p>stop：停止（口语），表示动作行为等的突然停止，可以表示暂时中断，还可以表示阻止某人做某事等多种含义。</p>
+<p>possession 占有</p>
+<h3 id="seamless">seamless</h3>
+<p>无缝的</p>
+<p>seamless cross-platform synchronization</p>
+<p>无缝的跨平台的同步</p>
+<h3 id="synchronization">synchronization</h3>
+<p>同步；同时</p>
+<p>How to Build a time Synchronization System in the Telecom Network</p>
+<h3 id="effortlessly">effortlessly</h3>
+<p>毫不费力地；轻易地</p>
+<p>There is so much information you can almost effortlessly find the facts for yourself</p>
+<h3 id="programme-program-的区别">programme program 的区别</h3>
+<p>节目；程序</p>
+<p><strong>programme</strong>：电视节目、演出节目单、培训项目</p>
+<p><strong>program</strong>：电脑程序</p>
+<p>The TV programme tonight is really interesting.</p>
+<p>I&rsquo;m writing a computer program to solve this problem.</p>
+<h3 id="achemy">achemy</h3>
+<p>炼金术；变换方法</p>
+<p>achemy 本意是炼金术，例如点石成金</p>
+<p>计算机中翻译成“变换”，例如 SQLachemy 就是把 SQL 结构，转换成 Python Class 数据结构的第三方库。</p>
+<h3 id="prune">prune</h3>
+<p>修剪；删除</p>
+<p>修剪（动词）：指对植物枝叶的修剪，例：He pruned the rose bushes. → 他修剪了玫瑰丛</p>
+<p>删除冗余（动词，计算机术语）：例：prune unused data → 删除无用数据</p>
+<p>n. 李子干；西梅干</p>
+<h3 id="deploy-1">deploy</h3>
+<p>部署</p>
+<p>部署项目</p>
+<p>When you’re ready to deploy to production, create a minified bundle with `npm run build`.</p>
+<p>部署导弹</p>
+<p>The defense department decided to deploy a new missile system.</p>
+<h3 id="refine">refine</h3>
+<p>改进；精练</p>
+<p>改进，用于计算机中，对某个功能的改进</p>
+<p>精炼，用于石油化工中，精炼技术</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

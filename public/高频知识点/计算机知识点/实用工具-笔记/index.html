@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>实用工具-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0843-file-server">0843 file-server</a></li>
+    <li><a href="#0870-浏览器内置截图">0870 浏览器内置截图</a></li>
+    <li><a href="#0904-heic-和-heif-图片说明">0904 HEIC 和 HEIF 图片说明</a></li>
+    <li><a href="#0903-动图实现逻辑">0903 动图实现逻辑</a></li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="实用工具笔记">实用工具笔记</h1>
+<p>2026-8-17</p>
+<p>原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/</p>
+<h2 id="0843-file-server">0843 file-server</h2>
+<p><a href="https://filebrowser.org/installation" title="https://filebrowser.org/installation">https://filebrowser.org/installation</a></p>
+<p>支持本地编辑，查询，管理，文本文件的工具（支持 brew 本地部署或者 docker 部署）</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>brew tap filebrowser/tap
+</span></span><span style="display:flex;"><span>brew install filebrowser
+</span></span><span style="display:flex;"><span>filebrowser -r /path/to/your/files
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0870-浏览器内置截图">0870 浏览器内置截图</h2>
+<p>浏览器打开控制台，打开命令菜单：Command+Shift+P（MacOS）</p>
+<p>基本上所有功能都有对应的搜索和快捷键，多使用即可</p>
+<p>截图</p>
+<ul>
+<li>
+<p><strong>Capture area screenshot</strong>：对鼠标拖动选取的区域进行截屏。</p>
+</li>
+<li>
+<p><strong>Capture full size screenshot</strong>：截取整个网页的屏幕快照，包括可视窗口中未出现的所有内容。网页截图：主要用于保存长网页，在搜索框中输入“Capture full size screenshot”，选择该命令并点击或按下回车键。Chrome将自动截取整个网页的内容，并保存为PNG格式的图片文件——这里截图需要全局有滚动条</p>
+</li>
+<li>
+<p><strong>Capture node screenshot</strong>：对选中的 DOM 元素节点进行截屏，可精确捕获该元素的内容。</p>
+</li>
+</ul>
+<p>主题</p>
+<ul>
+<li>
+<p><strong>切换主题</strong>：输入 “Switch to dark theme” 可切换到深色主题，“Switch to light theme” 则切换到浅色主题，方便在不同环境下使用调试工具。</p>
+</li>
+<li>
+<p><strong>改变调试窗口位置</strong>：“Dock to bottom” 将调试窗口设置在底部；“Dock to left” 设置在左侧；“Dock to right” 设置在右侧；“Undock into separate window” 可将调试窗口设置为独立的窗口，与浏览器界面分离开。</p>
+</li>
+</ul>
+<p>文件</p>
+<ul>
+<li>
+<p><strong>快速切换文件</strong>：在命令菜单中输入文件名或相关关键词，可快速切换到源代码面板中的指定文件。如果知道文件中的具体函数或变量名，也可以直接搜索定位。</p>
+</li>
+<li>
+<p><strong>源代码里跳转行数</strong>：按<code>Ctrl + G</code>（Windows/Linux）或<code>Cmd + G</code>（Mac），然后输入行数，可快速跳转到源代码中的指定行。</p>
+</li>
+</ul>
+<p>调试</p>
+<ul>
+<li>
+<p><strong>Enable/Disable JavaScript</strong>：用于启用或禁用页面上的 JavaScript 代码，方便调试与 JavaScript 相关的问题，例如在排查页面加载问题时，可先禁用 JavaScript 来确定是否是脚本导致的异常。</p>
+</li>
+<li>
+<p><strong>Toggle device toolbar</strong>：切换到设备模式，可模拟不同的移动设备或平板设备，方便进行响应式设计的调试，查看页面在不同设备尺寸下的显示效果。</p>
+</li>
+</ul>
+<h2 id="0904-heic-和-heif-图片说明">0904 HEIC 和 HEIF 图片说明</h2>
+<p>HEIC 和 HEIF 是新标准下的图片，区别如下：</p>
+<p>HEIF：是一种标准容器格式（包括更多元数据信息，例如拍照的相机参数，地理位置），例如小米手机拍摄的照片，可以设置存储为 HEIF 或者 JPG 格式。</p>
+<p>HEIC：是苹果的图片格式，使用了 HEIF 的容器格式，内置了 video 格式，使用了 HEVC 压缩格式进行压缩。</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/2025-12/image-1765936793514.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/2025-12/image-1765936802826.jpg" alt=""></p>
+<p>mac 系统下格式转换：<a href="https://github.com/strukturag/libheif" title="https://github.com/strukturag/libheif">https://github.com/strukturag/libheif</a> 使用 brew 安装工具，然后可以把 HEIC 和其他合适转换</p>
+<p>JS 下格式转换：<a href="https://alexcorvi.github.io/heic2any/" title="https://alexcorvi.github.io/heic2any/">https://alexcorvi.github.io/heic2any/</a> 可以把 HEIC 转换成各种图片格式</p>
+<h2 id="0903-动图实现逻辑">0903 动图实现逻辑</h2>
+<p>动态图实现逻辑：</p>
+<p>1、使用传统 gif 实现动图效果，兼容性很好。</p>
+<p>2、Google Motion Photo 使用 jpg 后缀格式的图片，后面附加了一个 MP4 格式的视频的数据，部分设备兼容。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

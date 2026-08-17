@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>软件工程-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0726-gantt-甘特图">0726 Gantt 甘特图</a></li>
+    <li><a href="#0727-pert-图">0727 Pert 图</a></li>
+    <li><a href="#0737-软件版本号的含义">0737 软件版本号的含义</a></li>
+    <li><a href="#0728-敏捷开发分类">0728 敏捷开发分类</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0729-模块耦合">0729 模块耦合</a></li>
+    <li><a href="#0730-软件风险">0730 软件风险</a></li>
+    <li><a href="#0731-增量模型">0731 增量模型</a></li>
+    <li><a href="#0732-管道过滤器体系结构">0732 管道过滤器体系结构</a></li>
+    <li><a href="#0733-mccabe-度量法">0733 McCabe 度量法</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0734-软件成熟度模型">0734 软件成熟度模型</a></li>
+    <li><a href="#0735-软件上线后维护分类">0735 软件上线后维护分类</a></li>
+    <li><a href="#0739-er模型">0739 ER模型</a></li>
+    <li><a href="#0740-uml-语句">0740 UML 语句</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0809-获取项目架构的工具">0809 获取项目架构的工具</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0742-瀑布模型">0742 瀑布模型</a></li>
+    <li><a href="#0743-螺旋模型">0743 螺旋模型</a></li>
+    <li><a href="#0744-软件开发模式有几种模型">0744 软件开发模式有几种模型？</a></li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="软件工程笔记">软件工程笔记</h1>
+<p>2026-8-17</p>
+<p>原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/</p>
+<h2 id="0726-gantt-甘特图">0726 Gantt 甘特图</h2>
+<p>甘特图-Gantt图，用于项目管理、软件工程、产品分析</p>
+<p>Gantt图：以时间为基准，描述项目任务，可以清晰的描述每个任务开始和结束时间，以及每个任务的并行关系。但是不能反映项目各任务之间的依赖关系，也无法确定整个任务的关键所在。</p>
+<p>横轴表示时间，纵轴表示项目，线条表示期间计划和实际完成情况。直观表明计划何时进行，进展与要求的对比，便于管理者弄清项目的剩余任务，评估工作进度。</p>
+<p>甘特图只能表示一个分支流程（不能表示多个分支流程）；Pert 图的多个分支，每一个分支可以使用甘特图表示时间进度。</p>
+<p>实例：工作内容分成6部分，时间上按照流水线工作流程，可以确定不同时间段的工作内容，并行和串行关系等。</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/auto-upload/image-1730792861304.jpg" alt=""></p>
+<p>参考：</p>
+<p><a href="https://baike.baidu.com/item/%E7%94%98%E7%89%B9%E5%9B%BE/113232?fr=ge_ala" title="https://baike.baidu.com/item/%E7%94%98%E7%89%B9%E5%9B%BE/113232?fr=ge_ala">https://baike.baidu.com/item/%E7%94%98%E7%89%B9%E5%9B%BE/113232?fr=ge_ala</a></p>
+<p><a href="https://blog.csdn.net/tongxinzhazha/article/details/130355910" title="https://blog.csdn.net/tongxinzhazha/article/details/130355910">https://blog.csdn.net/tongxinzhazha/article/details/130355910</a></p>
+<h2 id="0727-pert-图">0727 Pert 图</h2>
+<p>Pert 图：使用有向图，表示项目实现的多个路径（项目中全部事件都需要做），每一个路径的耗时和依赖关系，分析关键路径和松弛时间，帮助识别项目的关键环节。</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/auto-upload/image-1730792869384.jpg" alt=""></p>
+<p><strong>主要概念：​</strong></p>
+<p><strong>事件（节点）​</strong>：表示项目中的某个关键时间点（里程碑），通常使用圆形或矩形表示，标记事件编号。事件是项目活动的开始或结束点。</p>
+<p><strong>时间估算</strong>：每个活动通常有三个时间估算：<strong>乐观时间（O，最短路径）​</strong>：在一切顺利的情况下，完成任务所需的最短时间。<strong>悲观时间（P，最长路径）​</strong>：考虑到所有可能的延误，完成任务所需的最长时间。<strong>最可能时间（M）​</strong>：在正常情况下，完成任务的时间。</p>
+<p><strong>关键路径</strong>：PERT图中<strong>最长的路径称为关键路径</strong>，决定了项目的最短完成时间。关键路径上的活动不能被延迟，否则整个项目的完成时间将被推迟。因此，管理关键路径活动非常重要。</p>
+<p>​</p>
+<p>绘制PERT图的步骤</p>
+<ol>
+<li>
+<p>列出活动和依赖关系。</p>
+</li>
+<li>
+<p>画出表示活动和事件的箭头和节点。</p>
+</li>
+<li>
+<p>将每个活动的预计时间标注在箭头旁。</p>
+</li>
+<li>
+<p>计算从开始到每个终点的最早完成时间，找出<strong>最长路径——即关键路径。​</strong></p>
+</li>
+</ol>
+<p>​</p>
+<p>PERT图与甘特图的区别：</p>
+<ul>
+<li>
+<p><strong>重点</strong>：PERT图侧重于活动的依赖关系和项目时间估算，甘特图更多地用于直观显示项目时间进度。</p>
+</li>
+<li>
+<p><strong>可视化</strong>：PERT图是活动的逻辑关系，适合分析路径和依赖；甘特图是任务的进度条，适合时间线上的管理。</p>
+</li>
+</ul>
+<p>​</p>
+<p>参考：</p>
+<p><a href="https://blog.csdn.net/2302_79730293/article/details/141932767" title="https://blog.csdn.net/2302_79730293/article/details/141932767">https://blog.csdn.net/2302_79730293/article/details/141932767</a></p>
+<p><a href="https://blog.csdn.net/tongxinzhazha/article/details/130355910" title="https://blog.csdn.net/tongxinzhazha/article/details/130355910">https://blog.csdn.net/tongxinzhazha/article/details/130355910</a></p>
+<h2 id="0737-软件版本号的含义">0737 软件版本号的含义</h2>
+<p>Alpha：α是希腊字母的第一个，表示最早的版本，内部测试版，一般不向外部发布，Bug会比较多，功能也不全，一般只有测试人员使用。</p>
+<p>Beta：β是希腊字母的第二个，公开测试版，比 Alpha 版本晚些，主要会有“粉丝用户”测试使用，该版本仍然存在很多Bug，但比 Alpha 版本稳定一些。这个阶段版本还会不断增加新功能。分为Beta1、Beta2等，直到逐渐稳定下来进入RC版本。</p>
+<p>RC：Release Candidate，发行候选版本，基本不再加入新的功能，主要修复Bug。最终发布成正式版的前一个版本，将bug修改完就可以发布成正式版了。</p>
+<p>GA：General Availability，正式发布的版本，官方开始推荐广泛使用，有很多用GA来表示 RELEASE 版本。</p>
+<p>RELEASE：正式发布版，官方推荐使用的版本，有的用GA来表示，比如 Spring系列。</p>
+<p>Stable：稳定版，开源软件有的会用stable来表示正式发布的版本，比如 Nginx。</p>
+<p>Final：最终版，也是正式发布版的一种表示方法，比如 Hibernate。</p>
+<img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/auto-upload/image-1731139777255.jpg" alt="undefined" title="undefined" width="523" height="422" />
+<h2 id="0728-敏捷开发分类">0728 敏捷开发分类</h2>
+<p>极限编程（XP）：4大价值观、5个原则、12个最佳实践</p>
+<p>水晶法（ Crystal ）：认为每一个不同的项目都需要一套不同的策略、约定和方法论，认为人对软件质量有重要的影响(以人为本)，因此随着项目质量和开发人员素质的提高，项目和过程的质量也随之提高。通过更好地交流和经常性交付，软件生产力得到提高</p>
+<p>并列争求法（Scrum）：把每30天一次的迭代称为一个“冲刺”，并按需求的优先级来实现产品。多个自组织和自治的小组并行地递增实现产品。协调是通过简短的日常情况会议来进行，就像橄榄球中的“并列争球”。</p>
+<h4 id="自适应软件开发asd">自适应软件开发（ASD）</h4>
+<p>核心是三个非线性的、重叠的开发阶段：猜测、合作与学习。</p>
+<p>ASD有6个基本的原则：</p>
+<ul>
+<li>
+<p>有一个使命作为指导；</p>
+</li>
+<li>
+<p>特征被视为客户价值的关键点;</p>
+</li>
+<li>
+<p>过程中等待是很重要的，因此“重做”与“做”同样关键;</p>
+</li>
+<li>
+<p>变化不被视为改正，而是被视为对软件开发实际情况的调整；</p>
+</li>
+<li>
+<p>确定的交付时间，迫使开发人员认真考虑每一个生产的版本的关键需求；</p>
+</li>
+<li>
+<p>风险也包含其中</p>
+</li>
+</ul>
+<h2 id="0729-模块耦合">0729 模块耦合</h2>
+<p>模块耦合的分类</p>
+<ul>
+<li>
+<p>数据耦合：指两个模块之间有调用关系，传递的是简单的数据值（字符串）</p>
+</li>
+<li>
+<p>标记耦合：指两个模块之间传递的是复杂数据结构（对象）</p>
+</li>
+<li>
+<p>控制耦合：指一个模块调用另一个模块时，传递的是控制变量（控制参数），被调用模块通过该控制变量的值有选择地执行模块内的某一功能。因此，被调用模块应具有多个功能，哪个功能起作用受调用模块控制（isMobile，渲染移动端页面，否则渲染PC段页面）</p>
+</li>
+<li>
+<p>公共耦合：指通过一个公共数据环境相互作用的那些模块间的耦合</p>
+</li>
+</ul>
+<p>耦合的类型和强弱程序：无直接耦合 &lt; 数据耦合 &lt; 标记耦合 &lt; 控制耦合 &lt; 外部耦合 &lt; 公共耦合 &lt; 内容耦合</p>
+<h2 id="0730-软件风险">0730 软件风险</h2>
+<p>软件风险一般包括不确定性和损失两个特性。</p>
+<ul>
+<li>
+<p>不确定性：风险可能发生，也可能不发生；</p>
+</li>
+<li>
+<p>损失：当风险确实发生时，会引起的不希望的后果和损失。</p>
+</li>
+</ul>
+<p>相关概念</p>
+<ul>
+<li>
+<p>救火和危机管理：对不适合但经常采用的软件风险管理策略。</p>
+</li>
+<li>
+<p>软件风险进行分类：​已知风险和未知风险。</p>
+</li>
+<li>
+<p>识别项目风险时，需要识别员工和预算。</p>
+</li>
+</ul>
+<h2 id="0731-增量模型">0731 增量模型</h2>
+<p>增量模型：增量模型是一种软件开发方法，将系统划分为多个可交付的增量，每个增量都包含一部分功能。随着时间的推移，逐步完成整个系统的开发。</p>
+<p>特点：</p>
+<p>能够在较短的时间提交一个可用的产品系统：通过逐步增加功能，第一个可交付版本，所需要的成本和时间很少。</p>
+<p>优先级高的功能首先交付，这些功能将接受更多的测试，同时用户可以尽早接触和熟悉系统的部分功能，提供及时的反馈和意见</p>
+<p>增量模型，强调逐步迭代开发，每个迭代周期都需要完成一部分功能，因此需要预先规划好所需功能，并且要考虑未来的扩展性和兼容性，<strong>因此系统的设计并不比其它开发模型更加容易</strong></p>
+<h2 id="0732-管道过滤器体系结构">0732 管道过滤器体系结构</h2>
+<p>管道过滤器体系结构，是一种传统的体系结构风格，由一组成为过滤器的构件，以及连接构件的管道组成，管道将数据从一个过滤器传送到另一个过滤器。</p>
+<p>该风格具有以下优点：</p>
+<ul>
+<li>
+<p>软件构件具有良好的隐蔽性、高内聚、低耦合的特点</p>
+</li>
+<li>
+<p>允许设计者，将整个系统的输入输出行为，看成是多个过滤器的行为的简单合成</p>
+</li>
+<li>
+<p>支持软件复用</p>
+</li>
+<li>
+<p>系统维护和增强系统性能简单</p>
+</li>
+<li>
+<p>允许对一些如吞吐量、死锁等属性的分析</p>
+</li>
+<li>
+<p>支持并行执行</p>
+</li>
+</ul>
+<h2 id="0733-mccabe-度量法">0733 McCabe 度量法</h2>
+<p>McCabe 度量法：是通过定义环路复杂度，建立程序复杂性的度量，它基于一个程序模块的程序图中环路的个数。</p>
+<p>采用 McCabe 方法计算程序的复杂度，有三种计算方式：</p>
+<ul>
+<li>
+<p>方法一：<strong>公式法</strong>：<code>V(G) = 边数(e) - 节点数(n) + 2</code></p>
+</li>
+<li>
+<p>方法二：区域法：控制流图中封闭区域数（包括最外层区域）比较直接且简单。首先需要确定流程图中的环路数。</p>
+</li>
+<li>
+<p>方法三：<strong>判定节点法</strong>：<code>V(G) = 判定节点数 + 1</code>（判定节点：if、else、switch、for、while 等产生分支的节点）</p>
+</li>
+</ul>
+<h4 id="案例1">案例1</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 无分支的简单代码</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printHello</span>() {
+</span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Hello&#34;</span>);
+</span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;World&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>控制流图</strong>：[开始] → [打印Hello] → [打印World] → [结束]</p>
+<p><strong>节点 (n)​</strong>：4 个（开始、打印 Hello、打印 World、结束）</p>
+<p><strong>边 (e)​</strong>：3 条（顺序连接的 3 条边）</p>
+<p><strong>计算</strong>：</p>
+<ul>
+<li>
+<p>公式法：<code>3 - 4 + 2 = 1</code></p>
+</li>
+<li>
+<p>区域法：1 个区域（整个流程为一个区域）</p>
+</li>
+<li>
+<p>判定节点法：0 个判定节点 → <code>0 + 1 = 1</code></p>
+</li>
+</ul>
+<p><strong>结论</strong>：环路复杂度<code>V(G)=1</code>，逻辑最简单。</p>
+<h4 id="案例2">案例2</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 含一个if分支的代码</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getMax</span>(<span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (a <span style="color:#f92672">&gt;</span> b) {  <span style="color:#75715e">// 判定节点</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> a;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> b;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>控制流图：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>[开始] → [判断a&gt;b?] → 是 → [return a] → [结束]
+</span></span><span style="display:flex;"><span>                   ↘ 否 → [return b] → [结束]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>节点 (n)​</strong>：5 个（开始、判断、return a、return b、结束）</p>
+<p><strong>边 (e)​</strong>：5 条（开始→判断、判断→return a、判断→return b、两个 return→结束）</p>
+<p>计算：</p>
+<ul>
+<li>
+<p>公式法：<code>5 - 5 + 2 = 2</code></p>
+</li>
+<li>
+<p>区域法：2 个区域（左侧路径区域 + 右侧路径区域）</p>
+</li>
+<li>
+<p>判定节点法：1 个判定节点（if） → <code>1 + 1 = 2</code></p>
+</li>
+</ul>
+<p><strong>结论</strong>：环路复杂度<code>V(G)=2</code>，表示有 2 条独立路径需要测试（if 为真 / 假）。</p>
+<h4 id="实际应用意义"><strong>实际应用意义</strong></h4>
+<ol>
+<li>
+<p><strong>复杂度阈值</strong>：通常建议<code>V(G) ≤ 10</code>，超过则表明代码逻辑可能过于复杂，需要重构。</p>
+</li>
+<li>
+<p><strong>测试指导</strong>：环路复杂度等于 “最少必要测试用例数”，确保覆盖所有独立路径。</p>
+</li>
+<li>
+<p><strong>维护难度</strong>：复杂度越高，代码越难理解、调试和修改（例如，<code>V(G)=20</code>的代码比<code>V(G)=5</code>的代码维护成本高得多）。</p>
+</li>
+</ol>
+<h2 id="0734-软件成熟度模型">0734 软件成熟度模型</h2>
+<p>软件成熟度模型(CMM)：</p>
+<ul>
+<li>
+<p>建立基本的项目管理和实践，来跟踪项目费用、进度和功能特性，为可重复级的核心；</p>
+</li>
+<li>
+<p>使用标准开发过程(方法论)，构建集成系统，为定义级的核心：</p>
+</li>
+<li>
+<p>管理层，寻求更主动地应对系统的开发问题，为管理级的核心：</p>
+</li>
+<li>
+<p>连续监督改进标准化的系统开发过程，为优化级的核心。</p>
+</li>
+</ul>
+<h2 id="0735-软件上线后维护分类">0735 软件上线后维护分类</h2>
+<p>改正性维护（修复bug）：是指修复软件系统中已知的问题或缺陷</p>
+<p>改善性维护（处理用户新的需求）：是指对软件系统进行改进，以提高其质量、效率、易用性、可维护性等方面的特征，使其满足用户或市场的不断变化的需求</p>
+<p>适应性维护（兼容操作系统）：是指对软件系统进行适应性修改，以适应变化的环境、硬件、操作系统等</p>
+<p>预防性维护（鲁棒性维护）：是指在软件系统还没有发生实际问题之前，对可能发生问题的代码进行被动或主动的检查和改进，以预防未来可能出现的问题。</p>
+<p>​</p>
+<h2 id="0739-er模型">0739 ER模型</h2>
+<p>实体关系图 Entity Relationship model</p>
+<p><a href="https://baike.baidu.com/item/%E5%AE%9E%E4%BD%93%E5%85%B3%E7%B3%BB%E5%9B%BE/9005309" title="https://baike.baidu.com/item/%E5%AE%9E%E4%BD%93%E5%85%B3%E7%B3%BB%E5%9B%BE/9005309">https://baike.baidu.com/item/%E5%AE%9E%E4%BD%93%E5%85%B3%E7%B3%BB%E5%9B%BE/9005309</a></p>
+<ul>
+<li>
+<p>实体型(Entity)：用矩形表示，矩形框内写明实体名；比如学生张三。</p>
+</li>
+<li>
+<p>属性(Attribute)：用椭圆形表示，并用无向边将其与相应的实体连接起来；比如学生的姓名、学号、性别、都是属性。</p>
+</li>
+<li>
+<p>联系(Relationship)：用菱形表示，菱形框内写明联系名，并用无向边分别与有关实体连接起来，同时在无向边旁标上联系的类型（1 : 1，1 : n或m : n）就是指存在的三种关系（一对一，一对多，多对多）。 比如老师给学生授课存在授课关系，学生选课存在选课关系。</p>
+</li>
+</ul>
+<p>实际使用：数据库中，不同表就是不同实体；表的字段就是对应属性；不同对象可以建立联系（主键外键约束，分析对应关系等）</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/auto-upload/image-1731404201696.jpg" alt=""></p>
+<h2 id="0740-uml-语句">0740 UML 语句</h2>
+<p>Unified Modeling Language，UML</p>
+<p>统一建模语言，是面向对象系统的产品，进行说明、可视化和编制文档的一种标准语言。</p>
+<p>UML是面向对象设计的建模工具，独立于任何具体程序设计语言。</p>
+<h4 id="概念">概念</h4>
+<p>模型元素：代表面向对象中的类、对象、消息和关系等概念，是构成图的最基本的概念。</p>
+<p>图：是模型元素集的图形表示，通常是由弧（关系）和顶点（其他模型元素）相互连接构成的。</p>
+<p>视图：是表达系统的某一方面的特征的UMI，建模元素的子集，由多个图构成，是在某一个抽象层上，对系统的抽象表示。</p>
+<p>通用机制：用于表示其他信息，比如注释、模型元素的语义等。</p>
+<p>另外，UML还提供扩展机制，使UML语言能够适应一个特殊的方法（或过程），或扩充至一个组织或用户。</p>
+<h4 id="模型">模型</h4>
+<p>UML系统开发中有三个主要的模型：</p>
+<ul>
+<li>
+<p>功能模型：从用户的角度展示系统的功能，包括用例图。</p>
+</li>
+<li>
+<p>对象模型：采用对象，属性，操作，关联等概念展示系统的结构和基础，包括类别图、对象图。</p>
+</li>
+<li>
+<p>动态模型：展现系统的内部行为。包括序列图，活动图，状态图。</p>
+</li>
+</ul>
+<p>​</p>
+<h2 id="0809-获取项目架构的工具">0809 获取项目架构的工具</h2>
+<p>如何获取项目的整体架构？有四种方案</p>
+<h4 id="tree">tree</h4>
+<p>可以显示文件系统的树形结构：最常用，最便捷，更新速度快，可以基于这个继续改动成 markdown，支持树形结构，不支持复杂的相互引用。</p>
+<h4 id="doxygen">doxygen</h4>
+<p>可以生成项目的文档和架构图：需要配置项目，设置遍历的语言，递归遍历文件夹，设置中文输出等。</p>
+<p>可视化支持，可以按照文件树输出，可以按照类列表输出，也包括具体模块中的输出输出。</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/2025-02/image-1739525843189.jpg" alt="undefined" title="undefined" width="303" height="631" /><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/2025-02/image-1739525855959.jpg" alt="undefined" title="undefined" width="302" height="357" /></p>
+<h4 id="graphviz">graphviz</h4>
+<p>可以生成项目的依赖关系图：dot 文件：dot 是 graphviz 的脚本语言，用于描述图形的结构和样式。</p>
+<p>这个需要手写 dot 的依赖关系，还没有测试用否 AI 总结并写出联系，适合内容比较少的情况。</p>
+<p>支持本地编辑，本地输出。</p>
+<h4 id="plantuml">plantuml</h4>
+<p>可以生成项目的 UML 图，也是单独的语法格式，支持本地编辑，本地输出</p>
+<h4 id="process-on">process-on</h4>
+<p>在线项目架构，样式好看，需要鼠标操作，都是自定义增加图形框。</p>
+<h4 id="xmind">xmind</h4>
+<p>在线项目架构，样式好看。本地版本需要付费。</p>
+<h4 id="wps">WPS</h4>
+<p>在线项目架构，样式好看。本地版本需要付费。</p>
+<h4 id="jsdoc">JSDoc</h4>
+<p>JS 单独的文档生成工具，需要手写注释，然后生成文档，适合工具函数库，或者API库，不适合引用关系很复杂的库</p>
+<p>​</p>
+<h2 id="0742-瀑布模型">0742 瀑布模型</h2>
+<p>瀑布模型（Waterfall Model） 是一个项目开发架构，开发过程是通过设计一系列阶段顺序展开的，从系统需求分析开始直到产品发布和维护，每个阶段都会产生循环反馈。</p>
+<p>因此，如果有信息未被覆盖或者发现了问题，那么最好 “返回”上一个阶段并进行适当的修改，项目开发进程从一个阶段“流动”到下一个阶段，这也是瀑布模型名称的由来。</p>
+<p><a href="https://baike.baidu.com/item/%E7%80%91%E5%B8%83%E6%A8%A1%E5%9E%8B/9817778" title="https://baike.baidu.com/item/%E7%80%91%E5%B8%83%E6%A8%A1%E5%9E%8B/9817778">https://baike.baidu.com/item/%E7%80%91%E5%B8%83%E6%A8%A1%E5%9E%8B/9817778</a></p>
+<p>​</p>
+<p>瀑布模型有以下优点</p>
+<p>（1）为项目提供了按阶段划分的检查点。</p>
+<p>（2）当前一阶段完成后，您只需要去关注后续阶段。</p>
+<p>（3）可在迭代模型中应用瀑布模型。增量迭代应用于瀑布模型。迭代1解决最大的问题。每次迭代，产生一个可运行的版本，同时增加更多的功能。每次迭代必须经过质量和集成测试。</p>
+<p>（4）它提供了一个模板，这个模板使得分析、设计、编码、测试和支持的方法可以在该模板下有一个共同的指导。</p>
+<p>​</p>
+<p>瀑布模型有以下缺点</p>
+<p>（1）各个阶段的划分完全固定，阶段之间产生大量的文档，极大地增加了工作量。</p>
+<p>（2）由于开发模型是线性的，用户只有等到整个过程的末期才能见到开发成果，从而增加了开发风险。</p>
+<p>（3）通过过多的强制完成日期和里程碑来跟踪各个项目阶段。</p>
+<p>（4）瀑布模型的突出缺点是不适应用户需求的变化。</p>
+<p>​</p>
+<p>​</p>
+<p><img src="https://img1.baidu.com/it/u=3910071698,2645990268&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=749&amp;h=500" alt=""></p>
+<h2 id="0743-螺旋模型">0743 螺旋模型</h2>
+<p>螺旋模型是一种演化软件开发过程模型，它兼顾了快速原型的迭代的特征，以及瀑布模型的系统化与严格监控。螺旋模型最大的特点，在于引入了其他模型不具备的风险分析，使软件在无法排除重大风险时，有机会停止，以减小损失。同时，在每个迭代阶段构建原型，是螺旋模型用以减小风险的途径。螺旋模型更适合大型的昂贵的系统级的软件应用。</p>
+<p>螺旋模型沿着螺线进行若干次迭代，图中的四个象限代表了以下活动：</p>
+<p>四种象限四种象限</p>
+<p>（1）制定计划：确定软件目标，选定实施方案，弄清项目开发的限制条件；</p>
+<p>（2）风险分析：分析评估所选方案，考虑如何识别和消除风险；</p>
+<p>（3）实施工程：实施软件开发和验证；</p>
+<p>（4）客户评估：评价开发工作，提出修正建议，制定下一步计划。</p>
+<p><img src="https://pic.rmb.bdstatic.com/bjh/down/6909f1217804a7a81677b7503cf4c8dc.png@wm_2,t_55m+5a625Y+3L+WuieWFqOaKgOacr+Wutg==,fc_ffffff,ff_U2ltSGVp,sz_11,x_7,y_7" alt=""></p>
+<p><a href="https://baike.baidu.com/item/%E8%9E%BA%E6%97%8B%E6%A8%A1%E5%9E%8B/9817820" title="https://baike.baidu.com/item/%E8%9E%BA%E6%97%8B%E6%A8%A1%E5%9E%8B/9817820">https://baike.baidu.com/item/%E8%9E%BA%E6%97%8B%E6%A8%A1%E5%9E%8B/9817820</a></p>
+<p>​</p>
+<h2 id="0744-软件开发模式有几种模型">0744 软件开发模式有几种模型？</h2>
+<p>主要有5种开发模型，根据实际项目选择合适的模型</p>
+<p><strong>1. 瀑布模型——线性开发</strong></p>
+<p>该模型遵循从上至下，一次性完成整个软件产品的开发方式</p>
+<p>瀑布模型将软件开发过程分为6个阶段:<strong>计划→需求分析→软件设计→编码→测试→运行维护</strong></p>
+<p>在瀑布模型中，软件开发的各项活动，严格按照这条线进行，只有当一个阶段任务完成之后，才能开始下一个阶段。</p>
+<p>软件开发的每一个阶段都要有结果产出，结果经过审核验证之后，作为下一个阶段的输入，下个阶段才可以顺利进行。如果结果审核验证不通过，则需要返回修改。</p>
+<p>特点：对于现代软件来说，软件开发各阶段之间的关系，大部分不会是线性的，很难使用瀑布模型开发软件，因此瀑布模型不再适合现代软件开发，已经被逐渐废弃。</p>
+<p><strong>2、 快速原型模型——快速开发原型</strong></p>
+<p>快速原型模型与瀑布模型正好相反，它在最初确定用户需求时，快速构造岀一个可以运行的软件原型，这个软件原型向用户展示待开发软件的全部或部分功能和性能，客户对该原型进行审核评价，然后给出更具体的需求意见，这样逐步丰富细化需求，最后开发人员与客户达成最终共识，确定客户的真正需求。确定客户的真正需求之后，开始真正的软件开发。</p>
+<p>特点：快速原型模型克服了需求不明确带来的风险，适用于不能预先确定需求的软件项目。但快速原型模型关键在于快速构建软件原型，准确地设计出软件原型存在定的难度。这种开发模型也不利于开发人员对产品进行扩展。</p>
+<p><strong>3、 迭代模型——组件化开发</strong></p>
+<p>迭代模型又称为增量模型或演化模型，它将一个完整的软件拆分成不同的组件，然后逐个组件地开发测试，每完成一个组件就展现给客户，让客户确认这一部件功能和性能是否达到客户需求，最终确定无误，将组件集成到软件体系结构中。整个开发工作被组织为一系列短期、简单的小项目，称为一系列迭代，每一个迭代都需要经过需求分析→软件设计→编码→测试的过程。</p>
+<p>迭代模型可以很好地适应客户需求变更，它逐个组件地交付产品，客户可以经常看到产品，如果某个组件没有满足客户需求，则只需要更改这一个组件，降低了软件开发的成本与风险。但是选代模型需要将开发完成的组件集成到软件体系结构中，这样会有集成失败的风险，因此要求软件必须有开放式的体系结构。此外，迭代模型逐个组件地开发修改，很容易退化为“边做边改”的开发形式，从而失去对软件开发过程的整体控制。</p>
+<p><strong>4、 螺旋模型——大型项目</strong></p>
+<p>该模型融合了瀑布模型、快速原型模型，它最大的特点是引入了其他模型所忽略的风险分析，如果项目不能排除重大风险，就停止项目从而减小损失。这种模型比较适合开发复杂的大型软件。</p>
+<p><strong>5、敏捷模型——小型项目</strong></p>
+<p>敏捷模型是20世纪90年代兴起的一种软件开发模型。在现代社会，技术发展非常快软件开发，也是在快节奏的环境中进行的。在业务快速变换的环境下，往往无法在软件开发之前收集到完整而详尽的软件需求。没有完整的软件需求，传统的软件开发模型就难以展开工作。</p>
+<p>敏捷模型，可以及时响应客户需求变更,不断适应新的趋势,但是在开发灵活的同时也带来了一定程度的混乱。例如,缺乏文档资料;软件之前版本的可重现性、可回溯性较低;对于较大的项目,人员越多,面对面的有效沟通越困难。因此敏捷模型比较适用于小型项目的开发,而不太适用于大型项目。</p>
+<p>具体使用场景，可以参考：<a href="https://m.itheima.com/news/20201008/152129.html" title="https://m.itheima.com/news/20201008/152129.html">https://m.itheima.com/news/20201008/152129.html</a></p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

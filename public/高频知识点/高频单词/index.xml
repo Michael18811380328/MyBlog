@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>高频单词 on 我的笔记</title>
+		<link>https://michael18811380328.github.io/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/%E9%AB%98%E9%A2%91%E5%8D%95%E8%AF%8D/</link>
+		<description>Recent content in 高频单词 on 我的笔记</description>
+		<generator>Hugo</generator>
+		<language>zh-cn</language>
+		
+		
+		
+		
+			<atom:link href="https://michael18811380328.github.io/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/%E9%AB%98%E9%A2%91%E5%8D%95%E8%AF%8D/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title></title>
+				<link>https://michael18811380328.github.io/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/%E9%AB%98%E9%A2%91%E5%8D%95%E8%AF%8D/%E9%AB%98%E9%A2%91%E5%8D%95%E8%AF%8D%E8%A1%A8-%E7%AC%94%E8%AE%B0/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>https://michael18811380328.github.io/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/%E9%AB%98%E9%A2%91%E5%8D%95%E8%AF%8D/%E9%AB%98%E9%A2%91%E5%8D%95%E8%AF%8D%E8%A1%A8-%E7%AC%94%E8%AE%B0/</guid>
+				<description>&lt;h3 id=&#34;segment&#34;&gt;segment&lt;/h3&gt;&#xA;&lt;p&gt;片段；线段；部分&lt;/p&gt;&#xA;&lt;p&gt;URL &lt;strong&gt;segments, layouts&lt;/strong&gt;, and data are more often than not coupled (tripled?) together.&lt;/p&gt;&#xA;&lt;p&gt;URL片段、布局和数据通常是耦合在一起的（三倍？）&lt;/p&gt;&#xA;&lt;p&gt;URL 指的是界面 URL&lt;/p&gt;&#xA;&lt;p&gt;布局指的是组件结构 View&lt;/p&gt;&#xA;&lt;p&gt;数据指的是内部 Store 层&lt;/p&gt;&#xA;&lt;p&gt;所以 React-router 把 url - router - page - data 对应起来&lt;/p&gt;&#xA;&lt;h3 id=&#34;layout&#34;&gt;layout&lt;/h3&gt;&#xA;&lt;p&gt;布局；设计；排版&lt;/p&gt;&#xA;&lt;p&gt;He tried to recall the layout of the farmhouse.&lt;/p&gt;&#xA;&lt;p&gt;他想回忆那农舍的布局。&lt;/p&gt;&#xA;&lt;h3 id=&#34;authorization&#34;&gt;authorization&lt;/h3&gt;&#xA;&lt;p&gt;授权&lt;/p&gt;&#xA;&lt;p&gt;Can I see your authorization?&lt;/p&gt;&#xA;&lt;p&gt;我能看你的授权书吗？&lt;/p&gt;&#xA;&lt;h3 id=&#34;authentication&#34;&gt;authentication&lt;/h3&gt;&#xA;&lt;p&gt;认证&lt;/p&gt;&#xA;&lt;p&gt;A troublesome area is the management of the keys used for encryption and authentication.&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

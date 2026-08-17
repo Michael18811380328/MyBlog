@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">计算机学习笔记-归档</p>
+      <h1>计算机组成原理-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#11-计算机系统简介课程简介">1.1 计算机系统简介课程简介</a></li>
+        <li><a href="#11-计算机系统简介-11-a">1.1 计算机系统简介 1.1-a</a></li>
+        <li><a href="#11-计算机系统简介11-b">1.1 计算机系统简介1.1-b</a></li>
+        <li><a href="#12-计算机的基本组成12-a1">1.2 计算机的基本组成1.2-a1</a></li>
+        <li><a href="#12-计算机的基本组成12-a2">1.2 计算机的基本组成1.2-a2</a></li>
+        <li><a href="#12-计算机的基本组成12-b">1.2 计算机的基本组成1.2-b</a></li>
+        <li><a href="#12-计算机的基本组成12-c-存储器">1.2 计算机的基本组成1.2-c-存储器</a></li>
+        <li><a href="#12-计算机的基本组成12-d-运算器">1.2 计算机的基本组成1.2-d-运算器</a></li>
+        <li><a href="#12-计算机的基本组成12-e-控制器">1.2 计算机的基本组成1.2-e-控制器</a></li>
+        <li><a href="#13-计算机硬件的主要技术指标">1.3 计算机硬件的主要技术指标</a></li>
+        <li><a href="#21-计算机的发展史-a1">2.1 计算机的发展史-a1</a></li>
+        <li><a href="#21-计算机的发展史-a2">2.1 计算机的发展史-a2</a></li>
+        <li><a href="#21-计算机的发展史-b">2.1 计算机的发展史-b</a></li>
+        <li><a href="#22-23-计算机的应用和展望">2.2-2.3 计算机的应用和展望</a></li>
+        <li><a href="#31-总线的基本概念">3.1 总线的基本概念</a></li>
+        <li><a href="#32-总线的分类">3.2 总线的分类</a></li>
+        <li><a href="#33-总线性能及性能指标">3.3 总线性能及性能指标</a></li>
+        <li><a href="#56-dma方式56-a1">5.6 DMA方式5.6-a1</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="计算机组成原理">计算机组成原理</h1>
+<h3 id="11-计算机系统简介课程简介">1.1 计算机系统简介课程简介</h3>
+<p>课程来源：哔哩哔哩-哈尔滨工业大学</p>
+<p>集成后文档比较大，加载图片可能服务器返回 503 错误，所以可以访问原始网页</p>
+<p>计算机组成原理 = 计算机 + 组成 + 原理</p>
+<p>计算机：数字电子计算机</p>
+<p>组成：计算机硬件系统的逻辑实现（不是物理实现，数字电路门电路触发器）</p>
+<p>原理：基本运算的操作原理，基本部件和单元的设计思想（硬件层面）。这里是一般性原理，不针对某种特定机型。自顶向下方式讲解。</p>
+<p>教材：计算机组成原理（唐朔飞）</p>
+<h3 id="11-计算机系统简介-11-a">1.1 计算机系统简介 1.1-a</h3>
+<p>这一章是本书的概况，本书主要研究计算机的组成（CPU + 存储 + IO），每一个部分是什么功能等</p>
+<p>数字计算机型号规模各异，可能有小型的平板，或者大型的超级计算机。这里只分析基本的组成原理，所以对不同计算机进行抽象（提取公共主要的功能，忽略外观和细节的不同）</p>
+<p>计算机系统 = 软件（系统软件+应用软件） + 硬件（IO，CPU，硬盘等）</p>
+<h3 id="11-计算机系统简介11-b">1.1 计算机系统简介1.1-b</h3>
+<p>计算机系统的层级结构：</p>
+<p>微指令系统-机器语言-操作系统-汇编语言-高级语言</p>
+<p>计算机体系结构：计算机中是否有乘法指令（有哪些指令）</p>
+<p>计算机组成：计算机如何实现乘法指令（具体指令怎么实现）</p>
+<h3 id="12-计算机的基本组成12-a1">1.2 计算机的基本组成1.2-a1</h3>
+<p>冯·诺依曼计算机的特点</p>
+<p>1、计算机有5部分组成：运算器，控制器，存储器，输入设备、输出设备</p>
+<p>2、指令和数据同等重要，存放在存储器，可以按照地址寻访</p>
+<p>3、指令和数据是二进制表示</p>
+<p>4、指令 = 操作码 + 地址码（例如加2，就是加操作，和2所在的地址码）</p>
+<p>5、存储程序（关键）：将程序存放在计算机存储器中，然后按存储器中的存储程序的首地址执行程序的第一条指令，以后就按照该程序的规定顺序执行其他指令，直至程序结束执行。</p>
+<p>6、以运算器为中心（输入、输出、控制、存储都是和运算器相连）</p>
+<h3 id="12-计算机的基本组成12-a2">1.2 计算机的基本组成1.2-a2</h3>
+<p>冯·诺依曼计算机的改进</p>
+<p>可以改成存储器为中心的结构，然后进一步改进成现代计算机结构</p>
+<p>运算器（ALU）+控制器（CU）= CPU 中央处理器</p>
+<p>遇到复杂的问题或者系统，如何进行设计？</p>
+<blockquote>
+<p>参考：复杂性系统的管理方法（3Y）：</p>
+<p>1、层次化：一个复杂的应用，自顶向下，分成多个层级，不同的模块</p>
+<p>2、模块化：每一个模块有明确的功能和接口</p>
+<p>3、规范化：不同模块的接口和规范统一（例如全部的内存条尺寸，typeC）</p>
+</blockquote>
+<h3 id="12-计算机的基本组成12-b">1.2 计算机的基本组成1.2-b</h3>
+<p>实际案例</p>
+<p>思考：一个实际问题能否使用计算机解决？如果一个问题是一个函数，在定义域上，每一个值都有一个唯一的解，那么这个问题就是可以解答的问题。</p>
+<p>一个实际问题怎样使用计算机解决？</p>
+<p>1、建立数学模型（y = fn(x)）</p>
+<p>2、确定计算方法 sinx 的泰勒展开，不能直接计算三角函数，那么使用幂指数间接计算三角函数，一直到需要的精度满足需求。</p>
+<p>3、编程实现-运算的全部步骤</p>
+<blockquote>
+<p>例子：ax ^2 + bx + c 如何实现？</p>
+<p>从存储中拿出数字，执行加法运算，执行乘法运算，放入内存等都是一个步骤</p>
+<p>不同算法的实现，对于计算复杂度和操作数都不同，例如优化成 (ax + b)x + c 这样可以减少很多计算量</p>
+</blockquote>
+<p>指令格式：指令格式用二进制表示</p>
+<p>例如：取一个数字： [a] -&gt;ACC，把a放在内存中；还有类似的存数、加减乘除、打印、停机等。</p>
+<p>具体的程序清单：包括上面的指令+数据</p>
+<h3 id="12-计算机的基本组成12-c-存储器">1.2 计算机的基本组成1.2-c-存储器</h3>
+<p>存储器的组成：</p>
+<p>主存储器 = 存储体 + MAR + MDR</p>
+<p>存储体（大楼，主要存储部分）——存储单元（房间，存放一串二进制代码，每个存储单元都有一个地址）——存储元件（某个卧室是否空，对应物理元器件 0-1）</p>
+<p>MAR：存储器地址寄存器（存储单元的个数）</p>
+<p>MDR：存储器数据寄存器（存储字长）</p>
+<p>寄存器的功能是存储二进制代码，它是由具有存储功能的触发器组合起来构成的。一个触发器可以存储1位二进制代码，故存放n位二进制代码的寄存器，需用n个触发器来构成。</p>
+<h3 id="12-计算机的基本组成12-d-运算器">1.2 计算机的基本组成1.2-d-运算器</h3>
+<p>运算器是什么？运算器如何工作？</p>
+<p>1、运算器的基本组成：ACC + ALU + X + MQ</p>
+<p>2、加减乘除法分别分析</p>
+<p>加减法：ACC 存放已有的数据，X 存放加的数字，在 ALU 计算完毕后，存放到 ACC 中。</p>
+<p>乘法：乘法后位数增加，需要 MQ 寄存器。ACC 是已有数据，MQ 和 X 分别存放两个数字。ALU 计算后，将计算的结果高位放在 ACC 中，低位放在 MQ 中。</p>
+<p>除法：除法计算后有商和余数。那么商放在 MQ 中，余数放在 ACC 中。</p>
+<h3 id="12-计算机的基本组成12-e-控制器">1.2 计算机的基本组成1.2-e-控制器</h3>
+<p>控制器的基本组成：</p>
+<p>如何完成一条指令？取指令——分析指令（两个步骤是并行还是串行等）——执行指令</p>
+<ul>
+<li>取指令（PC）这里存放指令的地址，每次取出一个，指针指向下一个指令的地址</li>
+<li>分析指令（IR）这里存放当前指令的地址，分析指令执行顺序，是否并行执行等</li>
+<li>执行指令（CU）</li>
+</ul>
+<p>存储器、运算器、控制器构成了什么？以一条指令在主机上的执行过程为例（取数指令，存数指令，计算函数指令）分析这个问题</p>
+<h3 id="13-计算机硬件的主要技术指标">1.3 计算机硬件的主要技术指标</h3>
+<p>如何购买计算机？</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>1、分析用途：个人看剧（入门PC），还是打游戏（显卡），还是实验室工作站（多核CPU+工作站）？
+</span></span><span style="display:flex;"><span>2、分析资金，看实际资金能满足需求
+</span></span><span style="display:flex;"><span>3、计算机定性要求：计算快（处理速度快）；存的多（内存容量大）
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>计算机硬件的主要指标：</p>
+<p>1、机器字长（CPU 每次计算能处理的数字位数），和 CPU 的寄存器有关</p>
+<p>2、运算速度：每秒运行多少次运算？CPU 主频，CPU 核数（固定的速度），执行某个程序的耗时（程序中运算的加权平均，不同程序需要的计算能力不同）</p>
+<p>3、存储容量：存放二进制信息的总位数，主存（MAR + MDR）+辅助存储（硬盘，80G）</p>
+<h3 id="21-计算机的发展史-a1">2.1 计算机的发展史-a1</h3>
+<p>本章不重要</p>
+<p>不同时代计算机的主要的硬件，从电子管晶体管到集成电路，然后到超大规模的集成电路</p>
+<p>不同计算机的主要结构，有的是根据计算组件为核心</p>
+<p>IBM的system360是一个计算机系统，包括不同计算能力的集群</p>
+<h3 id="21-计算机的发展史-a2">2.1 计算机的发展史-a2</h3>
+<p>微型计算机的出现和发展</p>
+<p>微处理器的出现发展（一片集成电路组成的处理器）</p>
+<p>摩尔定律，计算机芯片的计算能力和时间呈指数关系的增长</p>
+<p>每18个月计算机处理器的性能就会翻一翻</p>
+<h3 id="21-计算机的发展史-b">2.1 计算机的发展史-b</h3>
+<p>计算机软件技术的兴起和发展</p>
+<h3 id="22-23-计算机的应用和展望">2.2-2.3 计算机的应用和展望</h3>
+<p>计算机的主要应用在</p>
+<p>科学计算和数据处理</p>
+<p>工业控制和实时控制</p>
+<p>网络技术（电子商务，网络教育，购物）</p>
+<p>人工智能</p>
+<h3 id="31-总线的基本概念">3.1 总线的基本概念</h3>
+<p>为什么要用总线？各个部件需要进行数据交流</p>
+<p>总线是连接各个主要部件的数据传输线路，就是连接 CPU IO 主存等的通信线路</p>
+<p>总线可以并行传输数据，也可以单行传输数据。因为主板较小，所以并行传输数据（电流）可能存在信号的干扰。不同计算机使用不同的布线方式。</p>
+<p>因为硬件很多，每两个部件两两相连需要很多线路，而且不方便扩展，所以需要科学的设计总线</p>
+<p>总线分类：</p>
+<p>1、单一总线：所有部件连接到一根总线上。优点是简单，缺点是可能两个设备通信会占用总线。</p>
+<p>2、以CPU为核心的总线：CPU 单独和其他设备连接一条总线，便于CPU更方便数据处理和交互</p>
+<p>3、以主存为核心的总线：主存和CPU单独增加一个总线，便于数据的读写和存储</p>
+<h3 id="32-总线的分类">3.2 总线的分类</h3>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/2025-01/image-1737382609647.jpeg" alt="" title="" width="665" height="541" />
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/2025-01/image-1737382618841.jpeg" alt=""></p>
+<h3 id="33-总线性能及性能指标">3.3 总线性能及性能指标</h3>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/2025-01/image-1737382717750.jpeg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/2025-01/image-1737382724639.jpeg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/2025-01/image-1737382731421.jpeg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/2025-01/image-1737382738261.jpeg" alt=""></p>
+<h3 id="56-dma方式56-a1">5.6 DMA方式5.6-a1</h3>
+<p>DMA</p>
+<p>直接内存访问（DMA，Direct Memory Access）是一些计算机总线架构提供的功能，它能使数据从附加设备（如磁盘驱动器）直接发送到计算机主板的内存上。——不通过CPU的调度，IO 直接发送数据到计算机内存上。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

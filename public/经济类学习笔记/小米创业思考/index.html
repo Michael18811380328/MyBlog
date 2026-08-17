@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">经济类学习笔记</p>
+      <h1>小米创业思考</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="读书笔记">读书笔记</h1>
+<p>小米公司创业过程中的经历和思考</p>
+<p>雷军系统梳理30年创业心法和经营哲学，深度复盘“小米模式”，认为取得持续成功的核心在于只干了一件事：坚持“互联网制造”路线，推动效率革命，实现用户利益和经济效率的最大化。</p>
+<p>雷军在书中首度全面公开包括三大铁律、七字诀、高效率模型、爆品模式、生态链要素等，涉及管理、投资、工作等多维度经验，为创业者和管理者提供借鉴和指导，也可以为普通人提供持续精进的头部思维。</p>
+<p>​</p>
+<p>小米创业十年过程的会议和思考，2022年写</p>
+<blockquote>
+<p>感动人心，价格厚道——追求极致的性价比，硬件利润率不超过 5%（低价策略依靠量抢占市场，类似的还有目前的胖东来，赵一鸣零食，都是依靠供应链确保低价产品，让用户性价比最高）</p>
+</blockquote>
+<blockquote>
+<p>核心方法</p>
+<p>把互联网的开发模式用在制造业中，提高效率</p>
+<p>例如多听用户的反馈，对用户说的有必要的改动多改动。</p>
+</blockquote>
+<p>专注：优先专注核心技术点（电话，通讯录，短信），如果考虑的太多方面，产品质量很难把控。</p>
+<p>极致：把一个产品做到最好，例如手机对标苹果手机供应链，汽车对标保时捷和兰博基尼。</p>
+<p>口碑：让用户成为口碑和宣传</p>
+<p>快：快速迭代，每天发布测试版本，每周发布内测版本，针对核心用户进行有风险测试。每月发布中等稳定版本，将新功能介绍给外部用户。</p>
+<p>PDF 书籍，目前先把笔记做到书上了，最后可以简化整理一个版本</p>
+<p>视频书评：<a href="https://www.bilibili.com/video/BV14RQDYfEUr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224" title="https://www.bilibili.com/video/BV14RQDYfEUr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224">https://www.bilibili.com/video/BV14RQDYfEUr/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224</a></p>
+<h4 id="第一部分小米创业历程">第一部分：小米创业历程</h4>
+<p>第一章 奇迹时代</p>
+<p>主要内容：小米创立初心；从MIUI系统起步，依靠100个梦想赞助商，互联网模式开发系统；小米1手机发布，一战成名；初步搭建生态链，开启铁人三项（硬件+软件+互联网服务）模式，实现早期高速崛起。 </p>
+<p>经典名言</p>
+<ol>
+<li>找人不是三顾茅庐，找人要三十顾茅庐。</li>
+<li>将复杂工程高度简化，是一项非常重要的能力。</li>
+<li>MIUI是“专注、极致、口碑、快”七字诀第一次成功验证。</li>
+</ol>
+<p>第二章 低谷</p>
+<p>主要内容：2015‑2016小米遭遇危机，销量下滑。反思问题：供应链交付、创新不足、质量管控短板；企业内部全面补课，补供应链、质量、创新、精细化管理，走出高速增长后的困境。 </p>
+<p>经典名言</p>
+<ol>
+<li>成功往往不是规划出来的，危机是你想不到的机会。</li>
+<li>风来了猪都会飞，风过去了，摔死的都是猪。风口是机会，翅膀才是本事。</li>
+</ol>
+<p>第三章 重回增长</p>
+<p>主要内容：完成内部整改之后重新复苏；小米上市，成为最年轻世界500强；大力拓展海外市场，全球化取得重大突破，海外业务成为第二增长曲线。 </p>
+<p>经典名言：创业就是在秩序与混沌之间，在确定与不确定之间，不断寻找平衡，寻找每一个节点的最优解。</p>
+<p>第四章 新十年新征程</p>
+<p>主要内容：小米十周年复盘；决心冲击高端市场；确立小米三大铁律：技术为本、性价比为纲、做最酷的产品；布局全场景AIoT，开启新十年战略方向。 </p>
+<p>经典名言</p>
+<ol>
+<li>三大铁律：技术为本、性价比为纲、做最酷的产品。</li>
+<li>做高端不是选择题，是小米的生死之战。</li>
+</ol>
+<h4 id="第二部分小米方法论">第二部分：小米方法论</h4>
+<p>第五章 我对互联网思维的理解</p>
+<p>主要内容：回顾互联网发展，结合雷军程序员经历；重新定义互联网思维，互联网不是行业，是方法论；核心是效率、用户、参与感；互联网思维可以改造传统制造业。 </p>
+<p>经典名言</p>
+<ol>
+<li>商业的本质是效率，效率可以给更多人带来幸福感。</li>
+<li>关注用户，而不是流量；追求闭环，而不是扩张。</li>
+</ol>
+<p>第六章 互联网七字诀：专注、极致、口碑、快 主要内容：小米最核心方法论，分四块拆解：</p>
+<ul>
+<li>专注：少就是多，决定不做什么和做什么同等重要，一次解决一个核心需求；</li>
+<li>极致：做到能力的极限，目标上绝不妥协；</li>
+<li>口碑：超越用户预期，口碑来自超出期待，而不是广告；</li>
+<li>快：快速迭代，小步快跑，敏捷响应市场与用户反馈。</li>
+</ul>
+<p>经典名言</p>
+<ol>
+<li>专注、极致、口碑、快，这是小米的互联网七字诀。</li>
+<li>决定不做什么，跟决定做什么一样重要。</li>
+<li>口碑不是营销出来的，是超出用户预期做出来的。</li>
+</ol>
+<h4 id="第三部分-小米方法论的实践">第三部分 小米方法论的实践</h4>
+<p>第七章 技术为本 主要内容：科技公司根基是技术；推崇工程师文化，鼓励创新；工程思维不只属于工程师，管理者也需要工程思维；坚持持续投入研发，技术是长期护城河。 </p>
+<p>经典名言：工程师文化，本质就是鼓励创新，鼓励敢于挑战现有方案。</p>
+<p>第八章 和用户交朋友 主要内容：小米核心价值观，把用户当朋友而非消费者；性价比是最大诚意；新媒体的本质是沟通，不是广告营销；无限贴近用户；目标做到用户“闭着眼睛买”，建立信任优先于短期利润。 </p>
+<p>经典名言</p>
+<ol>
+<li>性价比是最大的诚意。</li>
+<li>“闭着眼睛买”，信任才是唯一。</li>
+<li>永远相信美好的事情即将发生。</li>
+</ol>
+<p>第九章 爆品模式 主要内容：爆品不是靠营销炒作，是系统性打造；拆解打造爆品四项能力：洞察用户需求、技术创新、极致体验、高性价比；爆品带来流量，降低营销渠道成本。 </p>
+<p>经典名言</p>
+<ol>
+<li>爆品不是营销出来的，是磨出来的。</li>
+<li>只要用户愿意排队，渠道费用和市场费用就有机会无限趋近于零。</li>
+</ol>
+<p>第十章 高效率模型 主要内容：小米模式解决传统制造业“好产品卖不贵”矛盾；去掉层层中间渠道，合理利润，只赚一点“小费”；构建以用户为中心的增长飞轮；解释小米定价逻辑，效率革命是小米模式内核。 </p>
+<p>经典名言：我们赚合理的小费，不赚暴利。</p>
+<p>第十一章 新零售 主要内容：从线上电商走到线上线下融合；小米之家模式底层逻辑；零售本质就是效率+体验；用互联网方法论改造线下实体零售，实现线上线下同价。 </p>
+<p>经典名言：零售的本质就是做好效率和体验。</p>
+<h4 id="第四部分-小米方法论与产业生态">第四部分 小米方法论与产业生态</h4>
+<p>第十二章 生态链：竹林模式 主要内容：松树模式vs竹林模式；不控股、赋能生态链企业；投资、输出方法论，孵化大量IoT企业；生态链不是简单贴牌，是扶持一批新国货公司成长。 </p>
+<p>经典名言</p>
+<ol>
+<li>松树模式：一棵大树倒下就是灾难；竹林模式，根系相连，生生不息。</li>
+<li>我们做赋能者，不做控制者。</li>
+</ol>
+<p>第十三章 全球化 主要内容：小米出海思考，不是简单把国内产品卖到海外；尊重当地市场，本地化运营；把整套小米模式复制到全球市场。</p>
+<p>第十四章 小米方法论的演进思考 主要内容：复盘小米模式争议与迭代；时代变化，但底层逻辑不变；互联网改造制造业这套方法论，依然适用于各行各业；面向未来，坚持长期主义。 管自己以身作则，管团队将心比心，管业务身先士卒。</p>
+<h4 id="后记">后记</h4>
+<p>什么是小米模式：小米这么多年只干一件事：用互联网思维改造传统制造业，推动一场效率革命，实现用户利益最大化。</p>
+<p>如果你需要，我可以帮你把这份笔记压缩成一页极简版，方便复习。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

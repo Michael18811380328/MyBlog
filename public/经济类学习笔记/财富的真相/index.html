@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">经济类学习笔记</p>
+      <h1>财富的真相</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="读书笔记">读书笔记</h1>
+<p>财富的真相，李笑来</p>
+<h4 id="ai-总结">AI 总结</h4>
+<ul>
+<li>
+<p>财富与时间的关系：财富的唯一正常来源是“生产”，而生产资料如材料、知识等，溯源到底层都是“时间”的衍生物。时间是每个人终生唯一的生产资料，人们赚得的每一分钱，都是从时间里挖出来的。强调不要直接出售时间，因为这是不划算的，要思考<strong>如何让一份时间能卖出多次，以制造出更有价值的产品</strong>。</p>
+</li>
+<li>
+<p>财富相关概念解析</p>
+<ul>
+<li>
+<p>金钱：钱是一种社会账簿，是用自己的商品或服务向社会交换而来，相当于社会拿走商品和服务后给的“欠条”，所以攒钱等于攒命，钱也是最灵活的生产资料。</p>
+</li>
+<li>
+<p>投资：钱有消费和投资两个用途，用钱赚钱的前提是钱的量要足够多，复利是合理且具有强大力量的，投资股票约等于放贷，股权约等于债权，投资者把时间当作生产资料的必要组成部分，能赚到发展的结果。</p>
+</li>
+<li>
+<p>销售：在生产率提高、供大于求的时代，销售变得尤为重要，它离生产近，能让人理解市场需求和竞争，收入无上限，且没有学历专业门槛和破产压力，想要赚钱多，应优先选择做销售。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>提升财富的方法</p>
+<ul>
+<li>
+<p>提高生产效率：贫富差距，出自生产效率的差异，提高效率的基本原则是持续学习、长期践行、专注内部。要优先学习生产、销售、投资方面的知识。</p>
+</li>
+<li>
+<p>培养正确价值观：把时间这个终极生产资料，放在生产、销售、投资上。长期坚持，人人都可以白手起家。在现实充满尔虞我诈的情况下，做个好人、做好事更为重要和划算，从宏观角度看，整体趋势是向前发展的，人人都有白手起家的可能。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>全书已经看完，简明扼要有趣，局部语言有些片面，下面是个人整理的内容，未来有机会多看。</p>
+<h4 id="前言">前言</h4>
+<p>学校里边学不会的东西，是如何赚钱。</p>
+<p>不要迷信专家，专家对股市的变动预测不一定正确，人们难预测经济和股市的发展。</p>
+<p>我们对孩子的教育，要教会他们如何正当的赚钱（当然实际上是如何赚钱）。</p>
+<p>说到做到，不如做到再说</p>
+<p>榜样的力量，就是让我们会下定决心成为他们那样的人</p>
+<h4 id="第0章-改变想法改变生活">第0章 改变想法，改变生活</h4>
+<p>思考会引发决策，决策带来行动，进而构成命运</p>
+<p>当某个坏事发生的时候，例如生病或者出车祸，仍对命运这个概念的理解，会影响随后的每一个决策以及行动，进而间接的会影响自己的命运</p>
+<p>如果可以正常处理那些坏事，很明确后续改进，反思未来如何降低坏事发生的概率，或者应该如何改变自己的判断</p>
+<p>如果始终相信命运，那么行动自然而然就开始不由自主，就增加了很多不确定性。</p>
+<p>财富的真相，简单而且如此的关键</p>
+<p>一些很简单的原理，潜移默化中会影响人们深远的决策（赚钱）。</p>
+<h4 id="第1章-财富是唯一的正确的来源">第1章 财富是唯一的正确的来源</h4>
+<p>财富是什么？财富，就是钱的金额需要足够大，这样钱才可以成为财富，或者在投资或者创业的时候，成为资本。</p>
+<p>如果钱数量较少，就称为零钱，数量中等称为储蓄。</p>
+<p>只有能带来滚雪球的财富，可以成为财富或者原始资本。</p>
+<p>时间的不断积累，是把零钱变成财富的唯一的正当的手段。</p>
+<p>积累资金的过程，消耗时间，而且通常是很长的时间。</p>
+<p>金钱，时间，证书，人际关系等等，都是不可或缺的财富。</p>
+<p>在理论上完美的社会当中，只能靠自己生产的商品或者服务，通过交易来获得资金，然后逐渐积累，把资金变成财富。</p>
+<p>世界是不完美的社会，不完美的理论（实际上也有别的手段积累财富）。</p>
+<p>生活分成两部分，生产和消费。</p>
+<ul>
+<li>
+<p>消费，可以分为必需品消费和其他的消费，例如娱乐和教育。</p>
+</li>
+<li>
+<p>必需品消费，衣食住行是必不可少的。</p>
+</li>
+<li>
+<p>你决定的是其他消费，例如娱乐和教育等，所占总体消费的比例。</p>
+</li>
+</ul>
+<p>在正常的世界里，财富的最终来源是生产。</p>
+<p>所以应该要做到先生产，再消费。</p>
+<p>避免贷款进行消费，可以进行贷款再投资或者再生产。</p>
+<p>生产收入长期大于支出，那么零钱不断的积累，就变成足够大的财富。必须时间足够久的积累，才能产生有效积累。</p>
+<p><strong>生活应该以生产为中心，而不是以消费为中心。​</strong></p>
+<p>生产无关的消费就可以不做。</p>
+<p>优先做与生产有关的消费。工作与生产有关的事情。</p>
+<p>直白一点，某件事如果能赚钱，就可以去做。某件事做了之后，对赚钱没有任何意义，就可以不做。</p>
+<p>社会媒体宣传的观念，不一定是符合个人情况的（例如购买电子产品，应该根据个人实际需求，而不是根据是否发放消费券，是否进行国家补贴）</p>
+<h4 id="第二章">第二章</h4>
+<p>生产资料究竟有哪些？</p>
+<p>生产最关键的东西是需求，必须生产出能卖出去的商品或者服务，有人需要或者社会需要，才有人能购买，否则自己做出来的东西再好，自我感觉良好，都没有用。</p>
+<p>如果没有人要，就没有人交换，也就没有交易和钱。</p>
+<p>生产资料是时间，没有不需要花时间的生产。生产不仅需要时间，还需要持久集中的时间。</p>
+<p>经济学当中的生产资料包括土地，劳动力。</p>
+<p>企业家和资本</p>
+<p>一方面，时间对每个人都是免费的，另一方面，时间并不是可控的。</p>
+<p>如何利用有限的时间和资源来发挥更大的效用？就是经济学研究的理论依据。</p>
+<p>时间或许不受任何人控制，但是我的时间能否被我自己完全控制？能否用于个人的创造价值，能否决定用来去做什么？我能决定用时间来生产什么更划算。这是自己可以把握的事情。</p>
+<p>有效率的使用时间来进行生产和学习。如果进行的是无用的生产和学习，完全没有必要的。</p>
+<h4 id="第三章">第三章</h4>
+<p>个人生产的商品或者服务，如果需求很强硬，很广泛，那么它用来换钱的机会。就会更多。</p>
+<p>所以就要学习就业范围比较广的专业。</p>
+<p>自己的知识和自己的时间，把自己的钱积，累成自己的财富。</p>
+<p>现代人面临的真正的困难并不是花钱，而是花时间去学习，思考，观察。在学习改良这一系列重复的行为，确实很耗时间
+如果想干一件事情，真要去用心去花时间去花钱，这样事情才能干成。</p>
+<p>最后自己的财富，都是来源于来源于自己的时间。</p>
+<p>要学会去借力。例如我花钱去打车，然后节省出来自己的时间，可以赚取更多的财富。</p>
+<h4 id="第四章">第四章</h4>
+<p>生活艰辛的根本原因是什么？</p>
+<p>生产必须是有效的生产。无效生产，毕竟去生产了。在失败的过程中也是一个学习的过程，总结经验教训的过程，不是说失败的生产就是无效的生产。要不放弃，要逐步改进或者翻盘，多次的失败才能累积成成功。就和写代码一样。多写几次错误的代码就能找到最好的代码，不可能一次性写到最完美。</p>
+<p>思考决定选择，选择决定命运，应该要多想一想。</p>
+<h4 id="第五章">第五章</h4>
+<p>专门从事交易的人叫做商人</p>
+<p>把别人制作的商品或者服务及别人生产的结果卖出去，也是一种生产形式。</p>
+<p>短距离的交易通常称为销售，远距离的交易通常称为贸易。</p>
+<p>现代社会当中，随着互联网的崛起，远距离产生的价值可能会逐步的减少，因为电商平台成为了最大的贸易商。</p>
+<p>知识是需要不断的学习，学习的途径有且只有一条。</p>
+<p>先去做有效生产的被组织者，也就是打工人。</p>
+<p>我们正规的教育体系培养的主要是生产者或者被组织者，而并非有效的组织者或者销售者。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

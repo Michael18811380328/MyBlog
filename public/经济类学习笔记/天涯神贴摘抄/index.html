@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">经济类学习笔记</p>
+      <h1>天涯神贴摘抄</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="读书笔记">读书笔记</h1>
+<h4 id="家族贫穷的原因">家族贫穷的原因：</h4>
+<p>1，整个家族没有一个格局大的引路人（从商或者从政）。老人没有办法为懵懂的下一代做规划，自己也不注重提升格局，一辈子都在给别人打工。</p>
+<p>2，家族中的长辈都是利己主义者，只顾自己舒服，完全不重视子女的成长教育和经济扶持，等老了需要照顾了，才想起用养育之恩绑架子女。</p>
+<p>3，兄弟姐妹永远是各干各的，资源得不到积累，每一个行业都没有优势，同时彼此之间还不团结，一点利益就争吵不休，犹如一盘散沙！</p>
+<p>4，真正优秀的家族，是几代人相互激励共同努力的结果！这点我特别佩服浙江人，做生意都是家族式。一个人有了路子，就会让亲戚去别的城市开拓，不仅不抢生意，网格化经营，反而更容易实现同行业垄断，然后整个家族就起来了。</p>
+<p>​</p>
+<h4 id="跨越阶级游戏的四个步骤">跨越阶级游戏的四个步骤：</h4>
+<p>一、耐心等待全球性或区域性金融或经济危机的出现，这些危机会定期发生。</p>
+<p>二、在危机期间，利用新闻等资源观察危机形势，当优质资产的价格大幅下跌时，借助各种贷款和杠杆工具，购买这些被低估的核心资产。同时，根据市场预期，中央银行和政府可能会采取降息和大规模货币宽松政策。</p>
+<p>三、在货币宽松政策实施后，经济逐渐走出衰退期，进入繁荣期。此时，以较高的价格出售之前购买的优质资产，以偿还部分或全部负债，并保留一部分利润和优质资产。此后，继续专注于工作和生活，等待下一次危机的到来。</p>
+<p>四、重复以上三个步骤 N 次，并在日常生活中积累资金，这是普通人实现千万资产的最佳方式。然而，这个过程需要很长时间，同时也考验个人的洞察力和操作能力。</p>
+<blockquote>
+<p>实际情况：普通人很难预测危机持续的时间和周期，而且购买优质资产有难度</p>
+</blockquote>
+<p>​</p>
+<h4 id="通透人生">通透人生</h4>
+<p>想明白一件事儿，你就脱胎换骨了。在我没钱的时候，我就骑电动车出门，那时候我怕遇见熟人，怕丢面子，当我买了车的时候，再骑电动车出门，我就不怕了。万物本闲，唯有心闹。</p>
+<p>手上戴了一块 2000 块钱的表，饭桌上就有人聊起手表了，说不到 2000 块钱的手表怎么戴啊？机芯没机芯，要做工，没做工的带出去没面子。这个时候你心里是什么感觉？但是你手上要是带的是块劳力士，你又是什么感觉？记住前后这两种感觉啊。然后思考一个事儿，为什么说话的人没变，前后说的话也没变，你的感受怎么就变了呢？</p>
+<p>做生意做产品也一样，蛋糕店里卖蛋糕，那有的人就特别爱吃，有的人就不爱吃甜食，但是不论别人爱吃不爱吃，那个蛋糕就在那啊，没有任何变化，这就是这个世界的一种真相，十方空无意，众生其分别。所谓。果园就是一堆草，长在一片平地上，不代表自由和辽阔，大山也就是大山，没有巍峨和雄地。这些定义都是看到的人决定的。</p>
+<p>看透这个本质以后，你就会发现啊，我们会所向披靡，什么问题都能解决，什么人都能交往。</p>
+<p>​</p>
+<h4 id="如何从底层杀出来">如何从底层杀出来？</h4>
+<ol>
+<li>
+<p>第一，为穷人说话，帮富人办事。</p>
+</li>
+<li>
+<p>第二，既然参与竞争，就不能同情弱者。</p>
+</li>
+<li>
+<p>第三，拒绝学习的人最终一定会成为底层。</p>
+</li>
+<li>
+<p>第四，有所作为的人，靠的是长时间的专注和投入，而不是学校的教育。</p>
+</li>
+<li>
+<p>第五，人才过剩，学历过剩的时代，要做一个有特长的人，你要学会在一个细分的领域无人能敌，哪怕只是牛肉汤加葱油饼。</p>
+</li>
+<li>
+<p>第六，<strong>如果你想快速的提升自己，获得成长，不妨找一件高难度的事情去做一做，这个过程中会暴露大量你之前不在意被无视的问题，他给你的反馈会无限的接近于最客观、最真实的你，你的水平，显然这会儿会让你很尴尬。​</strong></p>
+</li>
+</ol>
+<p>​</p>
+<h4 id="改念就可以改变命运">改念就可以改变命运</h4>
+<p>很多高人都会告诉你，只要你改念就可以改变命运，那为什么你的念改了，命运剧本还是没有变化？其实真正的原因是因为你的习气没有改，所以好的命运剧本你是守不住的。虽然有几天的变化，但是很快又回到了之前的念中，也就是你又回到了之前的人生轨迹当中。</p>
+<p>这篇文章可能会颠覆你之前的世界观，因为我们会从微观量子的角度来推测我们的命运是如何形成的。</p>
+<p>如果我们把量子看成是组成物质念头、心理的基本单元，那么无数个认知念头就由无数个量子组成，这其中每一个认知念头都是由其他更为细小的记忆念头组成，而大多数细小的念头我们根本无法察觉。我之前视频说过，人在一秒钟内会升起无量个念头，每一个念头都会投射到现实世界，形成现实世界的物质场景，大的念头投影成你所感知到的场景。无法察觉的细小念头投影成了细胞分子，最为细小的念头投影成了质子、电子的基本粒子。这些最为细小的念头没有任何形象，你可以把它看成一种能量波，这种波是组成念头的基本单元，是创造一切的基本能量。这种基本能量又叫做心理，每个人观察到的世界就在自己心中，也在别人心中，就像一个共同的梦。</p>
+<p>用功夫一定要在微系处关照自己的心念心态，每一分钟都不要空过，每一炷香都不要空，这就是降服其心。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">网课学习笔记</p>
+      <h1>UI设计-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#00-介绍-托尼三三-设计公开课">00 介绍 托尼三三-设计公开课</a></li>
+        <li><a href="#01-单一素材">01 单一素材</a></li>
+        <li><a href="#02-原图杂乱">02 原图杂乱</a></li>
+        <li><a href="#03-设计稿没有重点">03 设计稿没有重点</a></li>
+        <li><a href="#04-图片处理">04 图片处理</a></li>
+        <li><a href="#05-设计感到疲惫和创意枯竭ai-优化">05 设计感到疲惫和创意枯竭？AI 优化</a></li>
+        <li><a href="#06--完全陌生的行业需求怎么办">06  完全陌生的行业需求怎么办？</a></li>
+        <li><a href="#07-设计稿很平淡如何提升视觉冲击力">07 设计稿很平淡，如何提升视觉冲击力？</a></li>
+        <li><a href="#08-ai-推进了设计行业发展">08 AI 推进了设计行业发展</a></li>
+        <li><a href="#09-设计中神奇的大与小">09 设计中神奇的大与小</a></li>
+        <li><a href="#10-如何用200的效率完成一个作品集封面">10 如何用200%的效率完成一个作品集封面</a></li>
+        <li><a href="#11-原来基础渐变让设计变得这么高级">11 原来基础渐变，让设计变得这么高级</a></li>
+        <li><a href="#12-原来渐变这么轻松就能搞定">12 原来渐变这么轻松就能搞定</a></li>
+        <li><a href="#13-人再多也不怕群像设计别再害怕">13 人再多也不怕！群像设计别再害怕</a></li>
+        <li><a href="#14-设计总是很空如何快速解决">14 设计总是很空，如何快速解决</a></li>
+        <li><a href="#15-震惊模糊的设计也可以这么好看的吗">15 震惊！模糊的设计也可以这么好看的吗</a></li>
+        <li><a href="#16-客户觉得我的设计不够酷炫">16 客户觉得我的设计不够酷炫？</a></li>
+        <li><a href="#17-困扰90设计师的背景细节问题今天终于可以解决了">17 困扰90%设计师的背景细节问题，今天终于可以解决了</a></li>
+        <li><a href="#18-喂喂不是拥有了色卡就会配色的啊">18 喂喂，不是拥有了色卡就会配色的啊</a></li>
+        <li><a href="#19-可能是你第一次知道可爱风素材还能这么设计">19 可能是你第一次知道，可爱风素材还能这么设计</a></li>
+        <li><a href="#20-过了20岁就不能设计的像个小孩子了">20 过了20岁，就不能设计的像个小孩子了</a></li>
+        <li><a href="#21-我想这一定是你正在找的排版知识">21 我想，这一定是你正在找的排版知识</a></li>
+        <li><a href="#22-你为啥总是害怕插画风">22 你为啥总是害怕插画风</a></li>
+        <li><a href="#23-分享一些宝藏网站给你">23 分享一些宝藏网站给你</a></li>
+        <li><a href="#24-七分靠设计-三分靠样机">24 七分靠设计 三分靠样机</a></li>
+        <li><a href="#25-拯救单身狗">25 拯救单身狗</a></li>
+        <li><a href="#26-万万没想到2023年我也有属于自己的红包封面啦">26 万万没想到，2023年我也有属于自己的红包封面啦</a></li>
+        <li><a href="#27-设计教程设计遇到废图怎么办一根线来解决">27 设计教程｜设计遇到废图怎么办？一根线来解决</a></li>
+        <li><a href="#28-设计心得--遇到垃圾素材别害怕三步快速升级">28 设计心得 | 遇到垃圾素材别害怕，三步快速升级</a></li>
+        <li><a href="#29-设计师过稿神器5个宝藏样机网站">29 设计师过稿神器！5个宝藏样机网站</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="ui设计">UI设计</h1>
+<h3 id="00-介绍-托尼三三-设计公开课">00 介绍 托尼三三-设计公开课</h3>
+<p>提示：文档比较大，一次性加载大量图片，可能服务器返回 503 错误，可以点击链接访问原始笔记网页：<a href="https://cloud.seatable.cn/dtable/external-links/621babd7e22b4ceb88ec/">https://cloud.seatable.cn/dtable/external-links/621babd7e22b4ceb88ec/</a></p>
+<p><strong>设计问题一定有底层逻辑可以去解决</strong></p>
+<p>及时设计推荐的一个 UI 设计课程</p>
+<p>2024年2月系统学习</p>
+<p>UP: <a href="https://space.bilibili.com/2142408">托尼三三</a></p>
+<p>哔哩哔哩 课程链接：<a href="https://www.bilibili.com/video/BV1uw411S77u/?spm_id_from=333.788&amp;vd_source=2d5bdee7ea59486ed4aa4a9b10020224">https://www.bilibili.com/video/BV1uw411S77u/?spm_id_from=333.788&amp;vd_source=2d5bdee7ea59486ed4aa4a9b10020224</a></p>
+<p>​</p>
+<h3 id="01-单一素材">01 单一素材</h3>
+<p>排版技巧｜只有1个素材，怎么做设计？</p>
+<p>思路1：蹭经典的流量（椰树椰汁，茅台酒，杜蕾斯等经典背景图）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603162069.jpg" alt=""></p>
+<p>思路2：如果产品很单调，那么尝试把主要的卖点显示到界面中央，这样可以突出产品本身的外形，以及产品的特点。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603610033.jpg" alt=""></p>
+<h3 id="02-原图杂乱">02 原图杂乱</h3>
+<p>链接：<a href="https://www.bilibili.com/video/BV1Qz4y1T7V5/?spm_id_from=333.788&amp;vd_source=2d5bdee7ea59486ed4aa4a9b10020224">https://www.bilibili.com/video/BV1Qz4y1T7V5/?spm_id_from=333.788&amp;vd_source=2d5bdee7ea59486ed4aa4a9b10020224</a></p>
+<p>如果客户提供的原始图片比较丑，怎么处理（例如色彩杂乱，背景杂乱）？</p>
+<p>解决：找到客户产品的重点，以及产品主色调，把非重点部分藏起来</p>
+<p>实例1：找到用户的特出特点，以及蓝色，把其他部分使用蓝色块隐藏起来，并增加产品说明</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603631169.jpg" alt=""></p>
+<p>实例2：使用渐变色，藏起非重点</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1708851312719.png" alt=""></p>
+<p>实例3：如果用户给的原图颜色比较杂，可以直接使用单色滤镜处理全图，然后突出产品重点特点。</p>
+<p>注意，不同的颜色给人的感觉不一致，选择适合的产品主题色，全局的主题色尽量保持一致。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603274985.jpg" alt=""></p>
+<h3 id="03-设计稿没有重点">03 设计稿没有重点</h3>
+<p>如果客户的图片没有重点，或者重点比较多，主次不均衡，怎么处理？</p>
+<p>1、使用大小对比</p>
+<p>例如客户给的特点是多个特点和广告语，那么修改后的设计稿，就要提现“霸气汉堡”和实际的大型汉堡的图片。其他特点就忽略掉，这样重点更突出。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709449906630.png" alt=""></p>
+<p>2、使用结构对比：</p>
+<p>例如原始图片中全部狗狗显示，修改后只展示狗头，其他部分去掉。同时把上面和下面使用纯色遮盖，文字和背景色的区分度更明确。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709449912829.png" alt=""></p>
+<p>3、使用模糊对比</p>
+<p>如果背景杂乱，可以使用2中的纯色，也可以使用3中的渐变色或者模糊进行处理，突出文字和视觉效果</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709449921271.png" alt=""></p>
+<h3 id="04-图片处理">04 图片处理</h3>
+<p>5个常用的图片处理技巧</p>
+<p>1、如果是图文设计，很多是左右布局（这种是常规布局，也符合设计逻辑）；当然可以把文字做成很大的，然后和主题层次突出，这样就能实现更突出的重点对比效果。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709450440072.png" alt=""></p>
+<p>2、如果做出的效果重点不突出，可以巧妙使用分割线，手动创造突变线，然后一侧纯色，另一侧是背景，这样可以突出产品位置，以及左侧纯色覆盖的文字。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709450446165.png" alt=""></p>
+<p>3、色块：如果产品（沙发）很单调，背景色如果是单一纯色或者渐变过渡，也是很单调的。这是可以使用色块进行区分重点和文字部分。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709450452687.png" alt=""></p>
+<p>如果文字比较多，可以使用大小和层级进行区分，以及背景色块。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709450459872.png" alt=""></p>
+<p>如果产品简单（相机），可以手动加一个背景色，避免单调的产品效果。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709450466589.png" alt=""></p>
+<h3 id="05-设计感到疲惫和创意枯竭ai-优化">05 设计感到疲惫和创意枯竭？AI 优化</h3>
+<p>现在 APP 和各种网页的经典设计布局，已经基本成型，很多产品有了固定的 UI 交互。</p>
+<p>例如登录界面，购物网站，短视频网站，都是固定的交互和布局，普通公司想做出别具一格的新交互很难，也大大增加了用户的学习成本。</p>
+<p>这样也促进了 AI 的发展（大量的成熟产品，可以训练很多的模型），给几个提示词，既可以生成一系列的基础设计稿。目前 AI 可以搭建基础的设计模型，对于复杂的交互逻辑还是比较欠缺（按照现在发展速度，很快就有了）</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709820297621.png" width="644" height="null" />
+<p>AI 的发展，势必会取代很多低端程序员，低端 UI 设计师，低端会计，高端的岗位还是需要的。</p>
+<p>对于本职岗位，AI 工具的使用，可以简化初始的开发过程，不需要考虑细枝末节等问题。</p>
+<p>目前及时设计使用了 AI 快速生成设计稿，这个对于自己很有帮助。</p>
+<h3 id="06--完全陌生的行业需求怎么办">06  完全陌生的行业需求怎么办？</h3>
+<p>本次分析三个问题：</p>
+<h4 id="1完全陌生的行业怎么设计">1、完全陌生的行业怎么设计？</h4>
+<p>如果是完全陌生的行业，最好先参考已有产品的效果（同行业大量的落地效果，而不仅仅是完全的设计稿飞机图）</p>
+<p>完全设计图：花瓣网、站酷网、Pinterest、Dribbble</p>
+<p>同行业落地产品图：UI notes <a href="https://uninotes.com">https://uninotes.com</a>, uiii clubs <a href="https://uiii.club/apps">https://uiii.club/apps</a> 这就是实际 APP 的截图</p>
+<h4 id="2如何避免设计出错">2、如何避免设计出错？</h4>
+<p>及时设计中支持真机测试，可以在不同的终端中演示实际的效果图</p>
+<h4 id="3设计效果怎么展现给客户">3、设计效果怎么展现给客户？</h4>
+<p>样机 mockup</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709965293330.png" alt=""></p>
+<h3 id="07-设计稿很平淡如何提升视觉冲击力">07 设计稿很平淡，如何提升视觉冲击力？</h3>
+<p>设计黑话：平——就是设计稿很平淡</p>
+<p>先根据产品类型，分析需要什么样的设计稿？平淡还是喧闹？需要突出产品特点。</p>
+<p>左侧的设计稿比较平和，右侧的设计稿比较冲击。左侧的字体字号范围不大，色彩主要使用渐变色，没有明显反差，显得比较平和。投策设计稿颜色突变比较多，文字突变也比较多，给人一种视觉的冲击力。这里不能直接评价这两个设计稿哪个好，需要看具体的使用场景。</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709966012261.png" alt="" title="" width="596" height="" />
+<p>视觉效果冲击力很低，可以通过三个方案优化</p>
+<p>1、放大重点+层级叠层</p>
+<p>这里把产品+宣传语放大，然后不同图层叠层，形成对比，更有垂直的效果</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603315186.jpg" alt=""></p>
+<p>2、主题倾斜+色块对比</p>
+<p>主题倾斜（对应文字布局倾斜）会更有冲击力</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709966350313.png" alt="" title="" width="313" height="" /><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709966358924.png" alt="" title="" width="355" height="" /></p>
+<p>3、几何+蒙版</p>
+<p>使用几何色块可以突出重点宣传语，使用蒙版去掉背景色中杂乱的效果</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709966395723.png" alt="" title="" width="605" height="" />
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603339814.jpg" alt="" title="" width="602" height="319" />
+<h3 id="08-ai-推进了设计行业发展">08 AI 推进了设计行业发展</h3>
+<p>目前 AI 技术 GPT 生成文本，midjourney 生成图片，sora 生成视频，得到很多的关注，使用很多。通过关键词或者自然语言描述就能生成结果。</p>
+<p>国内的文心一言，站酷，及时设计等也推出了生成文本，生成设计稿等功能（部分付费）。</p>
+<p>1、AI 能取代设计师吗？目前不会取代设计师，可以提高设计师的效率，辅助设计师（类似 PS 工具不会取代设计师，让设计门槛更低了）技术发展让入门门槛更低，会取代初级设计师（只会使用工具的设计师）。很多场景复杂性高，或者频繁改版比较高，所以也需要一定的人工改图等。</p>
+<p>2、AI 能提高效率吗？可以提高效率，根据客户需求，生成大量概念稿。然后根据实际需求进行微调，还需要人来处理。AI 可以完成 90% 的工作，剩余 10% 的工作还需要人工处理。</p>
+<h3 id="09-设计中神奇的大与小">09 设计中神奇的大与小</h3>
+<p>使用文字图片的大小对比，可以突出重点，或者诱导客户的行为（付费）</p>
+<p>例如下面几个图片，使用大小对比，特出重点和产品</p>
+<img width="409" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709968159877.png" />
+<img width="553" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709968170200.png" />
+<p>大小对比可以突出产品特点，但是不应该阻挡客户正常阅读</p>
+<img width="548" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709968178747.png" />
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709968188439.png" alt=""></p>
+<p>这里就是诱导客户选择（普通订阅或者关闭很小，优惠订阅很大）这种在抖音快手短视频中使用很多</p>
+<p>想付费很简单，想关闭或者查看用户权限就很小</p>
+<img width="608" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709968200806.png" />
+<h3 id="10-如何用200的效率完成一个作品集封面">10 如何用200%的效率完成一个作品集封面</h3>
+<p>如果需要做一个作品集（个人简历中展示）那么不一定要多么花哨的效果，主要提现内容。</p>
+<p>类比，自己的在线个人简历，也可以以 iframe 的形式，插入自己的作品和效果。</p>
+<p>或者一个网站入口放各种demo，另一个页面以 iframe 的形式插入这部分 demo，就是自己实时的作品集。</p>
+<img width="611" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710330740122.png" />
+<h3 id="11-原来基础渐变让设计变得这么高级">11 原来基础渐变，让设计变得这么高级</h3>
+<p>如果设计稿比较单调（没有层次感），可以使用渐变色填充文字或者图案，形成不同的层级，这样比单纯的一个层级要更多层次。</p>
+<p>当然，渐变的范围不要太大，通常是白色到灰色的文本渐变，或者一种颜色到另一种颜色的渐变。在同一个图片中，主体还是纯色，渐变可以设置在不同图案衔接的地方。</p>
+<p>当然要避免使用 PS 中七个色阶的渐变，效果很奇怪。</p>
+<img width="518" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710331051930.png" />
+<img width="524" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710331080371.png" />
+<h3 id="12-原来渐变这么轻松就能搞定">12 原来渐变这么轻松就能搞定</h3>
+<p>渐变是设计中很重要的部分。如果主体比较复杂，那么背景使用纯色最好。如果主体比较单调，背景可以使用渐变。</p>
+<p>主要介绍四种渐变</p>
+<h4 id="0-基础色板知识">0 基础：色板知识</h4>
+<p>一个颜色可以分成四个区域，饱和度和明度变化如下，不同区域对应不同的效果和感情色彩，使用在不同场景</p>
+<p>1、清新：20岁姑娘淡妆</p>
+<p>2、明艳：20岁姑娘浓妆</p>
+<p>3、稳重：40岁女士淡妆</p>
+<p>4、复古：40岁女士浓妆</p>
+<img width="621" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710332077521.png" />
+<img width="651" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710332088093.png" />
+<img width="655" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710332096507.png" />
+<img width="610" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710332112502.png" />
+<img width="608" src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710332536429.png" />
+<h4 id="1两个颜色的渐变">1、两个颜色的渐变</h4>
+<p>如何选择一个颜色？从色板中分析四个区域，先分析场景的特征，然后选择合适的主题色</p>
+<p>如何选择两个颜色？从色环上选择。两个颜色的取色范围角度不同，那么实现的效果不同。通常取60以内的最好。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333036821.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333046562.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333055818.png" alt=""></p>
+<p>我们可以看到，30-60比较稳重，90、180就比较突变，这样需要背景色和主体内容颜色不冲突。默认选择0-30-60就好。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333070185.png" alt=""></p>
+<h4 id="2一个颜色明度的渐变">2、一个颜色明度的渐变</h4>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333207094.png" alt=""></p>
+<h4 id="3一个颜色纯度的渐变">3、一个颜色纯度的渐变</h4>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333223438.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333231072.png" alt=""></p>
+<h4 id="4多个颜色弥散渐变">4、多个颜色弥散渐变</h4>
+<p>这个颜色，个人觉得实际效果不是很好，不容易把握。</p>
+<p>下面给出两个网站可以直接生成弥散渐变的图片，或者使用 PS AI 作图。</p>
+<p>如果使用弥散渐变，那么主要内容颜色应该醒目单一。如果主要内容就很复杂，那么加上弥散渐变就容易混乱。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333276551.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333288317.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710333295748.png" alt=""></p>
+<h3 id="13-人再多也不怕群像设计别再害怕">13 人再多也不怕！群像设计别再害怕</h3>
+<p>群像设计：设计稿的主题是多个人，每个人还有特定的标题（例如电影的海报，有多个主演和特点，形态肤色颜色不同，比较难以处理）</p>
+<p>原则：弱化人物差异性，强化设计统一性</p>
+<h4 id="1常规思路">1、常规思路</h4>
+<p>使用相同的外框</p>
+<p>人物大小相同</p>
+<p>图片去色（如果人物肤色差别比较大，可选，灰色人物有风险）</p>
+<p>例如下面两个设计稿中，设置了相同的边框（背景色）然后把人物单独抠出来，避免背景色，大小调节的基本一致。每个人的名称和头衔可以以渐变或者纯色块放在人物下方，达到设计整体一致性。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710560998811.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710561004722.jpg" alt=""></p>
+<h4 id="2突破常规思路">2、突破常规思路</h4>
+<p>在第一种思路基础上，可以把边框设置成不同的尺寸，任务也可以不完全放在边框内部，有一部分突出边框。或者使用不同的图层叠放人物，突出人物的重点和对比。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710561012419.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710561023523.jpg" alt=""></p>
+<h4 id="3躲猫猫设计">3、躲猫猫设计</h4>
+<p>在前两种的基础上，可以把人物放在一个曲线（撕纸）或者一个块级区域，这样可以达到很好的视觉效果。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710561031172.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710561037784.jpg" alt=""></p>
+<h3 id="14-设计总是很空如何快速解决">14 设计总是很空，如何快速解决</h3>
+<p>如果设计界面内容比较少，如何达到很充实，但是不乱的效果？</p>
+<h4 id="1延伸细节">1、延伸细节</h4>
+<p>可以在基础产品的细节，例如增加相同的纹理和相同的颜色，让界面整体效果充满。</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710567799237.jpg" width="689" height="null" />
+<h4 id="2背景虚化">2、背景虚化</h4>
+<p>可以选择主要产品内容，然后作为背景，然后进行虚化页面，这样可以让背景不空旷，也不会妨碍主要产品和宣传</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710567942336.jpg" alt=""></p>
+<h4 id="3复制和放大主要特征">3、复制和放大主要特征</h4>
+<p>不影响效果的情况下，放大产品的某个特点，实现重点明确，界面较满的效果</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710568600245.jpg" alt=""></p>
+<h4 id="4重复主题">4、重复主题</h4>
+<p>可以把主题或者标语重复显示在空白区域</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710568612243.jpg" alt=""></p>
+<h3 id="15-震惊模糊的设计也可以这么好看的吗">15 震惊！模糊的设计也可以这么好看的吗</h3>
+<p>模糊的三个作用：</p>
+<p>1、设计稿主要部分通常是清晰的，使用模糊淡化背景，引导客户，突出重点</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710765815806.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710765822401.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710765831446.png" alt=""></p>
+<p>2、模糊表示运动和速度</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710765839352.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710765846619.png" alt=""></p>
+<p>3、给单调的背景增加柔和，生成背景</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710765854335.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710765860721.png" alt=""></p>
+<h3 id="16-客户觉得我的设计不够酷炫">16 客户觉得我的设计不够酷炫？</h3>
+<p>5个网站链接都在这，可以做出炫酷的效果
+1. blobmixer：https://blobmixer.14islands.com/
+2. Ribbons 2：https://codepen.io/tsuhre/full/BYbjyg
+3. Stars-Emmision：https://wangyasai.github.io/Stars-Emmision/
+4. Silk：http://weavesilk.com/
+5. gradienta：https://gradienta.io/shattered-feelings/</p>
+<h3 id="17-困扰90设计师的背景细节问题今天终于可以解决了">17 困扰90%设计师的背景细节问题，今天终于可以解决了</h3>
+<p>整体设计稿增加细节：文字、版型、素材增加细节</p>
+<p>如果背景是纯色，那么缺少细节，可以选择下面几个方式增加背景的细节</p>
+<p>1、几何版型</p>
+<p>长方形，三角形（直线素材分割）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811051772.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811045941.jpg" alt=""></p>
+<p>圆形：沉稳冷静（曲线素材分割）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811071779.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811078969.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811087320.jpg" alt=""></p>
+<h3 id="18-喂喂不是拥有了色卡就会配色的啊">18 喂喂，不是拥有了色卡就会配色的啊</h3>
+<p>如何选择颜色？选择合适的主题色（颜色情绪）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811878103.jpg" alt=""></p>
+<p>先从色环上选择多个配色，这个在其他课程介绍过，选择角度在 90 度之内的比较好把握，然后根据明度和饱和度，调节情绪（复古、活泼）。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811946463.jpg" alt=""></p>
+<p>现在也就是 HSB 模式选择颜色</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811953029.jpg" alt=""></p>
+<p>整体上颜色较少比较好控制效果，一般把握在三种颜色内比较好</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811962079.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811969548.jpg" alt=""></p>
+<p>不同颜色的比例，按照 6 ：3 ：1 就行。两个主色 2：1，剩余的是少量的修饰色。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811975583.jpg" alt=""></p>
+<p>最后给出这个网站有较多的配色案例</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710811981933.jpg" alt=""></p>
+<h3 id="19-可能是你第一次知道可爱风素材还能这么设计">19 可能是你第一次知道，可爱风素材还能这么设计</h3>
+<p>设计卡通主题的设计稿，主要有两种类型。这个实际使用场景比较少，需要较多手绘和配图技巧。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710851584799.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710851820656.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603390407.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1727603398215.jpg" alt=""></p>
+<h3 id="20-过了20岁就不能设计的像个小孩子了">20 过了20岁，就不能设计的像个小孩子了</h3>
+<p>成熟的设计 不等于 复杂的设计（例如苹果和无印良品的设计，很简洁，给人感觉很好）</p>
+<p>设计的原则：对齐；亲密；重复；对比</p>
+<p>拿到设计任务时，需要弄清楚，什么是重点</p>
+<p>后面是苹果产品设计：<a href="https://www.bilibili.com/video/BV1Hg411B7Zp/?spm_id_from=333.788&amp;vd_source=2d5bdee7ea59486ed4aa4a9b10020224" title="https://www.bilibili.com/video/BV1Hg411B7Zp/?spm_id_from=333.788&amp;vd_source=2d5bdee7ea59486ed4aa4a9b10020224">https://www.bilibili.com/video/BV1Hg411B7Zp/?spm_id_from=333.788&amp;vd_source=2d5bdee7ea59486ed4aa4a9b10020224</a></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710853008178.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710853017448.png" alt=""></p>
+<h3 id="21-我想这一定是你正在找的排版知识">21 我想，这一定是你正在找的排版知识</h3>
+<p>设计稿的基本要素：文字、颜色、排版、装饰</p>
+<p>那么如果设计排版时，可以先去掉其他因素的干扰，单独进行处理</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710853716342.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1710853725211.png" alt=""></p>
+<h3 id="22-你为啥总是害怕插画风">22 你为啥总是害怕插画风</h3>
+<p>及时设计上有很多插画的模板和样品，可以拿过来直接使用，或者改一下主题色就行</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711202098943.png" alt=""></p>
+<h3 id="23-分享一些宝藏网站给你">23 分享一些宝藏网站给你</h3>
+<p>对话框生成器</p>
+<p>颜色搭配方案</p>
+<p>样机网站</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711202913916.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711202921078.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711202927927.png" alt=""></p>
+<h3 id="24-七分靠设计-三分靠样机">24 七分靠设计 三分靠样机</h3>
+<p>常见样机的三种形式</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207526822.png" alt=""></p>
+<p>首页可以用一个真实的效果，后面详情页尽量使用白模型，这样突出设计稿内容</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207541573.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207548070.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207555551.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207561828.png" alt=""></p>
+<h3 id="25-拯救单身狗">25 拯救单身狗</h3>
+<p>情人节风格的几种效果</p>
+<p>1、主题色选择对</p>
+<p>2、如果主要图案比较单调（例如图中的狗），那么可以用重复，或者背景色块方式，增加一些内容。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207788767.png" alt=""></p>
+<p>或者加一个门效果，增加设计的层次性</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207799575.png" alt=""></p>
+<h3 id="26-万万没想到2023年我也有属于自己的红包封面啦">26 万万没想到，2023年我也有属于自己的红包封面啦</h3>
+<p>介绍了微信红包制作-上传等的过程</p>
+<p>目前这个需要粉丝达到100个，目前自己的视频号还达不到</p>
+<p>每次发一个人需要1元钱</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711206059400.png" alt=""></p>
+<h3 id="27-设计教程设计遇到废图怎么办一根线来解决">27 设计教程｜设计遇到废图怎么办？一根线来解决</h3>
+<p>使用 JS 的曲线工具，可以调整明度和暗度</p>
+<p>这样就使得边界对比更清晰</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711206236797.png" alt=""></p>
+<h3 id="28-设计心得--遇到垃圾素材别害怕三步快速升级">28 设计心得 | 遇到垃圾素材别害怕，三步快速升级</h3>
+<p>如果客户给的原图不好，有清晰度，尺寸的问题，也不方便抠图，可以使用下面的网站进行优化处理</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711206617900.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711206630077.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711206636380.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711206642510.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711206651089.png" alt=""></p>
+<h3 id="29-设计师过稿神器5个宝藏样机网站">29 设计师过稿神器！5个宝藏样机网站</h3>
+<p>主要介绍几个样机方案</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207094269.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207128841.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207135251.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1711207141623.png" alt=""></p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1368 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">网课学习笔记</p>
+      <h1>捣鼓键盘的小麦-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#合集web-杂谈">合集·Web 杂谈</a></li>
+        <li><a href="#01-开源黑暗面-供应链投毒">01 开源黑暗面-供应链投毒</a></li>
+        <li><a href="#02-明水印和暗水印">02 明水印和暗水印</a></li>
+        <li><a href="#03-ai-能做到哪些网站">03 AI 能做到哪些网站</a></li>
+        <li><a href="#04-cdn">04 CDN</a></li>
+        <li><a href="#05-esr-边缘服务器渲染">05 ESR 边缘服务器渲染</a></li>
+        <li><a href="#06-npm-版本号的含义">06 npm 版本号的含义</a></li>
+        <li><a href="#07-前端--ai">07 前端 + AI</a></li>
+        <li><a href="#08-ai--前端未来">08 AI + 前端未来</a></li>
+        <li><a href="#09-前端请求发展历史">09 前端请求发展历史</a></li>
+        <li><a href="#10-浏览器渲染变迁">10 浏览器渲染变迁</a></li>
+        <li><a href="#11-不破不立的前端三十年">11 不破不立的前端三十年</a></li>
+        <li><a href="#合集-现代前端开发必知">合集-现代前端开发必知</a></li>
+        <li><a href="#01-如何成为现代前端六边形战士">01 如何成为现代前端六边形战士</a></li>
+        <li><a href="#02-上期回顾--章节概览">02 上期回顾 &amp; 章节概览</a></li>
+        <li><a href="#03-计算机网络">03 计算机网络</a></li>
+        <li><a href="#04-你需要知道的-http-协议">04 你需要知道的 HTTP 协议</a></li>
+        <li><a href="#05-编程语言es-标准js-引擎运行时">05 编程语言、ES 标准、JS 引擎、运行时</a></li>
+        <li><a href="#06-前端工具链">06 前端工具链</a></li>
+        <li><a href="#07-解锁构建用户界面-ui-框架">07 解锁构建用户界面 UI 框架</a></li>
+        <li><a href="#08-前端应用框架">08 前端应用框架</a></li>
+        <li><a href="#09-性能优化方案">09 性能优化方案</a></li>
+        <li><a href="#10-用户体验">10 用户体验</a></li>
+        <li><a href="#11-服务端技术栈">11 服务端技术栈</a></li>
+        <li><a href="#12-质量和安全">12 质量和安全</a></li>
+        <li><a href="#13-持续集成和部署">13 持续集成和部署</a></li>
+        <li><a href="#14-云基础设施加速前端开发">14 云基础设施加速前端开发</a></li>
+        <li><a href="#15-可观测性">15 可观测性</a></li>
+        <li><a href="#16-总结篇--我心目中的前端大厦">16 总结篇 | 我心目中的前端大厦</a></li>
+        <li><a href="#合集通俗易懂-ai-应用开发">合集·通俗易懂 AI 应用开发</a></li>
+        <li><a href="#1-介绍篇--前端通俗易懂的的-ai-应用开发">1 介绍篇 | 前端通俗易懂的的 AI 应用开发</a></li>
+        <li><a href="#2-实战篇--100-行代码实现ai聊天机器人">2 实战篇 | 100 行代码实现AI聊天机器人</a></li>
+        <li><a href="#3-解析篇--模型提示词上下文">3 解析篇 | 模型、提示词、上下文</a></li>
+        <li><a href="#4-js-中的流式处理技术-iteratorgeneratorfor-awaitof">4 JS 中的流式处理技术 Iterator、Generator、for await&hellip;of</a></li>
+        <li><a href="#5-图解-sse-协议的前后端实现">5 图解 SSE 协议的前后端实现</a></li>
+        <li><a href="#6-智能应用的两种开发范式-workflow-与-agentic">6 智能应用的两种开发范式 Workflow 与 Agentic</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="捣鼓键盘的小麦">捣鼓键盘的小麦</h1>
+<h3 id="合集web-杂谈">合集·Web 杂谈</h3>
+<p>个人页面 <a href="https://space.bilibili.com/3349949" title="https://space.bilibili.com/3349949">https://space.bilibili.com/3349949</a></p>
+<p>整体介绍的还可以</p>
+<p><a href="https://space.bilibili.com/3349949/lists/3295666?type=season" title="https://space.bilibili.com/3349949/lists/3295666?type=season">https://space.bilibili.com/3349949/lists/3295666?type=season</a></p>
+<h3 id="01-开源黑暗面-供应链投毒">01 开源黑暗面-供应链投毒</h3>
+<p>面向开发者供应链的投毒：npm 类似的名称，直接集成到常用工具中（zip压缩软件），pipy 工具库等，或者合并到 linux 操作系统中，还不算硬件层面的投毒后门事件。</p>
+<p>供应链：源代码——SDK——软件——客户，所以会影响开发者和客户群体。</p>
+<p>案例：2024年4月npm上存在700个投毒的包（恶意组件），包括恶意文件下载或执行，代码混淆执行，释放恶意文件，执行 shell 脚本。</p>
+<p>解决：</p>
+<p>1、定期进行代码审计，小心选择第三方依赖，安全培训</p>
+<p>2、建立强大的安全预警机制和响应机制</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747101824889.jpg" alt=""></p>
+<p>​</p>
+<h3 id="02-明水印和暗水印">02 明水印和暗水印</h3>
+<p>明水印是视觉可见的水印，防君子不防小人。</p>
+<p>暗水印是视觉不可见的水印。暗水印加密后，可以抗干扰（例如裁剪，缩放，遮挡部分内容），二次拍照，扫描通常可以解密。</p>
+<p>暗水印算法：离散小波变换、最低有效位（LSB）将数据嵌入到图像的最低有效位，将加密信息写入图片的颜色深度位中，且对显示效果影响不大。
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747102468116.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747102475920.jpg" alt=""></p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747102492241.jpg" alt="" title="" width="499" height="369" />
+<p>​</p>
+<h3 id="03-ai-能做到哪些网站">03 AI 能做到哪些网站</h3>
+<p>现在宣传AI可以做网站，3分钟完成一个网站，实际上效果怎么样？</p>
+<p>AI 可以实现：</p>
+<p>1、辅助编码（github copilot, marscode 等工具）</p>
+<p>2、辅助设计：根据设计稿绘制HTML，编辑网页（UI 生成器 anaconda, durable, 及时设计）</p>
+<p>因为软件工程阶段性强：需求分析阶段，比编码实现用时更多，AI 还不能支持复杂的需求分析阶段。</p>
+<p>网站设计还包括：多网页架构组织，部署运维，数据存储，流量调度，网络安全，算法优化等</p>
+<p>当前AI做网站：可以完成 demo 页面，一次性页面，个人简历。对中大型企业级别网站还不够。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747115101214.jpg" alt=""></p>
+<p>AI 目前不能实现的部分：</p>
+<p>1、需求覆盖不完善，需要不断调整提示词，可能达不到预期，需要大量上下文代码</p>
+<p>2、事故责任划分</p>
+<p>3、后期维护改动后，缺少长期记忆，容易改动已有功能，产生破坏性更新</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747115093824.jpg" alt=""></p>
+<p>​</p>
+<h3 id="04-cdn">04 CDN</h3>
+<p>CDN: 内容分发网络</p>
+<p>传统的 CDN 只能缓存静态文件，例如图片媒体文件，目的是用户可以从最近的节点获取静态资源，速度更快。</p>
+<p>现在的 CDN 功能比较多，还支持反向代理，函数计算，对象存储，边缘计算。下面结合个人的理解，简介这些功能。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747638566040.jpg" alt=""></p>
+<p>反向代理：类似 nginx 反向代理功能，CDN 节点可以避免用户直接请求到源服务器，过滤非法请求，减少源服务器的压力。</p>
+<p>对象存储：和传统的 mysql 关系型数据库对比，对象存储类似 sqlite 是键值对进行存储，适合静态资源的存储和缓存。源服务器和 CDN 节点上设置资源缓存时间。客户端请求 CDN 先走缓存，没有缓存或者缓存过期，再访问原服务器的资源。</p>
+<p>CDN = 反向代理服务器（nginx） + 缓存（cache）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747639634272.jpg" alt=""></p>
+<p>函数计算：是事件驱动的计算服务，写好函数代码上传就行，有对应触发事件时，函数就执行，按执行情况分配计算资源，处理业务逻辑。适用于 CDN 里复杂、动态、基于代码逻辑的业务处理，像生成个性化推荐内容、多媒体内容转码等。函数计算可以位于中心节点。</p>
+<p>边缘计算：把计算任务放到靠近数据源或用户的边缘节点处理，在 CDN 里就是靠近用户的边缘服务器，能就近处理数据，减少延迟。聚焦利用边缘位置优势，优化网络性能、减延迟、减轻中心服务器负载。用于对响应速度要求高的场景，如在线游戏操作处理、视频直播内容优化等。边缘计算还用于图片防盗链，网页重定向，图片转换等。</p>
+<h3 id="05-esr-边缘服务器渲染">05 ESR 边缘服务器渲染</h3>
+<p>这一节是上一节 CDN 的应用，就是把 deepseek 或者其他接口，部署在 CDN 上面的实践，属于边缘计算的扩展。</p>
+<p>ESR：edge server render 边缘服务器渲染（SSR 服务器渲染的延伸，就是服务器去中心化后的实践）</p>
+<p>就是在服务器上请求时，判断请求类型</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747640238977.jpg" alt=""></p>
+<p>直接初始化 openAI 需要申请 key token</p>
+<p>然后把 AI 的返回值返回给客户端</p>
+<p>相当于中间件拦截请求，并特殊处理</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747640232766.jpg" alt=""></p>
+<p>​</p>
+<h3 id="06-npm-版本号的含义">06 npm 版本号的含义</h3>
+<p>这一节探讨 npm 中不同版本符号的含义，简单的说就是安装第三方库的版本范围。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644533106.jpg" alt=""></p>
+<p>具体参考 npm 官方的说明</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644548140.jpg" alt="" title="" width="671" height="785" />
+<p>主要的版本规范如下：</p>
+<p>稳定版本：固定的 a.b.c 分成大版本，中版本，小版本。大版本表示跨越式的升级，可能存在不兼容问题。中版本表示功能性升级，和上一个版本兼容。小版本通常是细节问题修复。</p>
+<p>不稳定版本：带任意后缀（alpha, rc, beta 或者其他数字）只要是有 - 就是不稳定版本。</p>
+<p>版本优先级：稳定版本按照数字对比。数字部分相同，那么稳定版本大于不稳定版本。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644569159.jpg" alt=""></p>
+<p>下面是具体的格式：包名：版本范围</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644592528.jpg" alt=""></p>
+<p>安装依赖时，如果不指定版本号，默认安装最新的稳定版本，前面带一个 ^ 表示实际安装 1.x.x 的最新稳定版本。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644598272.jpg" alt=""></p>
+<p>^ 表示锁定主版本号</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644605816.jpg" alt=""></p>
+<p>最新版本：必须是稳定版本，不稳定版本不是最新版本。如果不是刻意说明，不会安装不稳定版本。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644616046.jpg" alt=""></p>
+<p>特例：如果主版本号是0，^ 含义变化</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644622459.jpg" alt=""></p>
+<p>^0.1.0 不能安装 0.2.0 版本，最高安装到 0.1.x，就是和 ~ 一样</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644628450.jpg" alt=""></p>
+<p>总结如下</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747644634770.jpg" alt=""></p>
+<p>实际情况-根据不同依赖类型安装版本</p>
+<p>1、react 锁定 x.y ，框架中等版本不同可能影响打包，所以是固定的版本，&ldquo;react&rdquo;: &ldquo;18.3.1&rdquo;,</p>
+<p>2、axios 锁定 x，这种工具库更新很多，通常不会出现兼容性问题，使用最新的即可，&ldquo;axios&rdquo;: &ldquo;^1.8.2&rdquo;,</p>
+<p>3、特殊库，指定 x.y.z，可能需要测试某个版本的功能，所以需要针对安装对应 xyz，&ldquo;reactstrap&rdquo;: &ldquo;9.2.3&rdquo;,</p>
+<p>~ 锁定中间版本，实际使用不多</p>
+<h3 id="07-前端--ai">07 前端 + AI</h3>
+<p>谈 AI 对前端的影响：</p>
+<ul>
+<li>
+<p>AI 能否取代码农（前端，后端，测试？）</p>
+</li>
+<li>
+<p>主力前端的核心竞争力是什么？</p>
+</li>
+<li>
+<p>AI 能否抢走前端的核心竞争力？</p>
+</li>
+</ul>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648934076.jpg" alt=""></p>
+<p>AI的优点：</p>
+<p>1、快速完成脏活累活（例如批量处理翻译，写文档写小说）</p>
+<p>2、给出固定的需求，能快速给出答案（例如刷题，N皇后算法，滑动窗口算法）</p>
+<p>3、给出需求绘图（创造性比较好，实际上效果还不满足）限定条件越多越好</p>
+<p>局限性：</p>
+<p>1、通用性问题很擅长（图片懒加载），专业性业务不一定擅长（例如资料库的具体数据结构优化）</p>
+<p>2、复杂任务，上下文窗口有限。小项目充分的提示词，那么可以很好的完成。老项目代码很烂，上下文全部塞进去也可能效果不满意，因为已有代码不满足（例如给定代码中包含了 thumbnail 但是和缩略图无关，AI 还是会按照缩略图的需求写）</p>
+<p>3、代码不一定满足复杂的产品需求（经常变化的需求），实际的需求并不是一句话就完成的。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648939781.jpg" alt=""></p>
+<p>前端核心竞争力？不仅仅是写代码，更重要的是对用户的洞察力，把用户的需求转换成需求文档。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648945918.jpg" alt=""></p>
+<p>AI 辅助编程的多个维度：</p>
+<p>1、自动提示：输入前文可以直接提示——使用较多</p>
+<p>2、辅助生成代码：根据需求写一个函数</p>
+<p>3、直接完成功能：例如直接写出一个组件（辅助编程）</p>
+<p>4、直接完成项目需求：初期分析需求，中期进行编码，后期自动测试上线（自动编程）</p>
+<p>这里类似于自动驾驶和辅助驾驶。L1-L3 是辅助驾驶，L4是自动驾驶。</p>
+<p>目前L1L2应用很多，L3正在尝试，实际上效果一般，还需要继续练习。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648952188.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648958311.jpg" alt=""></p>
+<p>L4 只需要设置性能，覆盖率，稳定性指标，AI 可以直接完成全部工作。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648977294.jpg" alt=""></p>
+<p>​</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648994182.jpg" alt=""></p>
+<p>作者建议：</p>
+<p>1、真正理解用户体验，创造优秀的用户交互（如果是精品软件，没问题；如果是快餐式软件，没有必要。很多产品迭代很快，上面主要关注多久能上线，而不是说90% - 99% 的优化体验）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747649001478.jpg" alt=""></p>
+<p>2、尽量多用AI（All in AI），类似搜索引擎，AI 大部分搜索出来的是正确的，但是及时性，可靠性，实际证明不一定合适。每一个AI的结果都有一个置信系数，AI 产品不会告诉你这个数字。所以，程序员需要有自己的判断能力。多用才能熟练使用。尽量多给出 AI 合适的提示词，才能让结果更满足需求。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747649007748.jpg" alt=""></p>
+<p>3、AI first，优先使用 AI 考虑解决策略，解决各种任务。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747649014812.jpg" alt=""></p>
+<p>AI as Tools 把AI当成工具，投入更多精力用于战略规划和团队效能上。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747649020683.jpg" alt=""></p>
+<p>个人观点：</p>
+<p>1、尽量多用AI，熟能生巧；多学习提示词怎么写，给定足够的条件，AI 才能完成更精确任务；一定要多写多写。</p>
+<p>2、AI 能取代的任务，就避免做（例如翻译）；优先做 AI 取代不了的活。</p>
+<h3 id="08-ai--前端未来">08 AI + 前端未来</h3>
+<p>这一节是前一节的扩展，AI 未来在哪里？AI 辅助研发、生成式 UI、下一代工程技术</p>
+<h4 id="ai-辅助研发">AI 辅助研发</h4>
+<p>辅助研发，和上一节的类似，就是根据需求，编写代码</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648812395.jpg" alt=""></p>
+<p>具体的 AI 工具 RAG SFT 可以基于自己的项目，进行调整学习。目前项目还没有做到这部分（上下文比较少，文档比较少）。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648817732.jpg" alt=""></p>
+<p>辅助研发，需要规定具体细节：例如风格偏好（代码格式），技术栈（第三方库）</p>
+<p>这个规范可以做，自己做出来一份前端代码规范指南，以及后面的注释，业务组件示例等，这样AI命中率就会更高</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648823314.jpg" alt=""></p>
+<p>RAG 目前还不支持，都是使用的公开的模型，不是自己训练的模型。这里核心是有自己的知识库，并且从知识库提炼出内容，和已有开源库 embeding 后，逐步训练自己的模型，这样才是符合自己要求的模型，不是公开的没有训练的模型。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648828838.jpg" alt=""></p>
+<p>模型是不断训练出来的，并不是直接上手能用。</p>
+<p>不同模型应该分类规范使用，使用对应的智能体（例如前端，后端，生活，创建不同的智能体，处理不同的问题）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648835229.jpg" alt=""></p>
+<p>IDE + AI </p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648843960.jpg" alt=""></p>
+<h4 id="生成式-ui">生成式 UI</h4>
+<p>主要是创造性的方向，例如文档撰写，创作图片。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648851005.jpg" alt=""></p>
+<h4 id="下一代工程技术">下一代工程技术</h4>
+<p>工具链一体化，工程实践 AI 化</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648858120.jpg" alt=""></p>
+<p>目前前端工具很多很杂，例如下面的包管理，测试，构建工具。不同的工具细节不同，这就是AI还不完善的地方。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648864715.jpg" alt=""></p>
+<p>例如国外 React 构建的 Vite 体系</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648871416.jpg" alt=""></p>
+<p>字节跳动全方位的工程技术栈</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648889586.jpg" alt=""></p>
+<p>AI测试，直接使用AI模拟人员操作（更符合实际使用情况），而不是还在一行一行写单元测试。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648895774.jpg" alt=""></p>
+<p>​</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648901938.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648907260.jpg" alt=""></p>
+<p>​</p>
+<h3 id="09-前端请求发展历史">09 前端请求发展历史</h3>
+<p>前端请求发展历史：</p>
+<p>1、早期 form + PHP 发送表单：简单数据，前段后端代码混合</p>
+<p>2、XHR 原生 JS 发送请求：实现了前后端的分离</p>
+<p>3、Ajax 发送请求：避免了 XHR 复杂语法，简化请求对象</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747642217375.jpg" alt=""></p>
+<p>4、Promise axios</p>
+<p>5、ES6 fetch：JS 出现标准化 fetch，避免了 axios 等第三方库的封装（语法类似 axios）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747642223807.jpg" alt=""></p>
+<p>6、ES8 async await: 避免回调地狱，实现线型处理（此时的 catch 可能是中间的某一步，或者是 JS 错误，直接捕获明确哪个请求出错比较难）。目前网络条件越来越好，出错的情况是少数。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747642232213.jpg" alt=""></p>
+<h3 id="10-浏览器渲染变迁">10 浏览器渲染变迁</h3>
+<p>这一节不分析浏览器内部渲染的逻辑（CSS tree， render Tree 等），主要分析渲染网页变化的过程，以及背后的原因。</p>
+<p>早期是服务端模板渲染（django 模板）中期是客户端渲染（React 前端渲染）现在趋势是服务端渲染首屏（性能高），客户端渲染其他页面</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648764825.jpg" alt=""></p>
+<p>客户端渲染的优缺点</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648681314.jpg" alt=""></p>
+<p>服务端渲染的特点：客户端和服务端可以使用同一份 HTML，客户端添加 JS 做交互（水合）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648686688.jpg" alt=""></p>
+<p>具体的代码层面，就是客户端和服务端使用同一份 APP 组件</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648692592.jpg" alt=""></p>
+<p>服务端渲染的变体（SSG，静态站点生成，主要是固定的页面）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648698347.jpg" alt=""></p>
+<p>具体的框架就是 Huge,Hexo 等</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648704374.jpg" alt=""></p>
+<p>增量静态再生</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648710913.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648719780.jpg" alt=""></p>
+<p>流式渲染</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648731104.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648738133.jpg" alt=""></p>
+<p>React 服务器组件</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648743436.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648749130.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1747648759005.jpg" alt=""></p>
+<p>​</p>
+<h3 id="11-不破不立的前端三十年">11 不破不立的前端三十年</h3>
+<p><a href="https://space.bilibili.com/3349949/lists/3295666?type=season" title="https://space.bilibili.com/3349949/lists/3295666?type=season">https://space.bilibili.com/3349949/lists/3295666?type=season</a></p>
+<p>作者还在不断更新中</p>
+<h3 id="合集-现代前端开发必知">合集-现代前端开发必知</h3>
+<p>个人页面 <a href="https://space.bilibili.com/3349949" title="https://space.bilibili.com/3349949">https://space.bilibili.com/3349949</a></p>
+<p>大厂前端</p>
+<p>整体介绍的还可以，其他的专辑也可以看看</p>
+<p><a href="https://space.bilibili.com/3349949/lists/3439209?type=season" title="https://space.bilibili.com/3349949/lists/3439209?type=season">https://space.bilibili.com/3349949/lists/3439209?type=season</a></p>
+<h3 id="01-如何成为现代前端六边形战士">01 如何成为现代前端六边形战士</h3>
+<p>作者提出，现在前端的工作不仅仅是传统前端的知识体系，涉及服务器开发，工程部署方面。</p>
+<p>这个系列会简单介绍前端新发展方向，以及为什么这样发展。</p>
+<p>这个系列只是一个科普，不会具体谈一个工具的细节，具体还需要自己实践应用。</p>
+<blockquote>
+<p>为什么要成为六边形战士？因为技术不断发展，竞争很强，前端和后端没有明确的界限，懂得多才能留下</p>
+</blockquote>
+<h4 id="前端新概念">前端新概念</h4>
+<p>构建工具：webpack Vite turbopack Rspack(rust重构后速度更快) Pnpm webassembly 服务器组件</p>
+<p>框架：NextJs 和 React 的区别，Nuxt 和VUE</p>
+<p>概念：CSP 可观测性 边缘计算 灰度发布 WAF Serverless</p>
+<p>现代前端 = 用户体验（网页性能、无障碍、交互设计、个性化需求、多端适配） + 工程化（研发提效、前端安全、监控和数据、部署运维、数据运营、终端安全）</p>
+<p>渲染流程：客户端渲染（传统 HTML 解析过程，获取资源，渲染信息，获取字段，渲染信息）——服务器渲染——流式渲染（Nextjs，发送多个请求，按照流水线渲染页面，速度更快）</p>
+<p>边缘计算：满足偏远地区用户打开网页速度问题，解决云服务器成本较高的问题，cloudlare 提供服务</p>
+<h4 id="前端新知识体系">前端新知识体系</h4>
+<p>这里只介绍新内容，已有体系不重复，对应后面几节课程。</p>
+<ul>
+<li>
+<p>计算机网络：DNS HTTPS websocket</p>
+</li>
+<li>
+<p>编程语言：ecma 运行时，标准库</p>
+</li>
+<li>
+<p>UI</p>
+</li>
+<li>
+<p>应用框架：react, vue, 小程序，桌面，移动原生</p>
+</li>
+<li>
+<p>服务端</p>
+</li>
+<li>
+<p>工具链：AI、IDE，包管理，构建工具，调试工具</p>
+</li>
+<li>
+<p>质量保证 QA：防御性编程，代码审查，质量工程，测试</p>
+</li>
+<li>
+<p>用户体验：无障碍，个性化</p>
+</li>
+<li>
+<p>CICD：持续集成，持续部署，工具</p>
+</li>
+<li>
+<p>可观测性：日志、追踪，度量</p>
+</li>
+<li>
+<p>云基础设施：网络、容器、存储、安全、Saas</p>
+</li>
+</ul>
+<p>​</p>
+<h3 id="02-上期回顾--章节概览">02 上期回顾 &amp; 章节概览</h3>
+<p>大厂中，也并不是一个人精通所有东西，各有所长</p>
+<p>这个视频主要是开阔眼界，方向性指引，不是具体技术细节。这个不涉及计算机基础，主要是前沿技术和实际应用。</p>
+<p>个人觉得发展就像木桶，不能有短板，必须有长处。</p>
+<p>前端各种工具各种框架很多，我们不需要也不可能每一种都精通，知道其差别，然后熟悉某一个技术栈</p>
+<p>不同规模的产品，需要不同的技术栈</p>
+<ul>
+<li>
+<p>小型：create-react-app，flask</p>
+</li>
+<li>
+<p>中型:  plugins, django</p>
+</li>
+<li>
+<p>大型：SSR CICD</p>
+</li>
+</ul>
+<h3 id="03-计算机网络">03 计算机网络</h3>
+<p>DNS 域名解析、缓存控制，实际的流程：</p>
+<p>域名解析流程：应用程序——本地host——本地DNS服务器——根服务器——顶级服务器——权威服务器</p>
+<p>小型项目（单机网站，1台后端服务器），域名和IP是一一对应的关系，可以理解成IP直接访问服务器。</p>
+<p>大型项目中，域名和网络运营商是一对多关系，对应不同地点，不同 IP 也是多对多关系，然后再访问负载均衡服务器等。多以 DNS 是动态解析。根域名可以对应一个 IP，子域名可以对应另一个 IP（CNAME）。造成了第一次访问网站时，实际需要很多次的域名解析，耗时较多；后续访问网页时耗时减少。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1748656247911.jpg" alt=""></p>
+<p>​</p>
+<p>现代DNS 其他功能：安全插件，DDoS防护，边缘网络极速，DNS分析。</p>
+<p>因为 DNS 存在多次访问，所以可以进行 DNS 优化：</p>
+<ul>
+<li>
+<p>更换高性能 DNS 服务器</p>
+</li>
+<li>
+<p>DNS 缓存</p>
+</li>
+<li>
+<p>增加 TTL （缓存时间）</p>
+</li>
+</ul>
+<h3 id="04-你需要知道的-http-协议">04 你需要知道的 HTTP 协议</h3>
+<p>HTTP：超文本传输协议，不仅仅传送文本，还支持传输多媒体</p>
+<h4 id="版本">版本</h4>
+<ul>
+<li>
+<p>HTTP 1.1 广泛使用</p>
+</li>
+<li>
+<p>HTTP 2 多路复用；二进制帧层；头部压缩</p>
+</li>
+<li>
+<p>HTTP 3 QUIC 协议，使用 UDP 协议</p>
+</li>
+</ul>
+<p>不是所有的都支持 HTTP23，所以可能存在很多问题。</p>
+<p>关注服务器返回码，明确主要的含义（200， 300， 400， 500）</p>
+<p>关注请求头和响应头，主要字段的含义</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1748658878580.jpg" alt=""></p>
+<h4 id="content-type-内容类型">content-type 内容类型</h4>
+<p>下面主要介绍 content-type 内容类型，这个在客户端和服务器通信很重要</p>
+<p>例如下面的例子</p>
+<ul>
+<li>
+<p>客户端发出的请求类型 content-type : JSON 格式，那么就需要把对象转化成 json，服务器就需要使用 JSON.parse() 进行解析数据（深蓝色部分）。</p>
+</li>
+<li>
+<p>服务器返回的数据类型是 content-type: text/plain 格式，那么客户端直接从 res.text() 进行解析即可。</p>
+</li>
+</ul>
+<p>通常不一定规定具体格式，只要前后端数据类型一致即可。所以如果一个人同时写前后端代码，就可以避免这些问题，如果是其他人写服务器的代码，还需要具体看内容类型，发送的类型，就很费时间。</p>
+<p><strong>前端默认的类型是 json，后端默认的类型是 form 表单，这样就造成了前后端数据接收不到的问题。​</strong></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1748659054660.jpg" alt=""></p>
+<p>其他字段也很重要，根据需要不断学习补充</p>
+<h4 id="调试方法">调试方法</h4>
+<p>1、浏览器的 devTools，全面具体</p>
+<p>2、终端的 curl 命令，快捷</p>
+<p>3、批量测试，POSTMAN</p>
+<p>4、移动设备调试：抓包工具，安装信任证书和网络代理工具</p>
+<p>5、服务器调试：抓包，分析日志</p>
+<h4 id="大型网站的-gateway-网关">大型网站的 GateWay 网关</h4>
+<p>登录验证，请求监控，限流，分析</p>
+<p>客户端可以对 HTTP 协议进行定制 gRPC</p>
+<p>例如请求 bilibili.com，类型就是 grpc 请求到 gateway 站点，然后进行转发（可以携带更多客户端的信息）</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1748659691071.jpg" alt="" title="" width="616" height="406" />
+<p>​</p>
+<h3 id="05-编程语言es-标准js-引擎运行时">05 编程语言、ES 标准、JS 引擎、运行时</h3>
+<p>编程语言：</p>
+<ul>
+<li>
+<p>JS</p>
+</li>
+<li>
+<p>TS：类型验证</p>
+</li>
+<li>
+<p>Rust：打包构建速度快</p>
+</li>
+<li>
+<p>其他特定场合的 wxml wss：专用于微信小程序，JSX </p>
+</li>
+<li>
+<p>webassembly: 其他语言可以打包</p>
+</li>
+</ul>
+<p>JS 引擎和运行时：JS 在什么环境中运行？浏览器，node环境，还是其他特殊环境？</p>
+<p>通过分析运行环境，选择最后的打包产物。</p>
+<h3 id="06-前端工具链">06 前端工具链</h3>
+<p>工具链（前端工程化）</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-05/image-1748676995448.jpg" alt="" title="" width="515" height="422" />
+<p>包管理：npm(使用多，兼容好，速度慢，容易污染) yarn（并行安装，本地缓存较多） pnpm（共享依赖，兼容性比较多）</p>
+<p>多包管理：monorepo，workspace larna rust</p>
+<p>构建工具：gulp webpack rollup rspack vite</p>
+<ul>
+<li>
+<p>转译器：babel 把 es6 转换成 es5</p>
+</li>
+<li>
+<p>优化器：压缩，混淆，分割</p>
+</li>
+<li>
+<p>打包器：bundle</p>
+</li>
+<li>
+<p>开发服务器：dev-server,HMR 接口代理</p>
+</li>
+<li>
+<p>各种插件</p>
+</li>
+</ul>
+<p>调试工具：</p>
+<ul>
+<li>
+<p>浏览器 devTools</p>
+</li>
+<li>
+<p>小程序开发工具</p>
+</li>
+<li>
+<p>特定框架调试工具 React 组件调试</p>
+</li>
+</ul>
+<p>CI-CD</p>
+<ul>
+<li>
+<p>github actions</p>
+</li>
+<li>
+<p>Travis CI</p>
+</li>
+</ul>
+<p>​</p>
+<h3 id="07-解锁构建用户界面-ui-框架">07 解锁构建用户界面 UI 框架</h3>
+<p>CSS框架：bootstrap</p>
+<p>UI 框架：React</p>
+<p>组件库：ant-design</p>
+<p>这部分日常使用很多</p>
+<h3 id="08-前端应用框架">08 前端应用框架</h3>
+<p>现在市场上很多前端应用框架，他们相对于 react VUE 等框架，有什么区别？</p>
+<p>react：是一个用于构建用户界面的框架（UI 框架），专注于组件化开发和状态管理。它本身是无服务器的，需要配合其他工具（如 Webpack、Babel）才能构建完整应用。</p>
+<p><strong>Next.js</strong>：是基于 React 的全栈框架，扩展了 React 的功能，提供了开箱即用的服务器端渲染（SSR）、静态站点生成（SSG）、路由系统等，属于 “React 生态系统的上层建筑”。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1749439515060.jpg" alt=""></p>
+<p>简单点，就是 应用框架集成了 路由，样式UI，数据获取，测试，插件，部署等一个或者多个功能。</p>
+<p>例如 TARO 可以把代码编译成不同类型的小程序，这就算应用框架。</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1749439548843.jpg" alt="" title="" width="543" height="336" />
+<p>多页应用 MPA：传统的技术，django 不同的路由对应不同的 HTML，切换不同页面，需要重新请求服务器的 HTML，重新进行渲染。</p>
+<p>单页应用 SPA：切换不同页面不需要全部渲染，多页切换过程比较流畅，但是首屏加载时间较多。</p>
+<p>渐进式网页应用 PWA：类似小程序的架构形式。</p>
+<p>可以看到，不同应用框架支持的技术不同，选择合适的开发框架可以减少开发负担。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1749439705137.jpg" alt=""></p>
+<p>​</p>
+<h3 id="09-性能优化方案">09 性能优化方案</h3>
+<p>性能优化方案，这个可以讲的东西有很多，例如网页性能，用户体验，个性化设置等。这个分成不同小节分开介绍。</p>
+<p>性能分析工具，通常浏览器自带开发工具就可以了，其他的工具实际使用再说。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1749440204635.jpg" alt=""></p>
+<p>避免过早或者过度优化性能，应该首先关注产品实现。目前的项目中，优先实现产品功能，如果用户反馈严重卡顿等问题，然后再考虑性能优化的问题。</p>
+<p>1、可以根据浏览器-performance-渲染时间线，红色部分就是阻塞部分，通常是 JS 执行阻塞了浏览器渲染。</p>
+<p>2、根据渲染时间，确认 FCP，首次渲染时间，可以计算白屏时间。</p>
+<p>3、页面加载时间过长（资源体积大，网络延迟高，没有设置合理的缓存，渲染受阻）</p>
+<p>4、交互过程不流畅</p>
+<p>5、资源消耗过度</p>
+<p>具体每一个点都能讲的很深。</p>
+<ul>
+<li>
+<p>资源体积大解决方案：压缩代码，tree-shaking，依赖外置（lib单独打包）、代码拆分、按需加载、服务端渲染、服务器组件、流式组件等等。</p>
+</li>
+<li>
+<p>网络延迟较高：HTTP2 多路复用，二进制帧层，头部压缩，提高网络的并发传输效率。</p>
+</li>
+<li>
+<p>浏览器资源提示：preload, prefetch, dns-prefetch, pre-connect</p>
+</li>
+<li>
+<p>图片优化：webp avif 格式压缩空间</p>
+</li>
+<li>
+<p>缓存：本地浏览器缓存（http 缓存头，cache-control, last-modified, etag 协商缓存存储方式， web storage），服务器缓存 (内存缓存，边缘缓存，网关缓存)</p>
+</li>
+<li>
+<p>渲染受阻（async defer 渲染脚本受阻，web workde 用于计算高的部分，避免阻塞渲染进程，web-assembly）</p>
+</li>
+<li>
+<p>交互过程：数据量大（长列表，虚拟列表，分页加载），用户点击频繁（debounce 防抖, throttle 节流， useTransition useDeferedValue），动画效果过多（抢红包动画点击效果），统计图表性能（大数据抽稀，主成分提取，分片渲染，canvas 加速， webGL 加速）</p>
+</li>
+</ul>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1749454316286.jpg" alt=""></p>
+<p>动画效果过多：开启css硬件加速，transform opacity perspective 或者专业的动画框架 lottie, react-motion</p>
+<p>资源消耗过度：占用大量的 CPU 或者硬件资源，克制使用第三方依赖</p>
+<p>容器技术（淘宝小程序，微信小程序，支付宝小程序等）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1749454574033.jpg" alt=""></p>
+<h3 id="10-用户体验">10 用户体验</h3>
+<p>从 UI 设计，可访问性，个性化方面，提升用户体验</p>
+<h4 id="ui-设计-不同设备">UI 设计-不同设备</h4>
+<p><strong>加载反馈</strong>：用户打开页面（渲染骨架屏，避免用户白屏期间等待的焦虑感，主要是小程序和APP，可能存在网络条件不好的情况），执行操作得到的反馈（通常是耗时较长的操作，例如下单支付，前端应该展示全局或者局部的按钮 loading，避免用户产生疑问或者重复操作）</p>
+<p><strong>强弱依赖</strong>：用户打开 SPA 时，通常需要很多请求，可能存在 promise.all 加载全部内容后，才渲染界面。这样做不太友好。应该分清主要功能和次要功能，主要功能加载好就渲染页面（例如商品详情），次要功能加载失败不会影响主要功能的显示（例如评论）。</p>
+<p><strong>异常反馈</strong>：网络错误，可以以轻提示（toaster），强提示（alert）告知用户</p>
+<p><strong>兜底反馈</strong>：空提示，404访问提示</p>
+<p><strong>响应式设计</strong>：移动端响应屏幕尺寸的设计，保证在不同屏幕尺寸下可以得到良好的显示效果。</p>
+<p>使用css媒体查询可以检测屏幕宽度高度，屏幕分辨率，色彩深度，是否触摸屏等很多条件，也是实现黑暗模式的处理方案。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-css" data-lang="css"><span style="display:flex;"><span><span style="color:#f92672">屏幕分辨率</span>
+</span></span><span style="display:flex;"><span>@<span style="color:#66d9ef">media</span> <span style="color:#f92672">only</span> <span style="color:#f92672">screen</span> <span style="color:#f92672">and</span> <span style="color:#f92672">(</span><span style="color:#f92672">min-resolution</span><span style="color:#f92672">:</span> <span style="color:#f92672">192dpi</span><span style="color:#f92672">)</span> {
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">是否支持触摸屏</span>
+</span></span><span style="display:flex;"><span>@<span style="color:#66d9ef">media</span> <span style="color:#f92672">(</span><span style="color:#f92672">pointer</span><span style="color:#f92672">:</span> <span style="color:#f92672">coarse</span><span style="color:#f92672">)</span> <span style="color:#f92672">and</span> <span style="color:#f92672">(</span><span style="color:#f92672">hover</span><span style="color:#f92672">:</span> <span style="color:#f92672">none</span><span style="color:#f92672">)</span> {
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">设备色彩深度</span>
+</span></span><span style="display:flex;"><span>@<span style="color:#66d9ef">media</span> <span style="color:#f92672">(</span><span style="color:#f92672">min-color-index</span><span style="color:#f92672">:</span> <span style="color:#f92672">256</span><span style="color:#f92672">)</span> {
+</span></span><span style="display:flex;"><span>} 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>媒体查询的局限性：只能影响 css 样式，无法改动 js 的交互逻辑。此时可以通过 JS 获取屏幕尺寸，判断设备，执行 JS</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>window.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;resize&#39;</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(window.<span style="color:#a6e22e">innerWidth</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">768</span>);
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>交互习惯适应</strong>：</p>
+<p>1、加载更多效果：移动端使用滚动加载更多，PC 端通常显示分页器，显示具体多少页，加载了多少页等</p>
+<p>2、菜单效果：手机上是下方的 ActionSheet，PC 上是 Dropdown 下拉菜单</p>
+<p>3、按钮位置：手机通常下面一排按钮，PC 通常右下角一排按钮</p>
+<h4 id="可访问性-不同用户">可访问性-不同用户</h4>
+<p>主要是国际化业务（多语言方案），残障人士（屏幕阅读器，色彩对比度等），新手（新手引导）</p>
+<h4 id="个性化">个性化</h4>
+<p>主题，记忆，AB测试</p>
+<p>主题：让用户切换主题色，让用户自定义背景图等</p>
+<p>记忆：浏览器本地存储用户习惯的状态（侧边栏是否打开，筛选条件，页面滚动位置，大型表单预先填写）</p>
+<p>AB测试：根据不同用户的喜好，UI 层面展示不同的效果（例如男性女性，VIP 客户和普通客户，显示不同的页面效果）</p>
+<h3 id="11-服务端技术栈">11 服务端技术栈</h3>
+<p>这里考虑和前端相关的服务端知识：</p>
+<p>早期传统JS都在前端实现，现在前端功能越来越多（需要渲染），那么客户等待时间就增加；前端需要发送很多请求到后端，那么用户等待时间也会增加，所以部分功能需要在服务端实现（服务端渲染，聚合接口，安全策略，持久化日志）。</p>
+<h4 id="运行时-runtime">运行时 runtime</h4>
+<p>nodejs：最基础，最稳定的运行时，提供了文件管理，网络管理等</p>
+<p>deno</p>
+<p>Bun</p>
+<h4 id="基础框架">基础框架</h4>
+<p>基于运行时封装的基础框架，减少了直接操作 API 的繁琐，专门为了构建 web 服务（5期视频）</p>
+<p>express：app = express() 路由，http </p>
+<p>koa</p>
+<h4 id="应用框架app-framework">应用框架（APP framework）</h4>
+<p>在基础框架上进一步封装</p>
+<p>nestjs: 进一步抽象了模块，控制器，服务的功能，验证，缓存，队列，日志，session 模块等功能，支持复杂业务场景</p>
+<p>nextjs: 全栈框架</p>
+<p>eggjs</p>
+<p>sailsjs</p>
+<p>krakenjs</p>
+<h4 id="应用架构architecture">应用架构（architecture）</h4>
+<p>MVC：model view control</p>
+<p>restful</p>
+<p>BFF: backend for frontend，处理大型C端业务，把不同设备来源的 API 进行整合后，统一发送到后端服务器（类似gateway的场景）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1750940368549.jpg" alt=""></p>
+<p>​</p>
+<h3 id="12-质量和安全">12 质量和安全</h3>
+<h4 id="编码质量">编码质量</h4>
+<p>三个常用方法：防御性编程，代码质量工具，代码评审等方法可以确保代码质量。</p>
+<p>防御性编程：主要用于弱类型的语言（判空处理，判断类型，异常处理）</p>
+<p>代码质量工具：静态检查工具 eslint，代码风格控制工具 prettier </p>
+<p>代码评审：交叉验证代码的功能（代码架构是否合理，这些其他工具无法检测）</p>
+<h4 id="测试">测试</h4>
+<p>单元测试，集成测试，兼容性测试（特性探针，埋点检测，日志上报）caniuse 等库，性能测试，UI 自动测试</p>
+<h4 id="攻击防御">攻击防御</h4>
+<p>xss：对用户输入进行过滤，sanitizeHTML 库可以进行过滤</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1750990648227.jpg" alt="" title="" width="625" height="280" />
+<p>csrf：同源检查，Token 检查</p>
+<h4 id="稳定性">稳定性</h4>
+<p>供应链安全(package-lock.json) 提供安全的版本锁定，及时更新问题</p>
+<p>应急预案（服务器存在延迟，给用户发送全局黄条提示信息 notice bar）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1750990810054.jpg" alt=""></p>
+<p>​</p>
+<h3 id="13-持续集成和部署">13 持续集成和部署</h3>
+<p>代码持续集成和自动部署 CI-CD</p>
+<h4 id="传统项目的局限">传统项目的局限</h4>
+<p>传统的简单个人项目：本地源代码——手动打包——上传到服务器——测试正常——用户使用</p>
+<p>如果项目比较大，这样比较耗费时间。不同人本地环境不一样，可能打包结果不一样。所以要改成自动部署和持续集成。</p>
+<h4 id="ci-代码持续集成">CI 代码持续集成</h4>
+<p>githubAction，可以编写具体的规则和过程，使用 git 自动检测拉取代码，在容器中进行编译集成测试工作</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1750991513788.jpg" alt=""></p>
+<p>单元测试覆盖率可以使用 codecov，增加测试报告。注意：截图中这个配置比较早，不正确，实际需要参考最新的文档。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1750991519340.jpg" alt=""></p>
+<h4 id="cd-持续部署">CD 持续部署</h4>
+<p>把 CI 编译后的结果，直接自动部署到服务器上（流水线作业），控制发布流程；环境隔离 dev master </p>
+<h3 id="14-云基础设施加速前端开发">14 云基础设施加速前端开发</h3>
+<p>应用发布后，需要关注哪些问题？</p>
+<p>云服务商给我们提供了很多云服务（不同的服务侧重不同的功能）</p>
+<h4 id="网络服务">网络服务</h4>
+<p>cdn，域名，SSL证书等，DNS 域名解析</p>
+<h4 id="计算服务">计算服务</h4>
+<p>云计算 serverless </p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1751096706068.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1751096711260.jpg" alt=""></p>
+<p>早期服务器提供接口，客户端使用 axios 调用接口。serverless 提供 SDK，直接调用服务器的函数（方法），所以部署的服务器就是计算功能。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1751099843121.jpg" alt=""></p>
+<h4 id="存储服务">存储服务</h4>
+<p>oss 多媒体存储，多媒体压缩处理（例如制作图片的缩略图）</p>
+<h4 id="安全服务">安全服务</h4>
+<p>https 防止黑客爬虫，隐私泄露</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-06/image-1751099970596.jpg" alt=""></p>
+<p>​</p>
+<h3 id="15-可观测性">15 可观测性</h3>
+<p>网站上线后，需要做什么？</p>
+<p>分析接口调用情况，分析异常情况，促进用户转化。</p>
+<p>可观测性，就是通过日志追踪度量角度</p>
+<p>前端监控（异常行为记录）+前端埋点（记录用户行为）</p>
+<p>Sentry 可以提供前端监控功能，监听 window.onError 事件并把相关信息记录</p>
+<h3 id="16-总结篇--我心目中的前端大厦">16 总结篇 | 我心目中的前端大厦</h3>
+<p>总结：</p>
+<p>本课程短小，主要是介绍性，具体知识还需要自己下去多看</p>
+<ul>
+<li>
+<p>基础篇（3-7节）计算机网络，编程语言，前端工具，UI 页面</p>
+</li>
+<li>
+<p>进阶（8-12节）服务端，用户体验，应用框架，前端质量和安全</p>
+</li>
+<li>
+<p>工业化（13-17节）CICD 云服务，上线后观测性</p>
+</li>
+</ul>
+<h3 id="合集通俗易懂-ai-应用开发">合集·通俗易懂 AI 应用开发</h3>
+<p><a href="https://space.bilibili.com/3349949/lists/6061232?type=season" title="https://space.bilibili.com/3349949/lists/6061232?type=season">https://space.bilibili.com/3349949/lists/6061232?type=season</a></p>
+<p>本课程对应的 github 仓库：<a href="https://github.com/micooz/ai-app-examples" title="https://github.com/micooz/ai-app-examples">https://github.com/micooz/ai-app-examples</a></p>
+<h3 id="1-介绍篇--前端通俗易懂的的-ai-应用开发">1 介绍篇 | 前端通俗易懂的的 AI 应用开发</h3>
+<h4 id="1ai-应用传统应用自动化应用的区别">1、AI 应用、传统应用、自动化应用的区别。</h4>
+<p>自动化应用：类似工作流等固定流程，脚本自动化运行的应用。</p>
+<p>AI 应用：利用 AI 技术构建的软件，软件具有智能化功能（分析——推理——行动）。</p>
+<h4 id="2ai-应用涉及的技术栈">2、AI 应用涉及的技术栈。</h4>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777040647251.jpg" alt=""></p>
+<p>基础层：大模型的训练，数据采集，训练算法（一般开发者不涉及，都是大公司进行研发）</p>
+<p>接入层：MaaS 接入 AI 厂商的 API，或者利用自行运行服务（运行大模型，或者进行 RAG）</p>
+<p>技术基建：</p>
+<ul>
+<li>
+<p>开发框架：Langchain LangGraph OPEN-AI-SDK</p>
+</li>
+<li>
+<p>提示词工程：专门的 Prompt Engineering</p>
+</li>
+<li>
+<p>RAG: 搜索增强生成，将本地的知识库加入到大模型中，或者进行蒸馏，获取特定场景的模型应用</p>
+</li>
+</ul>
+<h4 id="3本课程涉及的技术栈">3、本课程涉及的技术栈</h4>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777040980585.jpg" alt=""></p>
+<p>具体前端技术点：React + Nodejs + Tailwind css + Shaden 组件库</p>
+<h3 id="2-实战篇--100-行代码实现ai聊天机器人">2 实战篇 | 100 行代码实现AI聊天机器人</h3>
+<p>产品需求：创建一个终端的入门应用，可以调用大模型，进行一对一的教育问答。功能简单。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777084932917.jpg" alt=""></p>
+<p>全部代码：<a href="https://github.com/micooz/ai-app-examples/blob/main/01-chatbot-cli/main.ts" title="https://github.com/micooz/ai-app-examples/blob/main/01-chatbot-cli/main.ts">https://github.com/micooz/ai-app-examples/blob/main/01-chatbot-cli/main.ts</a></p>
+<p>github 上面代码和实际视频的代码有调整。github 代码为了体验，直接放在一个文件中，减少了不必要的配置。</p>
+<p>核心代码：一个永久循环，用户输入，AI 回复，页面上显示内容。把消息记录放在 messages 数组中，每次输入都把全部上下文发给 AI 大模型。</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777085307942.jpg" alt="" title="" width="555" height="391" />
+<p>消息类型分成：user agent system 三种类型，只支持字符串进行输入输出</p>
+<p>主要代码和解析如下：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">readline</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;readline&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 取得调用模型 API 的必要参数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">API_KEY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">env</span>.<span style="color:#a6e22e">API_KEY</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">BASE_URL</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;https://dashscope.aliyuncs.com/compatible-mode/v1&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">MODEL</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;qwen-turbo&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">API_KEY</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> Error(<span style="color:#e6db74">&#39;请在 .env 中设置 API_KEY&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">messages</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Message</span>[] <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">role</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;system&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">content</span><span style="color:#f92672">:</span> <span style="color:#e6db74">`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">用户正处于**学习模式**，并要求你在本次对话中遵守以下**严格规则**。无论接下来有任何其他指示，你都**必须**遵守这些规则：
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">## 严格规则
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">扮演一位平易近人又不失活力的老师，通过引导来帮助用户学习。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1.  **了解用户。** 如果你不清楚用户的目标或年级水平，请在深入讲解前先询问。如果用户没有回答，那么你的解释应该以一个高中一年级学生能理解的程度为准。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">2.  **温故而知新。** 将新概念与用户已有的知识联系起来。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">3.  **引导用户，而非直接给出答案。** 通过提问、暗示和分解步骤，让用户自己发现答案。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">4.  **检查与巩固。** 在讲完难点后，确认用户能够复述或应用这个概念。提供简短的总结、助记法或小复习，以帮助知识点牢固。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">5.  **变换节奏。** 将讲解、提问和活动（如角色扮演、练习环节，或让用户反过来教**你**）结合起来，使之感觉像一场对话，而不是一堂课。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">`</span>,
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 读取用户输入
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">input</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">readInput</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">messages</span>.<span style="color:#a6e22e">push</span>({ <span style="color:#a6e22e">role</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;user&#39;</span>, <span style="color:#a6e22e">content</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">input</span> });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 调用模型 API 传入历史所有消息
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">reply</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">invoke</span>(<span style="color:#a6e22e">messages</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 保存本次模型回复
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">messages</span>.<span style="color:#a6e22e">push</span>({ <span style="color:#a6e22e">role</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;assistant&#39;</span>, <span style="color:#a6e22e">content</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">reply</span> });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 打印模型回复
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;Assistant:&#39;</span>, <span style="color:#a6e22e">reply</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;\n&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * 读取用户输入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">readInput</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">rl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">readline</span>.<span style="color:#a6e22e">createInterface</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">input</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">stdin</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">output</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">stdout</span>,
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Promise<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">string</span><span style="color:#f92672">&gt;</span>((<span style="color:#a6e22e">resolve</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">rl</span>.<span style="color:#a6e22e">question</span>(<span style="color:#e6db74">&#39;User: &#39;</span>, (<span style="color:#a6e22e">message</span>) =&gt; {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">resolve</span>(<span style="color:#a6e22e">message</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">rl</span>.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * 调用模型 API 获取回复
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">invoke</span>(<span style="color:#a6e22e">messages</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Message</span>[]) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">BASE_URL</span><span style="color:#e6db74">}</span><span style="color:#e6db74">/chat/completions`</span>, {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;POST&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;Content-Type&#39;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;application/json&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">Authorization</span><span style="color:#f92672">:</span> <span style="color:#e6db74">`Bearer </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">API_KEY</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">model</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">MODEL</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">messages</span>,
+</span></span><span style="display:flex;"><span>    }),
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">json</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">choices</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">message</span>.<span style="color:#a6e22e">content</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">string</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * 消息格式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">type</span> <span style="color:#a6e22e">Message</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">role</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;user&#39;</span> <span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;assistant&#39;</span> <span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;system&#39;</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">content</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>启动服务时，需要补充环境变量，或者安装 dotenv 第三方库自动获取环境变量</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&#34;start&#34;: &#34;node --env-file .env main.ts&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h3 id="3-解析篇--模型提示词上下文">3 解析篇 | 模型、提示词、上下文</h3>
+<p>解释上一届中 AI 应用中的关键概念：模型 model、提示词 prompt、上下文 context</p>
+<h4 id="关键参数">关键参数</h4>
+<ul>
+<li>
+<p>API-key 进行鉴权，不同项目的额度管理</p>
+</li>
+<li>
+<p>Base url：不同的 URL 进行不同的作用，例如后面加 chat embedding files 分别用来处理聊天，嵌入，文件管理</p>
+</li>
+<li>
+<p>model：模型的名称（plus max）</p>
+</li>
+</ul>
+<p>这三个关键参数是每一个大模型必须的，切换不同大模型时，也需要考虑更换这几个参数，具体看官方最新的文档。</p>
+<h4 id="api-返回值">API 返回值</h4>
+<p>API 返回了大模型的输出结果，通常还返回了模型的 tokens 使用量，前端可以根据使用的情况，调整合适的上下文长度等。</p>
+<p>prompt_tokens, completion_token total_token 等不同的用量。</p>
+<h4 id="提示词">提示词</h4>
+<p>提示词是输入到模型中的指令，包括是用户的请求或者系统预设。这里有单独的提示词工程，有专门的课程。</p>
+<h4 id="上下文">上下文</h4>
+<p>上下文工程，就是 messages 数组，这是模型调用中很重要的部分（选择多少上下文，什么时候需要做取舍）</p>
+<p>[system, user, assistant, user, assistant] 还包括调用不同的 agent 等工具</p>
+<p>具体还有上下文持久化，上下文窗口限制，模型注意力，多窗口信息共享等细节。</p>
+<p>——————————</p>
+<p>这个课程是基本的引导，具体某个领域研究，还需要深入研究。</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<h3 id="4-js-中的流式处理技术-iteratorgeneratorfor-awaitof">4 JS 中的流式处理技术 Iterator、Generator、for await&hellip;of</h3>
+<h4 id="问题提出">问题提出</h4>
+<p>上面给到的案例中，通过 API 进行一问一答形式进行交互。如果回答内容很多，那么需要用户一直等待回复，体验不好。</p>
+<p>这里可以进一步，优化成流回答模式（API 以 Stream 形式返回，然后前端以流模式一个一个字动态展示返回的内容）。</p>
+<p>需要用到下面几个前端高级语法进行实现：</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777099975758.jpg" alt="" title="" width="517" height="318" />
+<h4 id="流式输出案例">流式输出案例</h4>
+<p>在请求时，增加 body 字段 { stream: true } 表示需要流式输出</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777100025737.jpg" alt="" title="" width="588" height="471" />
+<p>此时服务器就是以流模式返回的结果，可以看出 content 是一个一个文字进行返回的</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777100108830.jpg" alt="" title="" width="582" height="275" />
+<p>客户端 JS 解析步骤如下：</p>
+<p>1、先把 response 这个流式返回值，使用 for await (const value of response) 进行异步循环。</p>
+<p>2、使用 text-decoder 进行解码，就是把流式的 Unint8Array 转换成字符串进行处理。</p>
+<p>3、使用 split 进行换行，使用 map 去掉空格，使用 filter 去掉空行。</p>
+<p>4、循环每一行内容，判断如果是 DONE 表示已经结束。</p>
+<p>5、将每一行的字符串，去掉开头的 data: 部分，然后 JSON.parse 转换成对象，进一步获取 content，拿到内容。</p>
+<p>6、将 chunk 打印到屏幕上，并循环写入到回复 reply 中，最终将 reply 写入到 messages 中。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777100174690.jpg" alt=""></p>
+<h4 id="流式循环-js-分析">流式循环 JS 分析</h4>
+<p>上面代码中 for await (const value of response) 是流式循环，这个是 JS 代码的核心。</p>
+<p>在 es6 中引入了迭代器，使用 for of 可以对迭代器进行循环。for of 实际上就是一个语法糖，默认迭代器的第一个值 node，然后 node.next() 获取下一个，直到获得不到下一个，实际上就是按照链表来遍历数组。数组就是一种特殊的迭代器。</p>
+<p>在 es9 中，引入了异步迭代语法。可以对 fetch 到的异步结果进行迭代。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777100653825.jpg" alt=""></p>
+<p>此时服务器返回的是一个流模式，前端也可以模拟异步返回流。</p>
+<p>例如新建一个生成器函数 function* gen() { yield 1； yield 2; } 进行流式返回，这个函数需要不断 .next() 获取下一个数字。</p>
+<p>此时可以使用 for of 来解析流，这就是用 js 生成器函数模拟的效果。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777100659436.jpg" alt=""></p>
+<p>​</p>
+<h3 id="5-图解-sse-协议的前后端实现">5 图解 SSE 协议的前后端实现</h3>
+<p>在上一节课程中，了解如何流式接受信息，那么已有的很多通用大模型交互方式，是服务器多次向客户端发送消息，已经有很多框架封装实现了相关的技术，不需要手动去处理细节部分。</p>
+<p>SSE: server sent event 服务器发送事件</p>
+<h4 id="langchain-调用模型接口">LangChain 调用模型接口</h4>
+<p>langchain 封装了很多有用的方法，这里是调用 core 核心方法，减少客户端自定义数据结构。</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777102763200.jpg" alt="" title="" width="619" height="350" />
+<p>langchain 封装了不同类型的 message，以及封装了 model.stream 流处理方法，客户端直接能获取到 chunks。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777102815774.jpg" alt=""></p>
+<h4 id="express-实现-sse">Express 实现 SSE</h4>
+<p>服务器处理 SSE 比较容易，直接在响应头中增加内容类型是 event-stream ，然后就可以先给客户端返回响应头，然后按照 for await 接受到大模型返回的 stream 数据，再返回给客户端。返回结束后，调用 res.end() 结束。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777102905735.jpg" alt=""></p>
+<h4 id="客户端使用-eventsource-get-请求接口">客户端使用 EventSource GET 请求接口</h4>
+<p>默认可以使用 EventSource 内置的对象进行请求，这是 GET 请求，请求长度有限制，且不能携带 token 等验证字段。</p>
+<p>然后通过不同的事件处理函数，接收消息。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777103409089.jpg" alt=""></p>
+<h4 id="客户端使用-fetch-post-请求接口">客户端使用 fetch POST 请求接口</h4>
+<p>因为上面 GET 请求有局限性，所以这里可以使用 fecth POST 进行请求，然后在 then 中处理流式的结果。 </p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-04/image-1777103416407.jpg" alt=""></p>
+<p>​</p>
+<h3 id="6-智能应用的两种开发范式-workflow-与-agentic">6 智能应用的两种开发范式 Workflow 与 Agentic</h3>
+<p>智能应用的核心——语义匹配</p>
+<h4 id="workflow-模式">Workflow 模式</h4>
+<p>工作流模式通常是一条固定的流程，需要维护大量的判断节点。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>if 需要搜索:
+</span></span><span style="display:flex;"><span>    调用模型提取关键词
+</span></span><span style="display:flex;"><span>    调用搜索工具
+</span></span><span style="display:flex;"><span>    调用模型生成回复
+</span></span><span style="display:flex;"><span>else if xxx
+</span></span><span style="display:flex;"><span>    fn2()
+</span></span><span style="display:flex;"><span>else if xxx
+</span></span><span style="display:flex;"><span>    fn3()
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="agentic-模式">Agentic 模式</h4>
+<p>动态流程+多轮推理，根据上下文自主决策下一步操作。</p>
+<p>Re-Act: Reasoning and Acting 迭代操作。</p>
+<p>模型会循环调用工具，并回顾调用结果，决定继续调用还是返回，给了模型很大的自由度。</p>
+<p>这两个模式适合不同的使用场景。</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>数据库-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0113-数据库事务处理是什么">0113 数据库事务处理是什么</a></li>
+    <li><a href="#0377-mysql-中主键外键是什么">0377 mysql 中主键外键是什么</a></li>
+    <li><a href="#0888-数据库视图是什么">0888 数据库视图是什么</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0819-mysql-如何支持-emoji-表情">0819 mysql 如何支持 emoji 表情</a></li>
+    <li><a href="#0687-elastic-search-的基本原理">0687 elastic search 的基本原理</a></li>
+    <li><a href="#0296-mysql-高并发性能问题">0296 MYSQL 高并发性能问题</a></li>
+    <li><a href="#0378-mysql-中如何优化">0378 mysql 中如何优化</a></li>
+    <li><a href="#0380-mysql-和-mariadb-的区别">0380 mysql 和 mariaDB 的区别</a></li>
+    <li><a href="#0891-orm-对象关系映射">0891 ORM 对象关系映射</a></li>
+    <li><a href="#0899-强制删除外键的数据库表">0899 强制删除外键的数据库表</a></li>
+    <li><a href="#0489-数据库-schema-是什么意思">0489 数据库 schema 是什么意思</a></li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="数据库笔记">数据库笔记</h1>
+<p>2026-8-17</p>
+<p>原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/</p>
+<h2 id="0113-数据库事务处理是什么">0113 数据库事务处理是什么</h2>
+<p>事务处理：某一组操作是一个原子操作，如果中途无法执行，就回退到开始的状态。不能执行到一半执行停止执行。</p>
+<p>实例：删除一个用户时，用户的各种信息分别在不同的表中存储，那么这组操作就包括多个删除 SQL 语句，就是一个 commit。例如删除用户的基本信息，用户的评论，用户的操作日志等。如果删除用户评论时，发现找不到这个用户，那么应该提示错误并回退到之前的状态，而不应该继续执行，或者执行一半。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">START</span> TRANSATION
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">FROM</span> USERS <span style="color:#66d9ef">WHERE</span> user_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">002</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">FROM</span> COMMENTS <span style="color:#66d9ef">WHERE</span> user_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">002</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">FROM</span> OPERATIONS <span style="color:#66d9ef">WHERE</span> user_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">002</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">COMMIT</span>;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0377-mysql-中主键外键是什么">0377 mysql 中主键外键是什么</h2>
+<p>mysql 中不同表通过主键和外键建立关联，进行约束，确保了数据一致性。</p>
+<p>根据不同表的关联关系，确定主键和外键。</p>
+<p>如果是一对多的关系（例如用户表和评论表），那么用户表的 id 就是主键，在评论表中建立 user_id 作为外键。</p>
+<p>如果是多对多的关系（例如用户表和图书表），那么需要新建一个中间表，user_book 存放外键。用户表中 id 是主键，图书表中 id 也是主键，user_book 表中，新建 book_id 和 user_id 作为外键，进行关联和约束。</p>
+<p>主键是唯一的，确保了数据增删改的联动性。</p>
+<h2 id="0888-数据库视图是什么">0888 数据库视图是什么</h2>
+<p>视图是基于一个或多个基本表的查询结果的虚拟表。</p>
+<p>它是一个逻辑概念，不实际存储数据，但可以像基本表一样使用。</p>
+<p>视图是通过 SELECT 语句创建的，并可以对其进行查询、插入、更新和删除等操作。</p>
+<p>视图的主要作用，简化复杂查询和保护数据的安全性。</p>
+<p>通过创建视图，可以隐藏底层表结构和数据，只暴露需要的信息给用户。</p>
+<p>视图还可以将多个表的数据合并到一个虚拟表中，简化查询操作。</p>
+<h4 id="1特点">1、特点</h4>
+<ul>
+<li>
+<p>不存储实际数据，只保存查询定义</p>
+</li>
+<li>
+<p>可以像基本表一样使用，进行CRUD操作</p>
+</li>
+<li>
+<p>可以简化复杂查询和保护数据安全</p>
+</li>
+</ul>
+<h4 id="2优点">2、优点</h4>
+<p>简化查询：通过创建视图，可以将复杂的查询操作封装成一个简单的查询语句，并且可以重复使用。</p>
+<p>数据安全：通过视图，可以隐藏底层表的结构和数据，只暴露必要的信息给用户。可以给用户授予对视图的访问权限，而不直接访问基本表，从而提高数据的安全性。</p>
+<p>数据一致性：通过视图，可以将多个相关的表的数据合并到一个虚拟表中，保证了数据的一致性。</p>
+<h4 id="3缺点">3、缺点</h4>
+<p>查询效率：视图的查询效率可能会低于直接查询基本表，因为视图需要在查询时动态生成结果。</p>
+<p>更新限制：由于视图是基于基本表的查询结果，对视图的更新操作可能会受到限制。例如，视图中使用了聚合函数或 GROUP BY 子句，则不能对视图进行更新。</p>
+<p>存储空间：虽然视图不存储实际数据，但是需要占用一定的存储空间来保存查询定义。</p>
+<h4 id="4用途">4、用途</h4>
+<p>简化复杂查询：通过将复杂的查询逻辑封装到视图中，可以简化应用程序中的查询操作。</p>
+<p>数据安全性：视图可以限制用户对底层表的访问权限，从而提供更高的数据安全性和隐私保护。</p>
+<p>数据抽象和封装：通过视图，可以将多个表的数据抽象为一个虚拟表，简化数据模型和应用程序开发。</p>
+<p>性能优化：视图可以预先计算和存储结果集，以提高查询性能，并避免重复执行复杂查询。</p>
+<h4 id="基本使用">基本使用</h4>
+<p>视图的增删和表类似</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">VIEW</span> view_name <span style="color:#66d9ef">AS</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> column1, column2
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> table1, table2
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> conditions;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="案例">案例</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">创建数据库表，并插入数值</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> t(quantity int, price int);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> t <span style="color:#66d9ef">values</span> (<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">50</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> t <span style="color:#66d9ef">values</span> (<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">100</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">创建视图</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">view</span> view_t <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">select</span> quantity, price, quantity <span style="color:#f92672">*</span> price <span style="color:#66d9ef">from</span> t;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> view_t;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">创建视图</span><span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">VIEW</span> view_t2(qty, price, total) <span style="color:#66d9ef">AS</span> <span style="color:#66d9ef">SELECT</span> quantity, price, quantity <span style="color:#f92672">*</span> price <span style="color:#66d9ef">FROM</span> t;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> view_t2;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="参考链接">参考链接</h4>
+<p><a href="https://blog.csdn.net/qq_21891743/article/details/132590386">https://blog.csdn.net/qq_21891743/article/details/132590386</a></p>
+<p><a href="https://blog.csdn.net/2301_78341899/article/details/131533874">https://blog.csdn.net/2301_78341899/article/details/131533874</a></p>
+<h2 id="0819-mysql-如何支持-emoji-表情">0819 mysql 如何支持 emoji 表情</h2>
+<p>这是 mysql 字符集的问题，如果是 emoji 表情发送失败，原因是数据库不能存储 emoji 表情，需要修改 mysql 的配置，将字符类型修改为 utf8mb4。</p>
+<p>mysql 的 utf-8 编码的一个字符最多 3 个字节，但是一个 emoji 表情为 4 个字节，所以 utf-8 不支持储存 emoji 表情，但是 utf-8 的超集 utf8mb4 一个字符最多能有 4 个字节，所以能够支持 emoji 的表情存储。</p>
+<p>找到/etc/mysql 路径下有 my.cnf 文件，添加如下的配置：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>[<span style="color:#a6e22e">client</span>]
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">default</span><span style="color:#f92672">-</span><span style="color:#a6e22e">character</span><span style="color:#f92672">-</span><span style="color:#a6e22e">set</span><span style="color:#f92672">=</span><span style="color:#a6e22e">utf8mb4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[<span style="color:#a6e22e">mysqld</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">character</span><span style="color:#f92672">-</span><span style="color:#a6e22e">set</span><span style="color:#f92672">-</span><span style="color:#a6e22e">client</span><span style="color:#f92672">-</span><span style="color:#a6e22e">handshake</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">FALSE</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">character</span><span style="color:#f92672">-</span><span style="color:#a6e22e">set</span><span style="color:#f92672">-</span><span style="color:#a6e22e">server</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">utf8mb4</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">collation</span><span style="color:#f92672">-</span><span style="color:#a6e22e">server</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">utf8mb4_unicode_ci</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">init_connect</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;SET NAMES utf8mb4&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[<span style="color:#a6e22e">mysql</span>]
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">default</span><span style="color:#f92672">-</span><span style="color:#a6e22e">character</span><span style="color:#f92672">-</span><span style="color:#a6e22e">set</span><span style="color:#f92672">=</span><span style="color:#a6e22e">utf8mb4</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重启 mysql 的服务：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>service mysqld restart
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0687-elastic-search-的基本原理">0687 elastic search 的基本原理</h2>
+<p>安装和环境：elastic search 是一个单独 java 服务；默认端口是 9200</p>
+<p>搜索原理：类似数据库增加索引，elastic 对于文本内容也增加了索引（具体的中文分词、英文分词、构建字典树等细节不考虑）。增加索引后，对全文搜索性能更好。</p>
+<p>关键词：节点 Node，集群 cluster，索引 Index，文档 Document。</p>
+<p>每一个 elastic 是一个节点，多个节点构成分布式集群。每一个索引，包括多个文档。</p>
+<p>搜索步骤：</p>
+<p>通过 API 建立删除索引</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>PUT localhost:9200/novel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DELETE localhost:9200/novel
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置中文分词（创建索引时，增加配置）&ldquo;analyzer&rdquo;: &ldquo;ik_max_word&rdquo; 表示分词器</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>curl -X PUT &#39;localhost:9200/accounts&#39; -d &#39;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  &#34;mappings&#34;: {
+</span></span><span style="display:flex;"><span>    &#34;person&#34;: {
+</span></span><span style="display:flex;"><span>      &#34;properties&#34;: {
+</span></span><span style="display:flex;"><span>        &#34;user&#34;: {
+</span></span><span style="display:flex;"><span>          &#34;type&#34;: &#34;text&#34;,
+</span></span><span style="display:flex;"><span>          &#34;analyzer&#34;: &#34;ik_max_word&#34;,
+</span></span><span style="display:flex;"><span>          &#34;search_analyzer&#34;: &#34;ik_max_word&#34;
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        &#34;title&#34;: {
+</span></span><span style="display:flex;"><span>          &#34;type&#34;: &#34;text&#34;,
+</span></span><span style="display:flex;"><span>          &#34;analyzer&#34;: &#34;ik_max_word&#34;,
+</span></span><span style="display:flex;"><span>          &#34;search_analyzer&#34;: &#34;ik_max_word&#34;
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        &#34;desc&#34;: {
+</span></span><span style="display:flex;"><span>          &#34;type&#34;: &#34;text&#34;,
+</span></span><span style="display:flex;"><span>          &#34;analyzer&#34;: &#34;ik_max_word&#34;,
+</span></span><span style="display:flex;"><span>          &#34;search_analyzer&#34;: &#34;ik_max_word&#34;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参考：</p>
+<p><a href="https://www.ruanyifeng.com/blog/2017/08/elasticsearch.html" title="https://www.ruanyifeng.com/blog/2017/08/elasticsearch.html">https://www.ruanyifeng.com/blog/2017/08/elasticsearch.html</a></p>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started.html" title="https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started.html</a></p>
+<p><a href="https://www.elastic.co/cn/blog/a-practical-introduction-to-elasticsearch" title="https://www.elastic.co/cn/blog/a-practical-introduction-to-elasticsearch">https://www.elastic.co/cn/blog/a-practical-introduction-to-elasticsearch</a></p>
+<h2 id="0296-mysql-高并发性能问题">0296 MYSQL 高并发性能问题</h2>
+<p>Mysql 高并发性能问题</p>
+<p>问题：mysql 分布式还不完善，所以存在高并发的问题。如果并行请求很多，mysql 锁无法合理分配资源，产生延时。</p>
+<p>解决</p>
+<p>1、分库分表：利用已有的MySQL资源，将原来的数据表拆分成多个数据库（或者表），同时支持多个SQL的查询，可以在一定程度上提升查询性能。</p>
+<p>2、缓存技术：使用缓存可以减少MySQL服务器的查询压力，提高数据的读取速度，降低内存的占用。常用的缓存技术有Redis、Memcache等，可以将MySQL查询和处理的结果缓存起来，实现简单的数据一次查询，多次引用的功能。</p>
+<p>3、HTTP集群：通过市面上常用的反向代理负载均衡技术，将网站服务器的查询压力分散到多台服务器上，从而提升MySQL的性能和容量。</p>
+<p>4、优化SQL语句：通过在查询语句中添加索引、减少冗余数据等步骤，提升表之间关联查询、语句执行速度以及内存容量。</p>
+<p>参考链接</p>
+<p><a href="https://www.dbs724.com/157170.html">https://www.dbs724.com/157170.html</a></p>
+<p><a href="https://blog.csdn.net/weixin_40990818/article/details/113704102">https://blog.csdn.net/weixin_40990818/article/details/113704102</a></p>
+<p><a href="https://juejin.cn/post/7163894728201601060">https://juejin.cn/post/7163894728201601060</a></p>
+<h2 id="0378-mysql-中如何优化">0378 mysql 中如何优化</h2>
+<p>mysql 初级使用不涉及复杂算法</p>
+<p>如果遇到慢查询时：mysql 建立索引时，实际上就是线性查找，转换成映射查找（建立索引，具体算法不一样），可以提高查询的速度。</p>
+<h2 id="0380-mysql-和-mariadb-的区别">0380 mysql 和 mariaDB 的区别</h2>
+<p><a href="https://blog.csdn.net/sensor_WU/article/details/129646422">https://blog.csdn.net/sensor_WU/article/details/129646422</a></p>
+<p>相同点：mysql 和 mariaDB 都是关系型数据库，主要功能相同。MariaDB是MySQL的一个分支，由开源社区维护，采用GPL授权许可,完全兼容MySQL。</p>
+<p>发展历史：mysql 早期是个人开发者发布，随后被 Sun 收购，随后 2008 年被 Oracle 收购，走上了商业化道路（收费）。2009年 mysql 创始人在新的分支上创建了 mariaDB，使用 GPL 许可证，代码开源。</p>
+<p>主要区别：mysql 存储引擎是 innoDB, mariaDB 存储引擎是 XtraDB，有一些性能差异。</p>
+<h2 id="0891-orm-对象关系映射">0891 ORM 对象关系映射</h2>
+<p>对象关系映射，Object relationship mapping</p>
+<p>ORM 框架是一种用于解决编程语言中的对象模型，与关系型数据库中数据模型之间不匹配问题，的技术框架。</p>
+<p>核心：建立对象与数据库表之间的映射关系，让开发者可以直接使用面向对象的方式（如操作类、对象、方法）来操作数据库，而无需编写复杂的 SQL 语句。</p>
+<p>Python 领域的 ORM 框架：SQLAlchemy、Django ORM</p>
+<p>ORM 优势：</p>
+<ol>
+<li>
+<p>简化数据库操作：用熟悉的面向对象语法（如创建对象、调用方法）替代 SQL 语句，降低了数据库操作的复杂度。</p>
+</li>
+<li>
+<p>隔离数据库差异：屏蔽了不同数据库（如 MySQL、PostgreSQL、Oracle 等）的 SQL 语法差异，切换数据库时无需大量修改代码。</p>
+</li>
+<li>
+<p>提高开发效率：减少了重复编写 SQL 的工作量，让开发者更专注于业务逻辑而非数据访问细节。</p>
+</li>
+<li>
+<p>增强代码可维护性：将数据访问逻辑集中管理，便于后期修改和维护。</p>
+</li>
+</ol>
+<h2 id="0899-强制删除外键的数据库表">0899 强制删除外键的数据库表</h2>
+<p>通常，删除数据库表，执行</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">EXISTS</span> project_connection;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果这个表和其他的表存在多个外键关联，又必须删除（本地测试可以这样操作），执行下面的脚本，强制删除表</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- 临时禁用外键约束检查
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">SET</span> FOREIGN_KEY_CHECKS <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- 删除表
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">EXISTS</span> project_connection;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- 恢复外键约束检查（重要！）
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">SET</span> FOREIGN_KEY_CHECKS <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0489-数据库-schema-是什么意思">0489 数据库 schema 是什么意思</h2>
+<p>schema 是数据库的组织和结构，包含了表、列、数据类型、视图、存储过程、关系、主键、外键等数据库对象。</p>
+<ul>
+<li>
+<p>组织和结构：Schema 在数据库中起到了组织和结构化的作用，它定义了数据库的结构和对象之间的关系，使得数据存储和检索更加有序和高效。‌</p>
+</li>
+<li>
+<p>命名空间和对象集合：Schema在数据库中形成了一个命名空间，允许多个用户使用同一个数据库而不会相互干扰。它包含了表和其他数据库对象，如数据类型、函数、操作符等。‌</p>
+</li>
+<li>
+<p>避免名称冲突：通过将数据库对象组织成逻辑组，Schema有助于避免对象名称的冲突</p>
+</li>
+<li>
+<p>数据完整性和业务逻辑：Schema还通过定义约束和规则来确保数据的完整性和一致性，如唯一约束和非空约束，有助于维护数据的质量和准确性。</p>
+</li>
+<li>
+<p>可视化表示：在可视化工具中，Schema可以通过关系图表来表示，显示数据库对象及其之间的关系。‌</p>
+</li>
+</ul>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

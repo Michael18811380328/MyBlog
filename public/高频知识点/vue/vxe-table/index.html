@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>vxe-table</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#version">version</a></li>
+        <li><a href="#downloads">downloads</a></li>
+        <li><a href="#repository">repository</a></li>
+        <li><a href="#homepage">homepage</a></li>
+      </ul>
+    </li>
+    <li><a href="#default-readme">default readme</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#功能点">功能点</a></li>
+    <li><a href="#安装">安装</a>
+      <ul>
+        <li><a href="#cdn">CDN</a></li>
+      </ul>
+    </li>
+    <li><a href="#示例">示例</a></li>
+    <li><a href="#在线文档">在线文档</a></li>
+    <li><a href="#运行项目">运行项目</a></li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="vxe-table">vxe-table</h1>
+<p>基于Vue的table配置组件，‌提供强大的表格功能，‌包括数据展示、‌排序、‌筛选等。‌</p>
+<h1 id="vxe-tablex20">vxe-table </h1>
+<h3 id="version">version</h3>
+<p>4.6.18 • </p>
+<h3 id="downloads">downloads</h3>
+<p>23,550 </p>
+<h3 id="repository">repository</h3>
+<p>github.com/x-extends/vxe-table </p>
+<h3 id="homepage">homepage</h3>
+<p>vxetable.cn/ </p>
+<h2 id="default-readme">default readme</h2>
+<p>​</p>
+<h1 id="vxe-table-1">vxe-table</h1>
+<p>简体中文 | 繁體中文 | English</p>
+<p>​</p>
+<p>一个基于 vue 的 PC
+端表单/表格组件，支持增删改查、虚拟树、列拖拽、懒加载、快捷菜单、数据校验、打印导出、表单渲染、自定义模板、渲染器、JSON 配置式&hellip;</p>
+<ul>
+<li>
+<p>设计理念 </p>
+<ul>
+<li>
+<p>面向现代浏览器，高效的简洁 API 设计</p>
+</li>
+<li>
+<p>模块化表格、按需加载</p>
+</li>
+<li>
+<p>为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>​</p>
+<h2 id="功能点">功能点</h2>
+<ul>
+<li>
+<p> 基础表格</p>
+</li>
+<li>
+<p> 配置式表格</p>
+</li>
+<li>
+<p> 斑马线条纹</p>
+</li>
+<li>
+<p> 多种边框</p>
+</li>
+<li>
+<p> 单元格样式</p>
+</li>
+<li>
+<p> 列宽拖动</p>
+</li>
+<li>
+<p> 最小/最大高度</p>
+</li>
+<li>
+<p> 自适应宽高</p>
+</li>
+<li>
+<p> 固定列</p>
+</li>
+<li>
+<p> 多级表头</p>
+</li>
+<li>
+<p> 表尾数据</p>
+</li>
+<li>
+<p> 高亮行或列</p>
+</li>
+<li>
+<p> 序号</p>
+</li>
+<li>
+<p> 单选框</p>
+</li>
+<li>
+<p> 复选框</p>
+</li>
+<li>
+<p> 排序</p>
+</li>
+<li>
+<p> 多字段排序</p>
+</li>
+<li>
+<p> 筛选</p>
+</li>
+<li>
+<p> 合并单元格</p>
+</li>
+<li>
+<p> 合并表尾</p>
+</li>
+<li>
+<p> 导入/导出/打印</p>
+</li>
+<li>
+<p> 显示/隐藏列</p>
+</li>
+<li>
+<p> 拖拽/自定义列排序</p>
+</li>
+<li>
+<p> 加载中</p>
+</li>
+<li>
+<p> 格式化内容</p>
+</li>
+<li>
+<p> 自定义插槽 - 模板</p>
+</li>
+<li>
+<p> 快捷菜单</p>
+</li>
+<li>
+<p> 展开行</p>
+</li>
+<li>
+<p> 工具栏</p>
+</li>
+<li>
+<p> 虚拟树</p>
+</li>
+<li>
+<p> 增删改查</p>
+</li>
+<li>
+<p> 数据校验</p>
+</li>
+<li>
+<p> 数据代理</p>
+</li>
+<li>
+<p> 键盘导航</p>
+</li>
+<li>
+<p> 渲染器</p>
+</li>
+<li>
+<p> 虚拟滚动</p>
+</li>
+<li>
+<p> 虚拟合并</p>
+</li>
+<li>
+<p> CSS 变量主题</p>
+</li>
+<li>
+<p> (企业版) 单元格区域选取</p>
+</li>
+<li>
+<p> (企业版) 单元格复制/粘贴</p>
+</li>
+<li>
+<p> (企业版) 单元格查找和替换</p>
+</li>
+<li>
+<p> (企业版) 全键盘操作</p>
+</li>
+</ul>
+<h2 id="安装">安装</h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>npm install vxe-table
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>​    import { createApp } from &#39;vue&#39;
+</span></span><span style="display:flex;"><span>​    import VXETable from &#39;vxe-table&#39;
+</span></span><span style="display:flex;"><span>​    import &#39;vxe-table/lib/style.css&#39;
+</span></span><span style="display:flex;"><span>​    
+</span></span><span style="display:flex;"><span>​    createApp(App).use(VXETable).mount(&#39;#app&#39;)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="cdn">CDN</h3>
+<p>使用第三方 CDN 方式记得锁定版本号，避免受到非兼容性更新的影响  
+不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>​    &lt;!-- 引入样式 --&gt;
+</span></span><span style="display:flex;"><span>​    &lt;link rel=&#34;stylesheet&#34; href=&#34;https://unpkg.com/vxe-table/lib/style.css&#34;&gt;
+</span></span><span style="display:flex;"><span>​    &lt;!-- 引入脚本 --&gt;
+</span></span><span style="display:flex;"><span>​    &lt;script src=&#34;https://unpkg.com/xe-utils&#34;&gt;&lt;/script&gt;
+</span></span><span style="display:flex;"><span>​    &lt;script src=&#34;https://unpkg.com/vxe-table&#34;&gt;&lt;/script&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="示例">示例</h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&lt;template&gt;
+</span></span><span style="display:flex;"><span>​      &lt;div&gt;
+</span></span><span style="display:flex;"><span>​        &lt;vxe-table :data=&#34;tableData&#34;&gt;
+</span></span><span style="display:flex;"><span>​          &lt;vxe-column type=&#34;seq&#34; title=&#34;Seq&#34; width=&#34;60&#34;&gt;&lt;/vxe-column&gt;
+</span></span><span style="display:flex;"><span>​          &lt;vxe-column field=&#34;name&#34; title=&#34;Name&#34;&gt;&lt;/vxe-column&gt;
+</span></span><span style="display:flex;"><span>​          &lt;vxe-column field=&#34;role&#34; title=&#34;Role&#34;&gt;&lt;/vxe-column&gt;
+</span></span><span style="display:flex;"><span>​          &lt;vxe-colgroup title=&#34;Group1&#34;&gt;
+</span></span><span style="display:flex;"><span>​            &lt;vxe-column field=&#34;sex&#34; title=&#34;Sex&#34;&gt;&lt;/vxe-column&gt;
+</span></span><span style="display:flex;"><span>​            &lt;vxe-column field=&#34;address&#34; title=&#34;Address&#34;&gt;&lt;/vxe-column&gt;
+</span></span><span style="display:flex;"><span>​          &lt;/vxe-colgroup&gt;
+</span></span><span style="display:flex;"><span>​        &lt;/vxe-table&gt;
+</span></span><span style="display:flex;"><span>​      &lt;/div&gt;
+</span></span><span style="display:flex;"><span>​    &lt;/template&gt;
+</span></span><span style="display:flex;"><span>​    
+</span></span><span style="display:flex;"><span>​    &lt;script lang=&#34;ts&#34; setup&gt;
+</span></span><span style="display:flex;"><span>​    import { ref } from &#39;vue&#39;
+</span></span><span style="display:flex;"><span>​    
+</span></span><span style="display:flex;"><span>    const tableData = ref([
+</span></span><span style="display:flex;"><span>      { id: 10001, name: &#39;Test1&#39;, role: &#39;Develop&#39;, sex: &#39;Man&#39;, address: &#39;Shenzhen&#39; },
+</span></span><span style="display:flex;"><span>      { id: 10002, name: &#39;Test2&#39;, role: &#39;Test&#39;, sex: &#39;Man&#39;, address: &#39;Guangzhou&#39; },
+</span></span><span style="display:flex;"><span>      { id: 10003, name: &#39;Test3&#39;, role: &#39;PM&#39;, sex: &#39;Man&#39;, address: &#39;Shanghai&#39; }
+</span></span><span style="display:flex;"><span>    ])
+</span></span><span style="display:flex;"><span>    &lt;/script&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="在线文档">在线文档</h2>
+<p><a href="https://vxetable.cn/" title="https://vxetable.cn/">https://vxetable.cn/</a></p>
+<h2 id="运行项目">运行项目</h2>
+<p>安装依赖</p>
+<p>​</p>
+<p>    npm run update</p>
+<p>启动本地调试</p>
+<p>    
+​    npm run serve</p>
+<p>编译打包，生成编译后的目录：es,lib</p>
+<p>    
+​    npm run lib</p>
+<p>​</p>
+<p>​</p>
+<p>            </p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>
