@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>Linux-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0114-ssh-命令">0114 ssh 命令</a></li>
+    <li><a href="#0115-man-命令">0115 man 命令</a></li>
+    <li><a href="#0116-chmod-命令">0116 chmod 命令</a></li>
+    <li><a href="#0117-lsof-命令">0117 lsof 命令</a></li>
+    <li><a href="#0118-tree-命令">0118 tree 命令</a></li>
+    <li><a href="#0907-docker-如何查看不同容器的-ip">0907 docker 如何查看不同容器的 IP</a></li>
+    <li><a href="#0802-docker-概念和作用">0802 docker 概念和作用</a></li>
+    <li><a href="#0697-pbcopy-和-pbpaste-命令">0697 pbcopy 和 pbpaste 命令</a></li>
+    <li><a href="#0119-ps-aux-命令">0119 ps aux 命令</a></li>
+    <li><a href="#0207-cli-and-gui-是什么">0207 CLI and GUI 是什么</a></li>
+    <li><a href="#0120-程序和进程的区别">0120 程序和进程的区别</a></li>
+    <li><a href="#0121-如何使用-bash-批量创建操作文件">0121 如何使用 bash 批量创建操作文件</a></li>
+    <li><a href="#0876-linux-常用命令">0876 linux 常用命令</a></li>
+    <li><a href="#0255-ifconfig-命令">0255 ifconfig 命令</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0256-telnet-命令">0256 telnet 命令</a></li>
+    <li><a href="#0257-ssh-和-telnet-的区别">0257 ssh 和 telnet 的区别</a></li>
+    <li><a href="#0270-kill-pkill-如何杀掉进程">0270 kill pkill 如何杀掉进程</a></li>
+    <li><a href="#0272-df-du-如何查看磁盘占用">0272 df du 如何查看磁盘占用</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0281-netstat-命令">0281 netstat 命令</a></li>
+    <li><a href="#0435-portainer">0435 Portainer</a></li>
+    <li><a href="#0798-curl-命令">0798 curl 命令</a></li>
+    <li><a href="#0799-linux-各个目录的作用">0799 Linux 各个目录的作用</a></li>
+    <li><a href="#0800-linux-用户管理">0800 Linux 用户管理</a></li>
+    <li><a href="#0801-linux-权限管理">0801 Linux 权限管理</a></li>
+    <li><a href="#0803-linux-和-windows-特点">0803 Linux 和 Windows 特点</a></li>
+    <li><a href="#0751-常用-bash-脚本">0751 常用 bash 脚本</a></li>
+    <li><a href="#0901-nice-命令">0901 nice 命令</a></li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="linux笔记">Linux笔记</h1>
+<p>2026-8-17</p>
+<p>原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/</p>
+<h2 id="0114-ssh-命令">0114 ssh 命令</h2>
+<p>ssh 用于登录远程主机，命令是 `用户名@远程主机的ip`</p>
+<p>本地虚拟机测试登录，流程如下（这个适合虚拟机和宿主机的通信）ssh 默认使用 22 端口</p>
+<p>1、打开虚拟机，使用 ifconfig | grep &lsquo;inet&rsquo; 查看虚拟机的IP地址（192.168.1.168）或者在网络偏好设置界面中查看。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>inet 192.168.1.152 netmask 0xffffff00 broadcast 192.168.1.255
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2、在宿主机打开终端，使用 ssh <a href="mailto:michael@192.168.1.168">michael@192.168.1.168</a> 登录，然后输入虚拟机账户密码，即可进入</p>
+<p>3、如果提示网络连接不上，可以查看局域网是否畅通，或者重启虚拟机（重新获取IP）</p>
+<p>4、操作虚拟机（例如部署 python3 环境等）</p>
+<p>5、退出时，执行 exit() 命令</p>
+<p>也可以连接远程主机（个人服务器，操作类似）</p>
+<h2 id="0115-man-命令">0115 man 命令</h2>
+<p>man 命令（manual）可以查看一个命令的帮助文档： man git （git manual 文档）</p>
+<h2 id="0116-chmod-命令">0116 chmod 命令</h2>
+<p>change mode 用户对文件的权限的命令</p>
+<p>主要用于 bash 可执行脚本的使用</p>
+<p>chmod 755 hello</p>
+<p>更改权限后，这样就可以执行了</p>
+<p>文件执行时，第一行是执行的环境设置（下面第一个是node，第二个是bash）</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/env node
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;hello world&#39;</span>);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;build start------&#34;</span>
+</span></span><span style="display:flex;"><span>cd book <span style="color:#f92672">&amp;&amp;</span> mkdocs build
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0117-lsof-命令">0117 lsof 命令</h2>
+<p>lsof（list open files）是一个查看当前系统文件的工具。</p>
+<p>在linux环境下，任何事物都以文件的形式存在，用户通过文件不仅可以访问常规数据，还可以访问网络连接和硬件；如传输控制协议 (TCP) 和用户数据报协议 (UDP)套接字等，系统在后台都为该应用程序分配了一个文件描述符，该文件描述符提供了大量关于此应用程序的信息。</p>
+<p>主要用途：查看某个网络端口是否被占用，然后分析或者杀掉占用端口的进程，查看某个服务是否正常启动</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>lsof -i:3000
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>COMMAND     PID    USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Google      504 mike   52u  IPv4 0xff1d750e3e6d9b31      0t0  TCP localhost:52303-&gt;localhost:hbci (ESTABLISHED)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>node      61822 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>node      61822 mike  27u  IPv4 0xff1d750e3f4525c9      0t0  TCP localhost:hbci-&gt;localhost:52303 (ESTABLISHED)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>主要参数：</p>
+<p>COMMAND： 进程的名称</p>
+<p>PID：   进程ID</p>
+<p>USER: 	运行进程的用户</p>
+<h2 id="0118-tree-命令">0118 tree 命令</h2>
+<p>tree 命令可以显示当前项目的结构，通过参数设置不同的效果</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 显示英文名称</span>
+</span></span><span style="display:flex;"><span>tree
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示中文名称（-N）</span>
+</span></span><span style="display:flex;"><span>tree -N
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示全部文件（隐藏文件）</span>
+</span></span><span style="display:flex;"><span>tree -a
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 过滤隐藏文件夹</span>
+</span></span><span style="display:flex;"><span>tree -I <span style="color:#e6db74">&#34;node_modules&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 支持管道符和正则匹配</span>
+</span></span><span style="display:flex;"><span>tree -I <span style="color:#e6db74">&#34;node_modules|cache|test_*&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 只看两级目录</span>
+</span></span><span style="display:flex;"><span>tree -L <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 把当前目录下文件中文形式输出，并过滤图片文件，输出到 md 文件中</span>
+</span></span><span style="display:flex;"><span>tree -N -I <span style="color:#e6db74">&#34;*.svg|*.png|*.jpg|*.gif|*.xmind&#34;</span> &gt; tree-res.md
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="0907-docker-如何查看不同容器的-ip">0907 docker 如何查看不同容器的 IP</h2>
+<p>docker 不同容器类似一个虚拟机，对应具体的 IP</p>
+<p>1、docker ps 找到容器的 ID</p>
+<p>2、docker inspect ID，获取容器的信息，找到下面的部分</p>
+<p>这三个字段都属于 <strong>Docker 内网（默认是 bridge 网桥网络）​</strong> 的配置，不是宿主机的公网 / 内网配置，仅在 Docker 宿主机和同属该网络的容器之间生效。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&#34;NetworkSettings&#34;: {
+</span></span><span style="display:flex;"><span>  &#34;Networks&#34;: {
+</span></span><span style="display:flex;"><span>    &#34;bridge&#34;: {
+</span></span><span style="display:flex;"><span>      &#34;IPAddress&#34;: &#34;172.17.0.2&#34;,  # 容器的私有 IP 地址，其他同网络的容器可以通过这个 IP 直接访问该容器
+</span></span><span style="display:flex;"><span>      &#34;Gateway&#34;: &#34;172.17.0.1&#34;,
+</span></span><span style="display:flex;"><span>      &#34;Subnet&#34;: &#34;172.17.0.0/16&#34;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>IPAddress</code> 是容器的内网唯一标识，用于同网络内的直接通信——其他容器或者宿主机，可以访问这个</p>
+<p><code>Gateway</code> 是容器的内网出口，负责转发容器与外部的网络流量</p>
+<p><code>Subnet</code> 是内网地址池，限定 IP 分配范围并实现网络隔离</p>
+<h2 id="0802-docker-概念和作用">0802 docker 概念和作用</h2>
+<p>docker 类似一个轻量级的虚拟机，虚拟机是创建完全不同的操作系统层面的环境，docker 可以重复使用操作系统层面的很多基础服务，比虚拟机更节省资源。</p>
+<p>docker 可以将应用和依赖环境打包到一个容器中（使用直接拉取镜像，不需要考虑依赖安装兼容性等问题），支持自动化测试、发布等。</p>
+<p>主要概念</p>
+<p>镜像 image 对应类</p>
+<p>容器 container 对应类的实例</p>
+<p>先 pull 获取镜像，然后创建容器，然后进入容器进行操作</p>
+<p>更改镜像地址：可以更改国内的镜像地址，安装镜像速度更快 <a href="http://hub-mirror.c.163.com" title="http://hub-mirror.c.163.com">http://hub-mirror.c.163.com</a></p>
+<p>​</p>
+<h2 id="0697-pbcopy-和-pbpaste-命令">0697 pbcopy 和 pbpaste 命令</h2>
+<p>在 mac 终端中，可以使用 pbcopy 和 pbpaste 把内容复制粘贴到剪切板上，不需要手动复制粘贴内容</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>cat ./demo.txt | pbcopy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或者</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>pbpaste
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0119-ps-aux-命令">0119 ps aux 命令</h2>
+<p>ps命令（Process Status）进程查看命令</p>
+<p>aux 是参数，具体说明如下</p>
+<p>a 显示现行终端机下的所有程序，包括其他用户的程序。</p>
+<p>u 以用户为主的格式来显示程序状况。</p>
+<p>x 显示所有程序，不以终端机来区分。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>ps aux | grep Visual
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mike           2795   0.0  0.2 441880528  16784   ??  S    一10上午   0:08.85 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper --type=utility --utility-sub-type=network.mojom.NetworkService --lang=zh-CN --service-sandbox-type=network --user-data-dir=/Users/mike/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --bypasscsp-schemes --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --streaming-schemes --shared-files --field-trial-handle=1718379636,r,16462742083976417338,2502042514352757159,262144 --disable-features=CalculateNativeWinOcclusion,SpareRendererForSitePerProcess --seatbelt-client=39
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mike           2793   0.0  0.0 441597680   2080   ??  S    一10上午   0:00.10 /Applications/Visual Studio Code.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler --no-rate-limit --monitor-self-annotation=ptype=crashpad-handler --database=/Users/mike/Library/Application Support/Code/Crashpad --url=appcenter://code?aid=de75e3cc-e22f-4f42-a03f-1409c21d8af8&amp;uid=b710c932-bbde-4d20-bce2-e0f7fb455fad&amp;iid=b710c932-bbde-4d20-bce2-e0f7fb455fad&amp;sid=b710c932-bbde-4d20-bce2-e0f7fb455fad --annotation=_companyName=Microsoft --annotation=_productName=VSCode --annotation=_version=1.83.1 --annotation=plat=OS X --annotation=prod=Electron --annotation=ver=25.8.4 --handshake-fd=26
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>主要参数：</p>
+<p>COMMAND： 进程的名称</p>
+<p>PID：   进程ID</p>
+<p>USER: 	运行进程的用户</p>
+<p>%CPU:   #CPU占用率</p>
+<p>%MEM:   #内存占用率</p>
+<p>VSZ	    进程占用的虚拟内存大小</p>
+<p>RSS     占用的物理内存大小</p>
+<p>STAT：  #进程状态  &mdash;了解</p>
+<p>?    表示没有占用终端</p>
+<p>R 	运行</p>
+<p>S 	可中断睡眠 Sleep</p>
+<p>D	不可中断睡眠</p>
+<p>T 	停止的进程</p>
+<p>Z 	僵尸进程</p>
+<p>X    死掉的进程</p>
+<p>START:	#进程的启动时间</p>
+<p>TIME：	#进程占用CPU的总时间</p>
+<p>COMMAND： #进程文件，进程名</p>
+<p>进程状态&ndash;了解</p>
+<p>Sl	以线程的方式运行</p>
+<p>Ss  s进程的领导者，父进程</p>
+<p>R+	+表示是前台的进程组</p>
+<p>S&lt; &lt;优先级较高的进程</p>
+<p>SN  N优先级较低的进程</p>
+<h2 id="0207-cli-and-gui-是什么">0207 CLI and GUI 是什么</h2>
+<p>CLI and GUI——Command Line Interface  and Graphical user interface</p>
+<p>命令行界面（CLI）没有图形用户界面（GUI）那么方便用户操作。因为，命令行界面的软件通常需要用户记忆操作的命令，但是，由于其本身的特点，命令行界面要较图形用户界面节约计算机系统的资源。</p>
+<p>在熟记命令的前提下，使用命令行界面往往要较使用图形用户界面的操作速度要快。</p>
+<p>所以，图形用户界面的操作系统中，都保留着可选的命令行界面。</p>
+<h2 id="0120-程序和进程的区别">0120 程序和进程的区别</h2>
+<p>1.进程：当一个程序暂停时，需要将其现场信息作为断点保存起来，以便以后能从断点处继续执行。这样，在多道程序系统中需要一块特殊区域保存断点。因此程序的概念已不能如实地反映程序执行时的特征，需要一个更准确地描述程序执行状态的术语，这就是进程。</p>
+<p>进程：描述程序运行状态（程序进展的程度）。进程是具有一定独立功能的程序段关于一个数据集合的一次运行活动。</p>
+<p>2.进程组成</p>
+<p>① 程序块：由指令代码组成，代码必须是纯代码，即在运行期间不修改自身。</p>
+<p>② 数据块：进程执行时所需数据和工作单元以及开辟的工作区。</p>
+<p>③ 进程控制块（PCB）：一个数据结构，其中包含描述和管理进程所需全部信息。如进程标识、进程所属用户标识、进程状态、调度参数、现场信息和程序地址等。创建进程时建立PCB，撤消进程时收PCB。PCB是进程存在的惟一标志。</p>
+<p>3.程序与进程的本质区别在于程序是静态的，进程是动态的。</p>
+<p>- 程序是指令及执行指令时所需数据的集合，可以长期保存在存储介质上；</p>
+<p>- 进程具有创建性、运行性和消亡性。</p>
+<p>- 进程和程序不是一一对应关系，一个程序可以对应多个进程。</p>
+<h2 id="0121-如何使用-bash-批量创建操作文件">0121 如何使用 bash 批量创建操作文件</h2>
+<p>需要调用 bash 的 API（创建删除目录，创建删除文件，循环，操作中增加变量的写法）</p>
+<p>使用 for-do-done 完成循环（for循环的条件在外面，注意是两个点）删除文件无法回退，注意脚本执行</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> a in <span style="color:#f92672">{</span>1..10<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>	mkdir test$a
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="0876-linux-常用命令">0876 linux 常用命令</h2>
+<p>Linux 后台开发常用命令</p>
+<p><a href="https://dablelv.github.io/backend-cmd/">https://dablelv.github.io/backend-cmd/</a></p>
+<p>这个相当于一个手册，需要的时候可以查询，并不是说需要把上面全部的指令背会。</p>
+<p>可以把常见的部分拿下来，然后备份一下。简单看一下即可。然后把链接放在常用知识点中。</p>
+<h2 id="0255-ifconfig-命令">0255 ifconfig 命令</h2>
+<p>ifconfig是linux中用于显示或配置网络设备（网卡）的命令，英文全称是 network interfaces configuring。可以使用这个命令更改网卡配置。</p>
+<p>参考链接：<a href="https://baike.baidu.com/item/ifconfig/5073112">https://baike.baidu.com/item/ifconfig/5073112</a></p>
+<h4 id="参数说明">参数说明</h4>
+<p>inet 192.168.1.152 IPv4</p>
+<p>netmask 0xffffff00 子网掩码</p>
+<p>broadcast 192.168.1.255</p>
+<h4 id="实例截图">实例截图</h4>
+<img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/auto-upload/image-1698137019841.png" width="566" height="null" />
+<h2 id="0256-telnet-命令">0256 telnet 命令</h2>
+<p>telnet 远程登录协议，mac 需要手动安装 brew install telnet</p>
+<p>用途：查看某个远程主机的端口是否可以访问，实际工作中用的不多，主要是黑客使用</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>ping + ip //查看某一个ip地址是否能够连通，如： ping 114.80.67.193
+</span></span><span style="display:flex;"><span>telnet ip port // 查看某一个机器上的某一个端口是否可以访问，如：telnet 114.80.67.193 8080
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="0257-ssh-和-telnet-的区别">0257 ssh 和 telnet 的区别</h2>
+<p>加密方式不同：telnet是明码传输，SSH是加密传输。</p>
+<p>telnet通过TCP/IP协议簇来访问远程终端，传输的数据和口令是明文形式。相对来说不安全，你所有的数据都可被攻击者直接捕获。 </p>
+<p>SSH相对于telnet安全，它的传输方式是以加密形式传输。</p>
+<p>SSH功能比telnet齐全，它既可以代替telnet进行远程管理终端，又可以为ftp、pop、基础PPP提供一个安全的通道。</p>
+<ul>
+<li>
+<p>端口号不同：telent 23 端口；SSH 端口号 22</p>
+</li>
+<li>
+<p>默认情况下防火墙是不信任 telnet ，因为它不安全</p>
+</li>
+</ul>
+<p>简而言之，SSH更安全。</p>
+<h2 id="0270-kill-pkill-如何杀掉进程">0270 kill pkill 如何杀掉进程</h2>
+<p>kill - send a signal to a process. kill 功能是向进程发出信号，它<strong>默认传递终止进程运行的信号给进程。</strong></p>
+<p><strong>kill是杀掉单个进程</strong>，<strong>killall是杀掉所有同名进程</strong>，<strong>pkill是杀掉一类进程或者某个用户的所有进程。</strong></p>
+<p>终止前台进程使用 Ctrl + C 就可以了。终止一个后台进程就得用 kill 命令来终止。我们会先使用 ps、top 等命令获得进程的 PID，然后使用 kill 命令来杀掉该进程。通常使用 kill PID 就可以杀掉某个进程，不需要 killall pkill 批量杀掉进程。</p>
+<p>参考链接：Killall 、Kill 、Pkill三个命令之间的详细区别 <a href="https://cloud.tencent.com/developer/article/1847239">https://cloud.tencent.com/developer/article/1847239</a></p>
+<p>参数：9 表示彻底杀死一个进程（处理异常进程的最后手段，进程不会进行资源的清理工作），15 表示结束一个进程</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>kill -9 pid // 结束某个pid进程
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>killall -9 mysql //结束所有的 mysql 进程
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pkill mysql //结束 mysql 进程
+</span></span><span style="display:flex;"><span>pkill -u mark,danny // 结束mark, danny用户的所有进程
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="0272-df-du-如何查看磁盘占用">0272 df du 如何查看磁盘占用</h2>
+<p>df 和 du 可以查看磁盘占用情况</p>
+<p>df——disk free 可以快速获取 磁盘 被占用了多少空间，目前还剩下多少空间等信息</p>
+<p>du——disk usage 显示磁盘空间的使用情况，统计 目录（或文件）所占磁盘空间的大小</p>
+<p>详细参考：<a href="https://blog.csdn.net/Rio520/article/details/104370082">https://blog.csdn.net/Rio520/article/details/104370082</a></p>
+<p>df 实例（顶层目录，使用磁盘的情况）计算很快</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Filesystem     512-blocks      Used Available Capacity iused     ifree %iused  Mounted on
+</span></span><span style="display:flex;"><span>/dev/disk3s1s1  478724992  45924872 197793376    19%  501730 988966880    0%   /
+</span></span><span style="display:flex;"><span>devfs                 420       420         0   100%     727         0  100%   /dev
+</span></span><span style="display:flex;"><span>/dev/disk3s6    478724992   4194392 197793376     3%       2 988966880    0%   /System/Volumes/VM
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>du 实例（某个子节点下，各个目录占用磁盘情况）全部硬盘计算很慢</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>16      ./row-operation
+</span></span><span style="display:flex;"><span>40      ./notification
+</span></span><span style="display:flex;"><span>96      ./comment
+</span></span><span style="display:flex;"><span>96      ./editor-column/button-widgets/modify-row-item
+</span></span><span style="display:flex;"><span>8       ./editor-column/button-widgets/send-email-widgets
+</span></span><span style="display:flex;"><span>320     ./editor-column/button-widgets
+</span></span><span style="display:flex;"><span>528     ./editor-column
+</span></span><span style="display:flex;"><span>312     ./share-widgets
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>常用参数</p>
+<h4 id="df--h">df -h</h4>
+<p>-h参数使结果以K，M，G为单位，提高信息的可读性</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Filesystem       Size   Used  Avail Capacity iused     ifree %iused  Mounted on
+</span></span><span style="display:flex;"><span>/dev/disk3s1s1  228Gi   22Gi   94Gi    19%  501730 988944000    0%   /
+</span></span><span style="display:flex;"><span>devfs           210Ki  210Ki    0Bi   100%     727         0  100%   /dev
+</span></span><span style="display:flex;"><span>/dev/disk3s6    228Gi  2.0Gi   94Gi     3%       2 988944000    0%   /System/Volumes/VM
+</span></span><span style="display:flex;"><span>/dev/disk3s2    228Gi  505Mi   94Gi     1%     345 988944000    0%   /System/Volumes/Preboot
+</span></span><span style="display:flex;"><span>/dev/disk3s4    228Gi  654Mi   94Gi     1%     252 988944000    0%   /System/Volumes/Update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>文件系统                 容量  已用  可用 已用% 挂载点
+</span></span><span style="display:flex;"><span>/dev/mapper/centos-root   13G  5.1G  8.0G   39% /
+</span></span><span style="display:flex;"><span>devtmpfs                 485M     0  485M    0% /dev
+</span></span><span style="display:flex;"><span>tmpfs                    494M  176K  494M    1% /dev/shm
+</span></span><span style="display:flex;"><span>tmpfs                    494M   50M  444M   11% /run
+</span></span><span style="display:flex;"><span>tmpfs                    494M     0  494M    0% /sys/fs/cgroup
+</span></span><span style="display:flex;"><span>/dev/sda1                497M  119M  379M   24% /boot
+</span></span><span style="display:flex;"><span>tmpfs                     99M     0   99M    0% /run/user/0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="du--sh">du -sh</h4>
+<p>(-h 参数同样是为了提高可读性，-s 代表summary，只显示总大小)</p>
+<p>9.1M</p>
+<h4 id="du--h">du -h</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>0	./issue
+</span></span><span style="display:flex;"><span>20K	./v1/2.5-structure
+</span></span><span style="display:flex;"><span>20K	./v1/2.3-db
+</span></span><span style="display:flex;"><span>20K	./v1/2.0-env
+</span></span><span style="display:flex;"><span>24K	./v1/3.2-change
+</span></span><span style="display:flex;"><span>20K	./v1/2.2-backend
+</span></span><span style="display:flex;"><span>24K	./v1/00-introduction
+</span></span><span style="display:flex;"><span>28K	./v1/3.1-issues
+</span></span><span style="display:flex;"><span>24K	./v1/2.1-frontend
+</span></span><span style="display:flex;"><span>20K	./v1/2.4-test
+</span></span><span style="display:flex;"><span>36K	./v1/3.3-api
+</span></span><span style="display:flex;"><span>28K	./v1/1.0-future
+</span></span><span style="display:flex;"><span>64K	./v1/9.0-docs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="0281-netstat-命令">0281 netstat 命令</h2>
+<p>netstat -ntlp</p>
+<p>_Netstat _用于显示与IP、TCP、UDP和ICMP协议相关的统计数据，一般用于检验本机各端口的网络连接情况。</p>
+<p>常用参数</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>-n 拒绝显示别名，能显示数字的全部转化成数字。
+</span></span><span style="display:flex;"><span>-p 显示建立相关链接的程序名
+</span></span><span style="display:flex;"><span>-t (tcp)仅显示tcp相关选项
+</span></span><span style="display:flex;"><span>-l 仅列出有在 Listen (监听) 的服務状态
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其他参数</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>-a (all)显示所有选项，默认不显示LISTEN相关
+</span></span><span style="display:flex;"><span>-u (udp)仅显示udp相关选项
+</span></span><span style="display:flex;"><span>-r 显示路由信息，路由表
+</span></span><span style="display:flex;"><span>-e 显示扩展信息，例如uid等
+</span></span><span style="display:flex;"><span>-s 按各个协议进行统计
+</span></span><span style="display:flex;"><span>-c 每隔一个固定时间，执行该netstat命令。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 linux 和 mac 中稍微有些不一样，具体参考程序内部文档，下面是 centOS 中的效果</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Active Internet connections (only servers)
+</span></span><span style="display:flex;"><span>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+</span></span><span style="display:flex;"><span>tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      2528/mysqld         
+</span></span><span style="display:flex;"><span>tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      13613/nginx: master 
+</span></span><span style="display:flex;"><span>tcp        0      0 0.0.0.0:21              0.0.0.0:*               LISTEN      1254/pure-ftpd (SER 
+</span></span><span style="display:flex;"><span>tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      5466/sshd           
+</span></span><span style="display:flex;"><span>tcp        0      0 0.0.0.0:888             0.0.0.0:*               LISTEN      13613/nginx: master 
+</span></span><span style="display:flex;"><span>tcp        0      0 0.0.0.0:8888            0.0.0.0:*               LISTEN      60793/python        
+</span></span><span style="display:flex;"><span>tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      1574/master         
+</span></span><span style="display:flex;"><span>tcp6       0      0 :::21                   :::*                    LISTEN      1254/pure-ftpd (SER 
+</span></span><span style="display:flex;"><span>tcp6       0      0 :::22                   :::*                    LISTEN      5466/sshd           
+</span></span><span style="display:flex;"><span>tcp6       0      0 ::1:25                  :::*                    LISTEN      1574/master     
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到不同的进程（PID和进程名），占用不同的 TCP 网络信道</p>
+<h2 id="0435-portainer">0435 Portainer</h2>
+<p><a href="https://blog.csdn.net/m0_67900727/article/details/123550536" title="https://blog.csdn.net/m0_67900727/article/details/123550536">https://blog.csdn.net/m0_67900727/article/details/123550536</a></p>
+<p><a href="https://blog.csdn.net/qq_57761637/article/details/139063374" title="https://blog.csdn.net/qq_57761637/article/details/139063374">https://blog.csdn.net/qq_57761637/article/details/139063374</a></p>
+<p>docker 图形化管理工具配置</p>
+<p>目前本地运行时，注意 容器端口冲突 8000 9000</p>
+<p>执行命令</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>docker run -p 9000:9000 -p 8000:8000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /mydata/portainer/data:/data -d portainer/portainer
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>1、docker 设置访问目录的权限，是否访问目录</p>
+<p>2、路径是否正确? /host_mnt/my-data/portainer/data 这个路径没有权限创建，是否需要手动创建目录，是否存在安全问题</p>
+<h2 id="0798-curl-命令">0798 curl 命令</h2>
+<p>curl 命令在 linux 系统中常用，支持文件上传下载等多种命令</p>
+<p>curl [options] [url]</p>
+<ol>
+<li>
+<p>curl <a href="http://www.baidu.com">http://www.baidu.com</a> 系统发送 get 请求获取页面的链接内容到标准输出</p>
+</li>
+<li>
+<p>curl -I <a href="http://baidu.com">http://baidu.com</a> 显示 http 请求头，不显示内部内容</p>
+</li>
+</ol>
+<p>强制使用 get 方法 curl -d &ldquo;somedata&rdquo; -X GET URL</p>
+<p>应用：带 cookies 登录</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>curl -c &#34;cookie-login&#34; -d &#34;username=asd&amp;password=1234&#34; -X POST URL
+</span></span><span style="display:flex;"><span>curl -b &#34;cookie-login&#34; URL
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>第一次通过 POST 发送用户信息并进行验证，存储 cookies，以后直接上传 cookies 即可免用户登录。</p>
+<p>curl -v 显示请求详细信息</p>
+<p>curl -f 向服务器 post 表单 curl -F &ldquo;<a href="mailto:web=@index.html">web=@index.html</a>;type=text/html&rdquo; url</p>
+<h2 id="0799-linux-各个目录的作用">0799 Linux 各个目录的作用</h2>
+<p>/bin 二进制可执行命令。该目录下存放着普通用户的命令</p>
+<p>/dev 系统的设备文件，即设备的驱动程序</p>
+<p>/home 存放用户文件的主目录，用户数据</p>
+<p>/lib 存放着和系统运行相关的库文件</p>
+<p>/mnt 存放临时的映射文件，通常是一些用来安装其他设备的子目录</p>
+<p>/boot 存放启动 linux 的核心文件</p>
+<p>/media 存放着可移除的设备，比如软盘，光盘</p>
+<p>/misc 储存着一些特殊的字符的定义</p>
+<p>/net 存放着和网络相关的一些文件</p>
+<p>/proc 存放着用户与内核的交互信息</p>
+<p>/sbin 系统的管理命令，这里存放的是系统管理员使用的程序</p>
+<p>/srv 系统启动服务时可以访问的数据库目录</p>
+<p>/tmp 临时文件，重启后自动清空</p>
+<p>/var 存放系统产生的经常变化的文件</p>
+<p>/etc 系统所有的配置文件都在这个目录中</p>
+<p>/opt (option : 自由选择)主要给源码安装软件时选择的安装目录位置</p>
+<p>/root 超级用户的目录</p>
+<p>/selinux 主要用来加固操作系统，提高系统的安全性</p>
+<p>/sys 管理设备文件</p>
+<p>/usr 最大的目录，存放着应用程序和文件</p>
+<p>/lost-found 这个目录平时是空的，当系统非正常关机而留下的“无家可归”的文件便会储存在这里</p>
+<h2 id="0800-linux-用户管理">0800 Linux 用户管理</h2>
+<p>Linux 下有两种用户：普通用户和超级用户。</p>
+<p>普通用户：在 linux 下做有限的事情；提示符是“$”</p>
+<p>超级用户：可以在 linux 系统下做任何事情，不受限制，提示符是“#”。</p>
+<p>可以使用命令切换用户：su [用户名]</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>su – substitute user identity 更换用户身份
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解释：</p>
+<p>The su utility requests appropriate user credentials via PAM and switches to that user ID (the default user is the superuser).  A shell is then executed. </p>
+<p>su 实用程序通过PAM请求适当的用户凭据，并切换到该用户ID（默认用户是超级用户）。然后执行一个shell。</p>
+<h2 id="0801-linux-权限管理">0801 Linux 权限管理</h2>
+<p>1.文件访问者的分类（人）</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>文件和文件目录的所有者：u—User
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>文件和文件目录的所有者所在的组的用户：g—Group
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>其他用户：o—Others
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.文件访问权限的种类</p>
+<p>基本权限：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>read 对文件而言，具有读取文件内容的权限；对目录来说，具有浏览目录信息的权限。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>write 对文件而言，具有修改文件内容的权限；对目录来说，具有删除移动目录内文件的权限。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>execute 对文件而言，具有执行文件的权限；对目录来说，具有进入目录的权限。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- 表示不具有该权限。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p> 3.文件权限值得表示方法</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>r– 只读
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-w- 仅可写
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>–x 仅可执行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rw- 可读可写
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-wx 可写可执行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>r-x 可读可执行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rwx 可读可写可执行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>— 无权限
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0803-linux-和-windows-特点">0803 Linux 和 Windows 特点</h2>
+<p>1、开源和免费</p>
+<p>2、安全稳定性</p>
+<p>3、软件生态，开发语言</p>
+<p>4、主要使用人群，使用场景</p>
+<p>5、系统文件目录，磁盘驱动器</p>
+<p>6、斜杠和反斜杠路径：/root/usr/bin, C: Programs\test</p>
+<p>7、bash 和 cmd 等命令不同：cd dir，yum, brew</p>
+<h2 id="0751-常用-bash-脚本">0751 常用 bash 脚本</h2>
+<p>1、识别图片中的文字，并拷贝到剪切板</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>tesseract ./1.png output -l chi_sim --psm 6 &amp;&amp; cat ./output.txt | pbcopy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>具体配置参考：<a href="https://cloud.seatable.cn/workspace/32/dtable/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/?tid=6qb1&amp;vid=0000&amp;row-id=apD--UxhTO6zv2YKLoLJFA" title="https://cloud.seatable.cn/workspace/32/dtable/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/?tid=6qb1&amp;vid=0000&amp;row-id=apD--UxhTO6zv2YKLoLJFA">https://cloud.seatable.cn/workspace/32/dtable/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/?tid=6qb1&amp;vid=0000&amp;row-id=apD&ndash;UxhTO6zv2YKLoLJFA</a></p>
+<p>2、在线 m3u8 视频下载到本地</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ffmpeg -i &#34;https:///index.m3u8&#34; -c copy -bsf:a aac_adtstoasc output.mp4
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意切片需要 ts 格式，png 切片目前转换不对（有些需要配置 token）</p>
+<p>3、批量增加 import 语句</p>
+<p>（遍历全部代码，给存在 ModalHeader 的文件增加 import xxx from xxx 语句）</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>#!/bin/bash
+</span></span><span style="display:flex;"><span>﻿
+</span></span><span style="display:flex;"><span># 遍历目录中的全部 js 文件
+</span></span><span style="display:flex;"><span>for file in $(find . -name &#34;*.js&#34;); do
+</span></span><span style="display:flex;"><span>  # 检查文件内容是否包含 ModalHeader 字符串
+</span></span><span style="display:flex;"><span>  if grep -q &#34;ModalHeader&#34; &#34;$file&#34;; then
+</span></span><span style="display:flex;"><span>    # 找到文件中的最后一行 import 行号
+</span></span><span style="display:flex;"><span>    last_import_line=$(grep -n &#34;import&#34; &#34;$file&#34; | tail -n 1 | cut -d: -f1)
+</span></span><span style="display:flex;"><span>    # 插入代码
+</span></span><span style="display:flex;"><span>    awk -v last_import_line=&#34;$last_import_line&#34; -v code=&#34;import { DtableModalHeader } from &#39;dtable-ui-component;&#39;;&#34; &#39;NR == last_import_line+1 { print code; print; next } 1&#39; &#34;$file&#34; &gt; tmp &amp;&amp; mv tmp &#34;$file&#34;
+</span></span><span style="display:flex;"><span>  fi
+</span></span><span style="display:flex;"><span>done
+</span></span><span style="display:flex;"><span>﻿
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0901-nice-命令">0901 nice 命令</h2>
+<p><code>nice</code> 是 Linux/Unix 系统中用于<strong>调整进程优先级</strong>的命令。简单来说，它能告诉操作系统：&ldquo;这个程序的重要性高 / 低，分配给它更多 / 更少的 CPU 资源&rdquo;。</p>
+<p>进程优先级用 <strong>nice 值</strong> 表示，范围是 <code>-20</code> 到 <code>19 </code>默认情况下，新进程的 nice 值是 <code>0</code></p>
+<p><strong>nice 值越低优先级越高，​nice 值越高优先级越低</strong></p>
+<p>案例</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># 以默认优先级（nice=0）启动程序（等价于直接运行 program）
+</span></span><span style="display:flex;"><span>nice program
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 以低优先级（nice=10）启动程序（占用更少 CPU）
+</span></span><span style="display:flex;"><span>nice -n 10 program
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 简写
+</span></span><span style="display:flex;"><span>nice 10 program
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 以高优先级（nice=-5）启动程序（需要 root 权限，占用更多 CPU）
+</span></span><span style="display:flex;"><span>sudo nice -n -5 program
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>应用场景</p>
+<ol>
+<li>
+<p><strong>后台任务降优先级</strong>：比如大型文件压缩、数据备份等耗时操作，用 <code>nice -n 19 tar -zcvf backup.tar.gz /data</code>，避免占用过多 CPU 影响前台工作。</p>
+</li>
+<li>
+<p><strong>关键程序提优先级</strong>：比如服务器上的数据库服务（如 MySQL），用 <code>sudo nice -n -10 mysqld</code>，确保它获得更多 CPU 资源，响应更快。</p>
+</li>
+<li>
+<p><strong>系统负载均衡</strong>：当系统 CPU 使用率过高时，给非关键进程提高 nice 值，让关键进程（如桌面程序、服务程序）更流畅。</p>
+</li>
+</ol>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

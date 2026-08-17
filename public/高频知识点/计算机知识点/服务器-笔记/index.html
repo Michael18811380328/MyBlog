@@ -1,0 +1,1773 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>服务器-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0061-如何实现-token-加密">0061 如何实现 token 加密</a></li>
+    <li><a href="#0136-你对服务器有哪些了解">0136 你对服务器有哪些了解</a></li>
+    <li><a href="#0212-restful-api-与-graphql">0212 Restful API 与 GraphQL</a></li>
+    <li><a href="#0213-vps-云服务器-物理服务器-的区别">0213 vps 云服务器 物理服务器 的区别</a></li>
+    <li><a href="#0906-dockerfile-是什么-如何编写">0906 Dockerfile 是什么? 如何编写?</a></li>
+    <li><a href="#0878-服务器日志如何维护">0878 服务器日志如何维护</a></li>
+    <li><a href="#0842-serverless-无服务器架构">0842 serverless 无服务器架构</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0841-对象存储">0841 对象存储</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0839-caddy-配置和含义">0839 caddy 配置和含义</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0824-服务器如何部署多个服务">0824 服务器如何部署多个服务</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0694-微服务架构是什么">0694 微服务架构是什么</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0700-s3是什么">0700 S3是什么</a></li>
+    <li><a href="#0214-docker-和-k8s-的关系">0214 docker 和 K8S 的关系</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0877-如何实现后端搜索">0877 如何实现后端搜索</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0273-vnc-连接">0273 VNC 连接</a></li>
+    <li><a href="#0412-代理服务器和反向代理服务器">0412 代理服务器和反向代理服务器</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0408-nginx-常用配置和含义">0408 nginx 常用配置和含义</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0823-使用-socketio-发送消息">0823 使用 socket.io 发送消息</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#0881-bt-panel-是什么">0881 BT-Panel 是什么</a></li>
+    <li><a href="#0883-nmap-命令扫描端口">0883 nmap 命令扫描端口</a></li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="服务器笔记">服务器笔记</h1>
+<p>2026-8-17</p>
+<p>原始笔记链接：https://cloud.seatable.cn/dtable/external-links/59b453a8639945478de2/</p>
+<h2 id="0061-如何实现-token-加密">0061 如何实现 token 加密</h2>
+<p>1、JWT 加密</p>
+<p>2、设置过期时间，避免客户端泄露 token</p>
+<h2 id="0136-你对服务器有哪些了解">0136 你对服务器有哪些了解</h2>
+<p>定位：前端为主，了解一些简单的后端（服务器）知识</p>
+<p>知识点概念层面：RestFul API Graph 设计 API 的理念；请求并发，jwt token 验证，nginx 的反向代理，docker K8s 的基本使用（image container 实际运行环境等）权限控制</p>
+<p>语言框架层面：Python django 和 flask，node 的 express 和 Koa 基本使用；mysql 关系型数据库的增删改查（redis mongoDB 非关系型数据库的概念）监听 URL</p>
+<p>实际案例：以小说阅读器为例，用户注册，用户登录流程（服务器和客户端通信过程，HTTP 三次握手四次挥手 TCP get post 对应不同的 TCP 请求等，滑动窗口算法），管理员权限判断等；大文件断点续传；operations 的广播 socket WS 协议基本应用；单点登录等后端实现（session）</p>
+<h2 id="0212-restful-api-与-graphql">0212 Restful API 与 GraphQL</h2>
+<p>两种网络技术协议，RestAPI 和 GraphQL 的区别：</p>
+<p>RestfulAPI 是早期的协议。在网络请求中，url 中表示请求的资源名称，请求的方法，对应数据库的增删改查操作（常见的四种请求方法，get post delete put 的特点，以及 head option 请求方法）。好处：URL 直接关注资源，不需要关注怎么操作资源，大部分项目使用这个协议。</p>
+<p>​</p>
+<p>GraphQL是新一代的协议。每一个请求都类似 POST 请求，前端把需要的参数通过 POST 类似 JSON 发给后端，然后后端根据需要的参数（查询数据库），返回前端。</p>
+<p>好处：URL固定的，不会频繁变化。很多资源可以在一个 Query 中获取，这样服务器并行请求压力较小。服务器无需返回不需要的字段（前端需要用户姓名，后端会查询一次数据库，把用户很多信息拿到并返回）。</p>
+<p>不足：需要设置很多的查询和错误处理（前端查询两个参数，一个出错，怎么返回；数据量较大，传输更加消耗时间——网络良好的情况下，不需要考虑这个）。</p>
+<h2 id="0213-vps-云服务器-物理服务器-的区别">0213 vps 云服务器 物理服务器 的区别</h2>
+<p>物理服务器：真实的服务器，用于大企业，可靠性比较高，需要专人维护。内部维护比较安全稳定（例如金融电力通信行业）。</p>
+<p>vps: Virtual Private Server（虚拟私有服务器），一般架设在云端，有固定的带宽，个人博客可以搭建在这里。企业的网站不适宜搭建。</p>
+<p>云服务器：是 vps 的加强版，带宽可变，国内主要是华为云，阿里云，国外是亚马逊。</p>
+<h2 id="0906-dockerfile-是什么-如何编写">0906 Dockerfile 是什么? 如何编写?</h2>
+<p>Dockerfile 是一个<strong>纯文本文件</strong>，里面包含了一系列指令（比如 <code>FROM</code>、<code>RUN</code>、<code>COPY</code> 等）</p>
+<p>Docker 可以根据这些指令自动构建出一个可运行的 Docker 镜像。</p>
+<p>操作流程：写 Dockerfile → 构建自定义镜像 → 启动容器（挂载目录实现实时更新）。</p>
+<p>主要指令：</p>
+<table>
+	<thead>
+			<tr>
+					<th>指令</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>FROM</code></td>
+					<td>指定基础镜像（必须是第一条非注释指令）比如基于 Python 官方镜像</td>
+			</tr>
+			<tr>
+					<td><code>WORKDIR</code></td>
+					<td>设置容器内的工作目录（后续指令都在这个目录下执行）</td>
+			</tr>
+			<tr>
+					<td><code>COPY/ADD</code></td>
+					<td>把本地文件复制到容器内（<code>COPY</code> 更常用，<code>ADD</code> 会自动解压压缩包）</td>
+			</tr>
+			<tr>
+					<td><code>RUN</code></td>
+					<td>在构建镜像时执行命令（比如安装软件、依赖）</td>
+			</tr>
+			<tr>
+					<td><code>EXPOSE</code></td>
+					<td>声明容器要暴露的端口（仅声明，实际运行需加 <code>-p</code> 映射）</td>
+			</tr>
+			<tr>
+					<td><code>CMD/ENTRYPOINT</code></td>
+					<td>容器启动时执行的命令（<code>CMD</code> 可被运行命令覆盖，<code>ENTRYPOINT</code> 更固定）</td>
+			</tr>
+	</tbody>
+</table>
+<p>实例文件</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 基础镜像：选 Python 3.11-slim（兼容你指定的依赖版本）为基础镜像，然后构建自己的镜像（本地使用或者发布）</span>
+</span></span><span style="display:flex;"><span>FROM python:<span style="color:#ae81ff">3.11</span><span style="color:#f92672">-</span>slim
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置容器内的工作目录</span>
+</span></span><span style="display:flex;"><span>WORKDIR <span style="color:#f92672">/</span>docs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装指定版本的 MkDocs 及所有依赖</span>
+</span></span><span style="display:flex;"><span>RUN pip install <span style="color:#f92672">--</span>no<span style="color:#f92672">-</span>cache<span style="color:#f92672">-</span>dir <span style="color:#f92672">--</span>upgrade pip \
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;&amp;</span> pip install <span style="color:#f92672">--</span>no<span style="color:#f92672">-</span>cache<span style="color:#f92672">-</span>dir \
+</span></span><span style="display:flex;"><span>        mkdocs<span style="color:#f92672">==</span><span style="color:#ae81ff">1.6.1</span> \
+</span></span><span style="display:flex;"><span>        mkdocs<span style="color:#f92672">-</span>material<span style="color:#f92672">==</span><span style="color:#ae81ff">9.7.0</span> \
+</span></span><span style="display:flex;"><span>        mkdocs<span style="color:#f92672">-</span>material<span style="color:#f92672">-</span>extensions<span style="color:#f92672">==</span><span style="color:#ae81ff">1.3.1</span> \
+</span></span><span style="display:flex;"><span>        Markdown<span style="color:#f92672">==</span><span style="color:#ae81ff">3.10</span> \
+</span></span><span style="display:flex;"><span>        pymdown<span style="color:#f92672">-</span>extensions<span style="color:#f92672">==</span><span style="color:#ae81ff">10.17.1</span> \
+</span></span><span style="display:flex;"><span>        mkdocs<span style="color:#f92672">-</span>minify<span style="color:#f92672">-</span>plugin<span style="color:#f92672">==</span><span style="color:#ae81ff">0.8.0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 暴露 MkDocs 开发服务器默认端口</span>
+</span></span><span style="display:flex;"><span>EXPOSE <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 容器启动时启动 MkDocs 开发服务器（允许外部访问）</span>
+</span></span><span style="display:flex;"><span>CMD [<span style="color:#e6db74">&#34;mkdocs&#34;</span>, <span style="color:#e6db74">&#34;serve&#34;</span>, <span style="color:#e6db74">&#34;--dev-addr=0.0.0.0:8000&#34;</span>]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>操作步骤：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 创建 Dockerfile 文件，并写入上面的配置</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建镜像</span>
+</span></span><span style="display:flex;"><span>docker build <span style="color:#f92672">-</span>t mkdocs<span style="color:#f92672">-</span>docs <span style="color:#f92672">.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动容器</span>
+</span></span><span style="display:flex;"><span>docker run <span style="color:#f92672">-</span>p <span style="color:#ae81ff">8000</span>:<span style="color:#ae81ff">8000</span> <span style="color:#f92672">-</span>v <span style="color:#960050;background-color:#1e0010">$</span>(pwd):<span style="color:#f92672">/</span>docs mkdocs<span style="color:#f92672">-</span>docs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实际问题：默认的镜像源是官方的很慢，国内很多镜像源也失效了（被墙了），只能开代理服务器拉镜像。需要什么环境，可以直接用 AI 生成镜像构建文件。</p>
+<h2 id="0878-服务器日志如何维护">0878 服务器日志如何维护</h2>
+<p>1、设置不同日志等级，info warning error 避免日志打印过多。</p>
+<p>2、每天创建日志文件，避免单日的日志太多。</p>
+<p>3、可以定期把日志发送到邮箱，定期清理早期废弃的日志。</p>
+<p>4、日志可以打印到单独的路径下，使用 logs/服务名称/警告级别/时间戳，多级打印目录。</p>
+<h2 id="0842-serverless-无服务器架构">0842 serverless 无服务器架构</h2>
+<p>Serverless无服务器架构是一种云计算架构模式</p>
+<blockquote>
+<p>Michael 总结：云服务提供商，提供了云服务器+运维+登录验证，开发者只需要编辑业务和功能，不需要考虑底层运维</p>
+</blockquote>
+<h4 id="基本概念">基本概念</h4>
+<p>开发者不用管服务器的配置、管理与运维，只需写业务逻辑代码并部署，由云服务提供商按需分配资源执行代码，按实际使用资源付费。</p>
+<h4 id="核心特点">核心特点</h4>
+<ul>
+<li>
+<p>事件驱动：特定事件，触发应用执行，无需人工干预服务器操作。</p>
+</li>
+<li>
+<p>自动缩放：依业务负载自动扩缩资源，避免浪费。</p>
+</li>
+<li>
+<p>按使用量计费：按函数调用次数、执行时长等核算费用，控制成本。</p>
+</li>
+</ul>
+<h4 id="主要组成部分">主要组成部分</h4>
+<ul>
+<li>
+<p>函数即服务（FaaS）：开发者写函数代表业务逻辑，被事件触发后，在云平台资源环境运行，运行完资源自动释放。</p>
+</li>
+<li>
+<p>后端即服务（BaaS）：云服务提供数据库、身份认证等后端功能，开发者可直接用，简化开发。</p>
+</li>
+</ul>
+<h4 id="优势">优势</h4>
+<ul>
+<li>
+<p>降低运维成本：无需操心服务器运维事务，节省人力、物力和时间成本。</p>
+</li>
+<li>
+<p>加速开发进程：聚焦业务逻辑，利用现成资源，高效开发并推向市场。</p>
+</li>
+<li>
+<p>灵活应对变化：能适应业务量、功能变化，保障应用良好运行。</p>
+</li>
+</ul>
+<h4 id="应用场景">应用场景</h4>
+<ul>
+<li>
+<p>Web应用开发：创业公司快速搭建包含多功能的Web应用。</p>
+</li>
+<li>
+<p>移动应用后端服务：为移动应用提供如数据存储、推送通知等后端服务，并按需调资源。</p>
+</li>
+<li>
+<p>物联网应用：处理物联网设备产生的数据及触发的操作，按需分配资源。</p>
+</li>
+</ul>
+<h4 id="局限性">局限性</h4>
+<ul>
+<li>
+<p>冷启动问题：函数长时间未调用，再触发可能有延迟，对实时性要求高的场景不太适用。</p>
+</li>
+<li>
+<p>不适合复杂长期运行任务：处理长时、复杂状态管理任务效率不高。</p>
+</li>
+<li>
+<p>依赖云服务提供商：依赖其功能和资源配置，迁移应用可能有挑战。</p>
+</li>
+</ul>
+<h2 id="0841-对象存储">0841 对象存储</h2>
+<p>对象存储 S3，是一种用于存储和管理数据的云计算存储架构。</p>
+<blockquote>
+<p>Michael 总结：</p>
+<p>传统文件结构：树形结构，可能存在嵌套很深问题，不能标记元数据，查找遍历文件树性能较差。</p>
+<p>对象存储：用文件唯一标识和文件内容，组成对象结构，数据类型扁平化，便于扩展，便于编辑元数据。不是很直观的看出不同文件的依赖关系（parent_node_id, child_node_ids）。</p>
+</blockquote>
+<h4 id="基本概念-1">基本概念</h4>
+<p>对象存储将数据以对象的形式进行存储。</p>
+<p>一个对象包含了数据本身、相关的元数据（如对象的名称、创建时间、大小等信息）以及一个唯一标识符。</p>
+<p>与传统的文件系统按文件目录层级结构存储、块存储以固定大小的数据块为单位不同，对象存储从逻辑上更扁平，通过对象的唯一标识（id）来进行访问和管理。</p>
+<h4 id="存储结构特点">存储结构特点</h4>
+<ul>
+<li>
+<p><strong>数据扁平化</strong>：它摆脱了传统文件系统复杂的目录树结构，海量数据存储时查找等操作相对更高效，不需要像文件系统那样层层进入目录去定位文件。例如在存储海量的图片、视频等文件时，不需要构建很深很复杂的文件夹层级。</p>
+</li>
+<li>
+<p><strong>元数据管理</strong>：每个对象所带的元数据能提供丰富的描述信息，方便根据不同的属性（如创建时间范围、文件大小区间等）对对象进行分类、检索以及设置不同的访问权限等操作。</p>
+</li>
+</ul>
+<h4 id="优势-1">优势</h4>
+<ul>
+<li>
+<p><strong>可扩展性强</strong>：能够轻松应对海量数据的增长，无论是存储几百GB的数据还是几百PB甚至更多的数据，都可以通过增加存储节点等方式灵活扩展存储容量，很适合互联网企业不断增长的业务数据存储需求，像电商平台大量的商品图片、用户评价中的图片视频等数据存储。</p>
+</li>
+<li>
+<p><strong>数据安全性高</strong>：通常具备多副本冗余存储机制，数据会在不同的存储设备甚至不同的数据中心保存多个副本，即使某个存储节点出现故障，也能保障数据不丢失且可正常访问，同时还支持访问控制、加密等多种安全措施来保护数据隐私。</p>
+</li>
+<li>
+<p><strong>性能优势</strong>：采用分布式架构，能并行处理大量的读写请求，在应对高并发的访问场景时（比如视频网站大量用户同时在线观看视频，频繁请求视频数据），可以提供稳定且高效的读写服务。</p>
+</li>
+</ul>
+<h4 id="应用场景-1">应用场景</h4>
+<ul>
+<li>
+<p><strong>云存储服务</strong>：很多云服务提供商提供的网盘等云存储功能就是基于对象存储构建的，用户可以方便地上传、下载自己的文件，像百度网盘等存储大量用户的各类文件。</p>
+</li>
+<li>
+<p><strong>大数据存储</strong>：企业积累的海量日志数据、用户行为数据等，借助对象存储来长期保存，后续用于数据分析挖掘等工作，例如互联网公司分析用户浏览轨迹来优化推荐算法。</p>
+</li>
+<li>
+<p><strong>静态资源存储</strong>：网站的图片、脚本、样式文件等静态资源，放置在对象存储中，能快速响应客户端的访问请求，提升网站的加载速度和性能。</p>
+</li>
+</ul>
+<h4 id="访问方式">访问方式</h4>
+<p>可以通过多种协议和API（应用程序编程接口）进行访问，常见的如 RESTful API，开发人员可以在自己的应用程序中方便地集成对象存储功能，实现数据的上传、下载、删除等操作，无论是Web应用、移动端应用还是后端的数据处理服务等都能与之对接。</p>
+<h2 id="0839-caddy-配置和含义">0839 caddy 配置和含义</h2>
+<p>Caddy 是一款开源的、用 Go 语言编写，轻量级 Web 服务器，同时具备反向代理服务器功能</p>
+<blockquote>
+<p>Michael 笔记：candy 是 nginx 的替代品</p>
+</blockquote>
+<h4 id="特点">特点</h4>
+<ul>
+<li>
+<p><strong>自动 HTTPS 配置</strong>：它能自动从 Let&rsquo;s Encrypt 等证书颁发机构获取并更新 SSL/TLS 证书，极大地简化了网站启用加密连接（https）的流程，让网站可以轻松实现安全访问，无需手动去申请和配置复杂的证书相关内容。</p>
+</li>
+<li>
+<p><strong>配置简单</strong>：使用简洁直观的配置语法，相较于一些传统的 Web 服务器（如 Apache、Nginx 等），其配置文件更易读懂和编写，新手也能较快上手，快速搭建起服务器应用。</p>
+</li>
+<li>
+<p><strong>跨平台支持</strong>：可以运行在 Windows、Linux、macOS 等多种主流操作系统上，方便不同环境下的部署使用，满足多样化的部署需求。</p>
+</li>
+<li>
+<p><strong>灵活的插件机制</strong>：拥有丰富的插件生态，通过插件可以扩展诸如缓存、认证、日志记录等诸多功能，能够根据具体的业务场景定制化服务器功能。</p>
+</li>
+</ul>
+<h4 id="应用场景-2">应用场景</h4>
+<ul>
+<li>
+<p><strong>网站托管</strong>：可以直接用来托管静态网站，将网站的相关文件部署在服务器上指定位置，通过 Caddy 配置好对应的域名等信息，就能对外提供访问服务。</p>
+</li>
+<li>
+<p><strong>反向代理</strong>：可作为反向代理服务器，位于后端真实服务器（比如运行着 Web 应用的服务器）之前，接收来自互联网的请求，并将请求转发到后端服务器处理，同时可以做负载均衡、安全防护等相关工作，适用于架构较为复杂的网络应用部署场景。</p>
+</li>
+</ul>
+<p>Caddy 的配置系统非常灵活，支持多种格式（Caddyfile、JSON、环境变量）。</p>
+<p>下面介绍最常用的 <strong>Caddyfile 格式</strong>，并通过示例说明核心配置概念。</p>
+<h4 id="基本结构"><strong>基本结构</strong></h4>
+<p>Caddyfile 采用 <strong>站点块（Site Block）​</strong> 组织配置，每个块对应一个域名或 IP 地址：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>example<span style="color:#f92672">.</span>com {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 针对 example.com 的配置指令</span>
+</span></span><span style="display:flex;"><span>    root <span style="color:#f92672">*</span> <span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>html
+</span></span><span style="display:flex;"><span>    file_server
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>:<span style="color:#ae81ff">8080</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 监听 8080 端口的配置</span>
+</span></span><span style="display:flex;"><span>    reverse_proxy http:<span style="color:#f92672">//</span>localhost:<span style="color:#ae81ff">3000</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="核心指令"><strong>核心指令</strong></h4>
+<h5 id="1静态文件服务">1. <strong>静态文件服务</strong></h5>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>example<span style="color:#f92672">.</span>com {
+</span></span><span style="display:flex;"><span>    root <span style="color:#f92672">*</span> <span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>html  <span style="color:#75715e"># 设置网站根目录</span>
+</span></span><span style="display:flex;"><span>    file_server           <span style="color:#75715e"># 启用文件服务器</span>
+</span></span><span style="display:flex;"><span>    encode gzip zstd      <span style="color:#75715e"># 启用压缩</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="2反向代理">2. <strong>反向代理</strong></h5>
+<p>将请求转发到后端服务（如 Node.js、Python 应用）：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>api.example.com {
+</span></span><span style="display:flex;"><span>    reverse_proxy http://localhost:3000  # 转发到本地 3000 端口
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="3https-配置">3. <strong>HTTPS 配置</strong></h5>
+<p>Caddy 默认自动管理证书，无需额外配置。若需自定义：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>example.com {
+</span></span><span style="display:flex;"><span>    tls me@example.com  # 指定邮箱（可选）
+</span></span><span style="display:flex;"><span>    # 或使用自定义证书
+</span></span><span style="display:flex;"><span>    # tls /path/to/cert.pem /path/to/key.pem
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="4日志与错误处理">4. <strong>日志与错误处理</strong></h5>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>example<span style="color:#f92672">.</span>com {
+</span></span><span style="display:flex;"><span>    log {
+</span></span><span style="display:flex;"><span>        output file <span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>log<span style="color:#f92672">/</span>caddy<span style="color:#f92672">/</span>access<span style="color:#f92672">.</span>log
+</span></span><span style="display:flex;"><span>        format json
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    handle_errors {
+</span></span><span style="display:flex;"><span>        respond <span style="color:#e6db74">&#34;Error: {http.error.status_code}&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="5路径匹配与处理组">5. <strong>路径匹配与处理组</strong></h5>
+<p>针对不同路径应用不同配置：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>example<span style="color:#f92672">.</span>com {
+</span></span><span style="display:flex;"><span>    handle <span style="color:#f92672">/</span>api<span style="color:#f92672">/*</span> {  <span style="color:#75715e"># 匹配 /api/ 开头的路径</span>
+</span></span><span style="display:flex;"><span>        reverse_proxy http:<span style="color:#f92672">//</span>localhost:<span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    handle <span style="color:#f92672">/</span><span style="color:#66d9ef">static</span><span style="color:#f92672">/*</span> {  <span style="color:#75715e"># 静态资源</span>
+</span></span><span style="display:flex;"><span>        root <span style="color:#f92672">*</span> <span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span><span style="color:#66d9ef">static</span>
+</span></span><span style="display:flex;"><span>        file_server
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    handle {  <span style="color:#75715e"># 默认处理</span>
+</span></span><span style="display:flex;"><span>        root <span style="color:#f92672">*</span> <span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>html
+</span></span><span style="display:flex;"><span>        file_server
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="高级功能"><strong>高级功能</strong></h4>
+<h5 id="1请求头与响应头修改">1. <strong>请求头与响应头修改</strong></h5>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>example.com {
+</span></span><span style="display:flex;"><span>    header {
+</span></span><span style="display:flex;"><span>        +Cache-Control &#34;max-age=3600&#34;  # 添加响应头
+</span></span><span style="display:flex;"><span>        -Server                        # 移除 Server 头
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="2缓存控制">2. <strong>缓存控制</strong></h5>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>example.com {
+</span></span><span style="display:flex;"><span>    handle /cache/* {
+</span></span><span style="display:flex;"><span>        cache {
+</span></span><span style="display:flex;"><span>            match path *.jpg *.png *.css *.js
+</span></span><span style="display:flex;"><span>            match header Cache-Control public
+</span></span><span style="display:flex;"><span>            max_size 100MB
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="3基本认证">3. <strong>基本认证</strong></h5>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>example<span style="color:#f92672">.</span>com<span style="color:#f92672">/</span>admin {
+</span></span><span style="display:flex;"><span>    basicauth <span style="color:#f92672">*</span> {
+</span></span><span style="display:flex;"><span>        username hash(password)  <span style="color:#75715e"># 使用 caddy hash-password 生成哈希</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    root <span style="color:#f92672">*</span> <span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>admin
+</span></span><span style="display:flex;"><span>    file_server
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>caddy run --config /etc/caddy/Caddyfile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="常用命令"><strong>常用命令</strong></h4>
+<ul>
+<li>
+<p>启动服务：<code>caddy run</code>（前台运行）或 <code>caddy start</code>（后台运行）</p>
+</li>
+<li>
+<p>重新加载配置：<code>caddy reload</code></p>
+</li>
+<li>
+<p>停止服务：<code>caddy stop</code></p>
+</li>
+</ul>
+<h4 id="参考资源"><strong>参考资源</strong></h4>
+<ul>
+<li>
+<p>官方文档：<a href="https://caddyserver.com/docs/">https://caddyserver.com/docs/</a></p>
+</li>
+<li>
+<p>Caddyfile 语法：<a href="https://caddyserver.com/docs/caddyfile">https://caddyserver.com/docs/caddyfile</a></p>
+</li>
+<li>
+<p>JSON API 参考：<a href="https://caddyserver.com/docs/json/">https://caddyserver.com/docs/json/</a></p>
+</li>
+</ul>
+<h2 id="0824-服务器如何部署多个服务">0824 服务器如何部署多个服务</h2>
+<p>需求：一台服务器上部署多个服务，例如同时部署博客、部署小说服务器服务。</p>
+<p>关键点：设置 nginx 的不同路径，默认入口改成博客的路径，其他服务正常启动。</p>
+<h4 id="1安装环境ubuntu系统">1、安装环境（Ubuntu系统）</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>sudo apt update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo apt install nginx python3 python3-pip
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 启动 nginx
+</span></span><span style="display:flex;"><span>sudo systemctl start nginx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 自启动 nginx
+</span></span><span style="display:flex;"><span>sudo systemctl enable nginx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="2设置不同服务的目录">2、设置不同服务的目录</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/var/www/
+</span></span><span style="display:flex;"><span>├── blog/          # 博客文件目录
+</span></span><span style="display:flex;"><span>│   ├── index.html
+</span></span><span style="display:flex;"><span>│   ├── css/
+</span></span><span style="display:flex;"><span>│   ├── js/
+</span></span><span style="display:flex;"><span>│   └── images/
+</span></span><span style="display:flex;"><span>└── dev/           # 开发项目目录
+</span></span><span style="display:flex;"><span>    ├── project1/
+</span></span><span style="display:flex;"><span>    ├── project2/
+</span></span><span style="display:flex;"><span>    └── ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>/var/www/blog：用于存放博客的 HTML、CSS、JavaScript 等文件。</p>
+</li>
+<li>
+<p>/var/www/dev：用于存放开发项目，每个项目可创建一个独立的子目录。</p>
+</li>
+</ul>
+<h4 id="3配置-nginx-以支持博客">3、配置 Nginx 以支持博客</h4>
+<p>编辑 Nginx 的配置文件，通常位于 /etc/nginx/sites-available/default：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>sudo nano /etc/nginx/sites-available/default
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>将配置文件中的 root 指令修改为博客目录：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>server {
+</span></span><span style="display:flex;"><span>    listen 80 default_server;
+</span></span><span style="display:flex;"><span>    listen [::]:80 default_server;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    root /var/www/blog;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    index index.html index.htm index.nginx-debian.html;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    server_name _;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    location / {
+</span></span><span style="display:flex;"><span>        try_files $uri $uri/ =404;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>保存并退出文件后，检查配置文件是否存在语法错误：</p>
+<p>sudo nginx -t</p>
+<p>若没有错误，重新加载 Nginx 配置：</p>
+<p>sudo systemctl reload nginx</p>
+<h4 id="4上传博客文件">4、上传博客文件</h4>
+<p>你可以使用 scp 命令或者 FTP 工具将本地的博客文件上传到 /var/www/blog 目录。例如，使用 scp 命令：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>scp -r /path/to/local/blog/* user@your_server_ip:/var/www/blog/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="5测试其他服务">5、测试其他服务</h4>
+<p>在 /var/www/dev 目录下创建和开发项目。</p>
+<p>例如，创建一个 Python Flask 测试项目：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>cd /var/www/dev
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mkdir my_flask_project
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd my_flask_project
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python3 -m venv venv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>source venv/bin/activate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pip install flask
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>增加一个测试应用</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> flask <span style="color:#f92672">import</span> Flask
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app <span style="color:#f92672">=</span> Flask(__name__)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#39;/&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">hello_world</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;Hello, World!&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    app<span style="color:#f92672">.</span>run(debug<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行 Flask 应用：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>python app.py
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0694-微服务架构是什么">0694 微服务架构是什么</h2>
+<p>个人理解：</p>
+<h4 id="服务器架构发展历史">服务器架构发展历史</h4>
+<p>早期的互联网应用模式，就是 BS 模式，browser-server 服务器-客户端模式。</p>
+<p>当访问量增加后，单一服务器无法处理复杂事务，就增加了分布式系统，负载均衡、反向代理服务器，用于平衡不同服务器的压力。</p>
+<p>当功能越来越多，传统的服务器模式中，一个服务器上需要运行很多服务（例如 用户登录，用户评论，书籍管理，操作日志等各种服务），那么在一个服务器上运行多个服务，可能代码维护比较复杂，可能测试流程复杂，代码的耦合性等较大——例如更改新的功能，可能需要测试全部的服务等。</p>
+<p>所以此时引入了微服务和微服务架构等。</p>
+<h4 id="微服务">微服务</h4>
+<p>微服务：不同的服务器负责不同单一的功能（可能是外部多个 APIs），如果某个功能改动，不会影响其他功能；某个服务扩容也不会影响其他功能。</p>
+<p>在多个业务微服务模块基础上，还需要支持服务（服务网关 api-gateway, 服务注册中心，服务配置中心）</p>
+<ul>
+<li>
+<p>服务网关：统一处理外部的请求，并把不同类型的服务继续发送到不同的服务上</p>
+</li>
+<li>
+<p>服务注册中心：不同服务之间不清楚对方的功能和变化，所以需要在注册中心去注册服务，这样就能互相调用了 rpc</p>
+</li>
+<li>
+<p>服务配置中心：如果每个服务都有自己的配置，那么不利于后期维护和更新（运维）所以统一一个服务配置项目</p>
+</li>
+</ul>
+<h4 id="优点">优点</h4>
+<p>不同服务位于不同的服务器，方便扩容，方便改动功能，方便测试维护，故障隔离。</p>
+<h4 id="缺点">缺点</h4>
+<p>增加了学习和部署成本。如果小公司，服务不多，还要部署多个微服务，那么维护比较困难。</p>
+<h4 id="在前端中的使用">在前端中的使用</h4>
+<p>理论上前端不复杂时，不需要微服务架构，实际上也用到类似的概念。</p>
+<p>不同模块（用户服务，书籍服务）等维护在不同模块，模块内部只实现某个功能的管理，外部业务组件调用模块的 API，不需要考虑模块的具体细节。这个可以说，是 redux 状态管理的一个扩展。redux 仅仅把一个状态维护在公共部分。微前端微服务就是把状态进一步封装成一个前端服务，例如 users 是状态，那么写一个 UserService 提供了 getUsers, setUsers, clearUsers APIs 外部调用这些 API 即可完成 user 的操作，不需要考虑 users 具体怎样存储的，怎样和服务器交互的等等逻辑。</p>
+<h4 id="参考">参考</h4>
+<p><a href="https://zhuanlan.zhihu.com/p/381847108" title="https://zhuanlan.zhihu.com/p/381847108">https://zhuanlan.zhihu.com/p/381847108</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/345552079" title="https://zhuanlan.zhihu.com/p/345552079">https://zhuanlan.zhihu.com/p/345552079</a></p>
+<p><a href="https://www.zhihu.com/question/600277145" title="https://www.zhihu.com/question/600277145">https://www.zhihu.com/question/600277145</a></p>
+<h2 id="0700-s3是什么">0700 S3是什么</h2>
+<p>‌S3，Simple Storage Service 简单存储服务</p>
+<p>对象存储服务协议</p>
+<p>‌S3，全称为‌ Amazon Simple Storage Service，是‌亚马逊推出的一种对象存储服务协议，旨在为开发者提供一种简单、高效、可靠的方式来存储和管理大量的数据对象。S3协议的设计目标是提供一种易于使用的接口，使得用户可以通过互联网轻松地存储、访问和管理数据。它采用了基于对象的存储模型，每个数据对象都被视为一个独立的实体，可以通过唯一的键来识别和访问。</p>
+<p>S3的基本特性包括：</p>
+<ul>
+<li>
+<p>对象存储：S3是一种对象存储服务，用户可以将文件保存到S3存储桶上。</p>
+</li>
+<li>
+<p>文件大小：每个文件的大小可以从0字节到5TB，支持分段上传最大5TB的文件。</p>
+</li>
+<li>
+<p>存储容量：S3存储桶的容量是无限的，没有总文件容量的限制。</p>
+</li>
+<li>
+<p>命名规则：S3存储桶的命名是全球唯一的，不能和任何区域的任何账号内的S3存储桶同名。</p>
+</li>
+</ul>
+<p>S3的URL结构也具有其独特性，通过统一的资源标识符（URI）进行查找和访问。</p>
+<p>这种服务模式特别<strong>适合存储和访问大量的非结构化数据，如视频、图片、文档等，并且能够根据需求快速扩展，满足各种规模的数据存储需求</strong>。‌</p>
+<h2 id="0214-docker-和-k8s-的关系">0214 docker 和 K8S 的关系</h2>
+<p>docker 和 K8S 的关系：docker and kubernetes</p>
+<h4 id="docker">Docker</h4>
+<p>Docker 是轻量级的环境部署工具，相对传统虚拟机，占用资源少，可以提供若干个独立的环境部署不同的服务，架构是 image-container 从镜像创建不同的容器，然后在容器中执行操作，创建服务。不同容器共用底层硬件资源，数据层不互相影响。</p>
+<p>image: 镜像（类）</p>
+<p>container: 容器（类的实例）</p>
+<p>docker 只适用于单机部署环境，对于集群部署服务，文件管理等需要下面的 k8s.</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1673947884286.jpeg" alt=""></p>
+<img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1673947892816.jpeg" alt="undefined" title="undefined" width="642" height="437" />
+<h4 id="k8s">k8s</h4>
+<p>k8s 是一个集群环境-cluster，包括一个 Master 主节点和很多 Node 工作节点。</p>
+<p>Master 主节点：负责调度管理不同的 Node 节点，提供了对外的接口 API，对内的控制器 Controller，Node 节点之间的调度，以及 etcd 存储系统。</p>
+<p>Node 工作节点：每一个工作节点，运行了 Docker 创建容器的工具，创建了多个 POD 进程（独立的服务）还有其他的支持模块，例如 proxy 代理，日志模块，搜索模块等。</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1673946428894.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1673946438393.jpg" alt=""></p>
+<p>参考链接</p>
+<p><a href="https://juejin.cn/post/6952331691524358174">https://juejin.cn/post/6952331691524358174</a></p>
+<p><a href="https://juejin.cn/post/6844903943051411469">https://juejin.cn/post/6844903943051411469</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/53260098">https://zhuanlan.zhihu.com/p/53260098</a></p>
+<h2 id="0877-如何实现后端搜索">0877 如何实现后端搜索</h2>
+<h4 id="1数据库加索引">1、数据库加索引</h4>
+<h4 id="2algolia">2、Algolia</h4>
+<p>小型项目，可以使用 Algolia 进行搜索，很多文档都使用这个搜索引擎</p>
+<p>algolia本质上是个搜索引擎服务接口，把索引提前建好，索引就像目录，提前建好搜索时就能秒出。我们作为用户，在搜索关键词时向algolia提出请求，由它计算并传送结果，送交我们的图书馆显示。algolia提供给个人用户上限1万条索引记录和每月1万次的搜索次数。</p>
+<p>存在的问题：</p>
+<p>1、index.json 这个中文和英文索引，怎么生成？</p>
+<p>2、本地自己的搜索组件中，怎样调用 Algolia 这个索引库？</p>
+<h4 id="3大型项目-elastic-searches">3、大型项目 Elastic search（ES）</h4>
+<p>通常搜索使用 Elasticsearch（ES）这个适用于大型项目</p>
+<h4 id="4hugo">4、Hugo</h4>
+<p><a href="https://github.com/gohugoio/hugo" title="https://github.com/gohugoio/hugo">https://github.com/gohugoio/hugo</a>  Go 语言框架实现的搜索系统，看一下能否应用到目前的项目</p>
+<p><a href="https://zhuanlan.zhihu.com/p/568538285" title="https://zhuanlan.zhihu.com/p/568538285">https://zhuanlan.zhihu.com/p/568538285</a> 这个博客是是基于 hugo 框架实现的个人图书馆 </p>
+<p>Hugo 应该是内置的搜索配置文件</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<h2 id="0273-vnc-连接">0273 VNC 连接</h2>
+<p><a href="https://blog.csdn.net/jks212454/article/details/131453847">https://blog.csdn.net/jks212454/article/details/131453847</a></p>
+<p>VNC (Virtual Network Console)是虚拟网络控制台的缩写。它 是一款优秀的远程控制工具软件，可以实现远程控制计算机的功能。应用于云服务器控制平台，便于远程操作。</p>
+<h2 id="0412-代理服务器和反向代理服务器">0412 代理服务器和反向代理服务器</h2>
+<h4 id="代理服务器-proxy-三个作用">代理服务器 Proxy 三个作用</h4>
+<p>1、缓存：代理服务器是客户端和真实服务器的链接，代理服务器硬盘可以缓存真实服务器中返回的数据，如果请求量较大或者重复请求时，可以加快速度；</p>
+<p>2、防火墙：代理服务器可以过滤一些不安全的请求，起到防火墙的作用；</p>
+<p>3、翻墙：代理服务器可以翻墙访问其他不能直接访问的服务器的资源。</p>
+<h4 id="反向代理-reverse-proxy">反向代理 reverse proxy</h4>
+<p>反向代理部署在服务器端。当用户请求很多时，单一服务器无法满足用户的大量的请求，所以设置一个反向代理服务器，处理负载均衡。当我们访问 baidu.com 时，发送请求到 nginx 反向代理服务器，然后反向代理服务器再把请求转到真实的服务器（分布式集群）。用户可以获取相同的资源，不需要知道真实的服务器，单个服务器端的压力会减小。</p>
+<p>反向代理服务器需要将用户发到服务器的请求分配到空闲的服务器上，同时真实服务器可以返回自己的服务到反向代理服务器；如果需要增减新的服务器，不会影响到现有的服务，只需要修改负载均衡服务器列表。用户域名解析的服务器 IP 不是真实的服务器 IP，是负载均衡服务器的 IP。</p>
+<h4 id="常用协议和对应端口号">常用协议和对应端口号</h4>
+<p>http 代理，主要用于网站访问，端口号 80，8080</p>
+<p>ssl 代理：加密网站代理，端口号 443；</p>
+<p>ftp 代理，端口号 21，2121；</p>
+<p>POP3 代理，端口号 110；</p>
+<p>telnet 代理，端口号 23；</p>
+<p>socks 全能代理，支持 http/tcp/udp 协议，标准端口是 1080</p>
+<h2 id="0408-nginx-常用配置和含义">0408 nginx 常用配置和含义</h2>
+<p>详细内容见本地实际配置</p>
+<p>下面是简化的 nginx.conf</p>
+<h4 id="log_format-日志模块">log_format 日志模块</h4>
+<p>定义了一个 yuiformat 的变量，包括一系列日志</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>nginx服务器日志相关指令主要有两条
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1 log_format，用来设置日志格式
+</span></span><span style="display:flex;"><span>2 access_log，用来指定日志文件的存放路径、格式和缓存大小
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>参数说明：
+</span></span><span style="display:flex;"><span>$remote_addr 和 $http_x_forwarded_for 用于记录IP地址
+</span></span><span style="display:flex;"><span>$request 用于记录请求URL与HTTP协议
+</span></span><span style="display:flex;"><span>$status 用于记录请求状态，例如成功时状态为200，页面找不到时状态为404
+</span></span><span style="display:flex;"><span>$body_bytes_sent 用于记录发送客户端的文件主体内容大小
+</span></span><span style="display:flex;"><span>$http_referer 用于记录是从哪个页面链接访问过来的；
+</span></span><span style="display:flex;"><span>$http_user_agent 用于记录客户浏览器的相关信息。
+</span></span><span style="display:flex;"><span>$upstream_response_time 请求过程中，upstream 响应时间
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>log_format yuiformat &#39;[$time_iso8601] $http_x_forwarded_for $remote_addr &#34;$request&#34; $status $body_bytes_sent &#34;$http_referer&#34; &#34;$http_user_agent&#34; $upstream_response_time&#39;;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="upstream-上游模块">upstream 上游模块</h4>
+<p>可支持多个上游服务器，实现负载均衡和主备分离</p>
+<p>可以设置多个上游服务器，并设置权重 weight，nginx 把请求依次发送到不同服务器上，减少并发量</p>
+<p>keepalive 指令用于设置长连接的超时时间</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>upstream servers {
+</span></span><span style="display:flex;"><span>  server 127.0.0.1:5000 weight=5;
+</span></span><span style="display:flex;"><span>  server 127.0.0.1:5001 weight=5;
+</span></span><span style="display:flex;"><span>  server 127.0.0.1:5002 weight=1;
+</span></span><span style="display:flex;"><span>  server 127.0.0.1:5003 backup;
+</span></span><span style="display:flex;"><span>  keepalive 20;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="server-服务器模块">server 服务器模块</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>server {
+</span></span><span style="display:flex;"><span>  # 这个 default_server 块是默认的服务器块。当没有其他服务器块能够处理请求时，Nginx 会使用默认的服务器块。
+</span></span><span style="display:flex;"><span>  listen 80 default_server;
+</span></span><span style="display:flex;"><span>  listen [::]:80 default_server;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  # root 指定的是服务器根目录，用于处理 HTTP 请求时，所使用的默认根目录
+</span></span><span style="display:flex;"><span>  # 例如，若root /var/www/html; 则访问 http://example.com/index.html 会定位到 /var/www/html/index.html 文件
+</span></span><span style="display:flex;"><span>  root /var/www/html;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  index index.html index.htm index.nginx-debian.html
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  # server_name 用于设置虚拟主机服务名称
+</span></span><span style="display:flex;"><span>  server_name _;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  # 访问根目录 /
+</span></span><span style="display:flex;"><span>  location / {
+</span></span><span style="display:flex;"><span>    proxy_pass http://127.0.0.1:8000;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    # proxy_set_header 设置代理服务器，向后端服务器转发请求时的头部信息。
+</span></span><span style="display:flex;"><span>    # 这个指令允许你定制代理请求头，比如修改用户代理（User-Agent）、主机名、内容类型等
+</span></span><span style="display:flex;"><span>    # 以便更好地控制流量或隐藏客户端信息。
+</span></span><span style="display:flex;"><span>    # Host $host; 设置请求的目标主机为原始请求的主机；
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    proxy_set_header HOST $host;
+</span></span><span style="display:flex;"><span>    proxy_set_header   X-Real-IP $remote_addr;
+</span></span><span style="display:flex;"><span>    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+</span></span><span style="display:flex;"><span>    proxy_set_header   X-Forwarded-Host $server_name;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    # X-Forwarded-For: 传递客户端代理的 IP 链接，对于多个代理层会有多个 IP。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    # proxy_read_timeout 通常在代理服务器中使用，它设置了从上游服务器接收数据的最大等待时间。
+</span></span><span style="display:flex;"><span>    # 如果超过这个时间限制但没有接收到预期的数据，代理服务器会认为连接超时，然后可能会关闭连接，以秒为单位
+</span></span><span style="display:flex;"><span>    # 用于控制网络请求的响应时间，防止因长时间等待导致的性能问题或资源浪费。
+</span></span><span style="display:flex;"><span>    proxy_read_timeout 600s;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    # client_max_body_size 是一个配置选项，通常用于Web服务器中，允许客户端通过HTTP请求发送的最大数据体（body）大小。这个设置对于限制潜在的恶意攻击或防止服务器资源被大文件上传消耗过多。
+</span></span><span style="display:flex;"><span>    # 如果设置了较高的值，可能会增加服务器处理大文件的能力，但同时也增加了被DDoS攻击的风险。
+</span></span><span style="display:flex;"><span>    # 如果设置过低，可能会导致一些大文件无法正常上传，例如文件上传功能的网站。
+</span></span><span style="display:flex;"><span>    # 在实际部署中，你需要根据应用的需求和服务器性能来合理配置这个值。
+</span></span><span style="display:flex;"><span>    client_max_body_size: 0;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    # add_header 用于在 HTTP响应头 中添加自定义的元数据，这对于控制HTTP缓存、设置安全策略、提供特定信息给客户端或代理服务器等场景非常有用。
+</span></span><span style="display:flex;"><span>    # 使用add_header，你可以动态地插入如 Cache-Control、Content-Security-Policy、X-Frame-Options等头信息。
+</span></span><span style="display:flex;"><span>    add_header Access-Control-Allow-Origin * always;
+</span></span><span style="display:flex;"><span>    add_header Access-Control-Allow-Methods GET,POST,PUT,DELETE,OPTIONS;
+</span></span><span style="display:flex;"><span>    add_header Access-Control-Allow-Headers &#34;deviceType,token, authorization, content-type&#34;;
+</span></span><span style="display:flex;"><span>    if ($request_method = &#39;OPTIONS&#39;) {
+</span></span><span style="display:flex;"><span>        add_header Access-Control-Allow-Origin *;
+</span></span><span style="display:flex;"><span>        add_header Access-Control-Allow-Methods GET,POST,PUT,DELETE,OPTIONS;
+</span></span><span style="display:flex;"><span>        add_header Access-Control-Allow-Headers &#34;deviceType,token, authorization, content-type,Content-Range,Content-Disposition&#34;;
+</span></span><span style="display:flex;"><span>        return 204;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    # 日志位置
+</span></span><span style="display:flex;"><span>    access_log /data/logs/yui.access.log yuiformat;
+</span></span><span style="display:flex;"><span>    error_log /data/logs/yui.error.log;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  # alias 别名，nginx会将 location 后面的 xxx 替换为 alias 指令指定的路径 xxx
+</span></span><span style="display:flex;"><span>  location /media/assets/scripts {
+</span></span><span style="display:flex;"><span>    alias /data/dev/static/scripts;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  location /media {
+</span></span><span style="display:flex;"><span>    alias /data/dev/statis/media;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h2 id="0823-使用-socketio-发送消息">0823 使用 socket.io 发送消息</h2>
+<p>需求：使用 socket-io 进行消息发送，或者进行多人编辑协同</p>
+<h4 id="第一步安装依赖">第一步，安装依赖</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;sexample&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;0.0.1&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.js&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;dependencies&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;express&#34;</span>: <span style="color:#e6db74">&#34;^4.18.2&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;socket.io&#34;</span>: <span style="color:#e6db74">&#34;^4.7.1&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;scripts&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;start&#34;</span>: <span style="color:#e6db74">&#34;node index.js&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;Michael An&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;ISC&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="第二步服务器使用-express--socketx20">第二步，服务器使用 express + socket </h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;express&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">http</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;http&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">server</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">createServer</span>(<span style="color:#a6e22e">app</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">Server</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;socket.io&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">io</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Server</span>(<span style="color:#a6e22e">server</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// express 基本支持
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;/&#39;</span>, (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">sendFile</span>(<span style="color:#a6e22e">__dirname</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/index.html&#39;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// socket-io 提供协同
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;connection&#39;</span>, (<span style="color:#a6e22e">socket</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;in-out message&#39;</span>, (<span style="color:#a6e22e">msg</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">emit</span>(<span style="color:#e6db74">&#39;in-out message&#39;</span>, <span style="color:#a6e22e">msg</span>);
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;chat message&#39;</span>, (<span style="color:#a6e22e">msg</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">emit</span>(<span style="color:#e6db74">&#39;chat message&#39;</span>, <span style="color:#a6e22e">msg</span>);
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;disconnect&#39;</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">emit</span>(<span style="color:#e6db74">&#39;in-out message&#39;</span>, <span style="color:#e6db74">&#39;某个人退出了聊天室&#39;</span>);
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 开启服务器
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">server</span>.<span style="color:#a6e22e">listen</span>(<span style="color:#ae81ff">3050</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;listening on *:3050&#39;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="第三步客户端显示基本-ui">第三步，客户端显示基本 UI</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">title</span>&gt;Socket.IO chat&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">style</span>&gt;
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">body</span> { <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">padding-bottom</span>: <span style="color:#ae81ff">3</span><span style="color:#66d9ef">rem</span>; <span style="color:#66d9ef">font-family</span>: <span style="color:#f92672">-</span>apple-system, BlinkMacSystemFont, <span style="color:#e6db74">&#34;Segoe UI&#34;</span>, Roboto, Helvetica, Arial, <span style="color:#66d9ef">sans-serif</span>; }
+</span></span><span style="display:flex;"><span>      #form { <span style="color:#66d9ef">background</span>: rgba(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.15</span>); <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0.25</span><span style="color:#66d9ef">rem</span>; <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">fixed</span>; <span style="color:#66d9ef">bottom</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">left</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">right</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>; <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">3</span><span style="color:#66d9ef">rem</span>; <span style="color:#66d9ef">box-sizing</span>: <span style="color:#66d9ef">border-box</span>; backdrop-filter: blur(<span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span>); }
+</span></span><span style="display:flex;"><span>      #input { <span style="color:#66d9ef">border</span>: <span style="color:#66d9ef">none</span>; <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>; <span style="color:#66d9ef">flex-grow</span>: <span style="color:#ae81ff">1</span>; <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">rem</span>; <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0.25</span><span style="color:#66d9ef">rem</span>; }
+</span></span><span style="display:flex;"><span>      #input:<span style="color:#a6e22e">focus</span> { <span style="color:#66d9ef">outline</span>: <span style="color:#66d9ef">none</span>; }
+</span></span><span style="display:flex;"><span>      #form <span style="color:#f92672">&gt;</span> <span style="color:#f92672">button</span> { <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#333</span>; <span style="color:#66d9ef">border</span>: <span style="color:#66d9ef">none</span>; <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>; <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0.25</span><span style="color:#66d9ef">rem</span>; <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">3</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">outline</span>: <span style="color:#66d9ef">none</span>; <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#fff</span>; }
+</span></span><span style="display:flex;"><span>      #messages { <span style="color:#66d9ef">list-style-type</span>: <span style="color:#66d9ef">none</span>; <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span>; <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0</span>; }
+</span></span><span style="display:flex;"><span>      #messages <span style="color:#f92672">&gt;</span> <span style="color:#f92672">li</span> { <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0.5</span><span style="color:#66d9ef">rem</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>; }
+</span></span><span style="display:flex;"><span>      #messages <span style="color:#f92672">&gt;</span> <span style="color:#f92672">li</span>:<span style="color:#a6e22e">nth-child</span><span style="color:#f92672">(</span><span style="color:#f92672">odd</span><span style="color:#f92672">)</span> { <span style="color:#66d9ef">background</span>: <span style="color:#ae81ff">#efefef</span>; }
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">style</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">ul</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;messages&#34;</span>&gt;&lt;/<span style="color:#f92672">ul</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form&#34;</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;input&#34;</span> <span style="color:#a6e22e">autocomplete</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;off&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">button</span>&gt;Send&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">form</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/socket.io/socket.io.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">&lt;!-- &lt;script src=&#34;https://cdn.socket.io/4.5.4/socket.io.min.js&#34;&gt;&lt;/script&gt; --&gt;</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="第四步前端显示-socket-io-通信信息">第四步，前端显示 socket-io 通信信息</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">socket</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">io</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">form</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;form&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">input</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;input&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 打开页面时，直接让用户输入自己的姓名（实际上应该需要后端登录验证，这里为了简单处理）
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">username</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">prompt</span>(<span style="color:#e6db74">&#34;请输入您的姓名:&#34;</span>);
+</span></span><span style="display:flex;"><span>window.<span style="color:#a6e22e">currentUserName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">username</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 向全局广播进入的消息
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">emit</span>(<span style="color:#e6db74">&#39;in-out message&#39;</span>, <span style="color:#a6e22e">username</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; 进入了聊天室&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 点击按钮，提交消息
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">form</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;submit&#39;</span>, <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">e</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 阻止表单默认提交
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">preventDefault</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">input</span>.<span style="color:#a6e22e">value</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 发送给全部用户
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">emit</span>(<span style="color:#e6db74">&#39;chat message&#39;</span>, <span style="color:#a6e22e">input</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; by &#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">username</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">input</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 监听消息，并把消息显示到页面
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;chat message&#39;</span>, <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">msg</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">item</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;li&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">item</span>.<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">msg</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">messages</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">item</span>);
+</span></span><span style="display:flex;"><span>  window.<span style="color:#a6e22e">scrollTo</span>(<span style="color:#ae81ff">0</span>, document.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">scrollHeight</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 监听到进出的消息
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;in-out message&#39;</span>, <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">msg</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">item</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;li&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">item</span>.<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">msg</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">messages</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">item</span>);
+</span></span><span style="display:flex;"><span>  window.<span style="color:#a6e22e">scrollTo</span>(<span style="color:#ae81ff">0</span>, document.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">scrollHeight</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 退出时，向全局广播退出的消息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果直接关闭浏览器或者操作系统，获取不到用户用户的退出信息
+</span></span></span><span style="display:flex;"><span>window.<span style="color:#a6e22e">onbeforeunload</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">socket</span>.<span style="color:#a6e22e">emit</span>(<span style="color:#e6db74">&#39;in-out&#39;</span>, <span style="color:#a6e22e">username</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; 退出了聊天室&#39;</span>);
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="实现效果">实现效果</h4>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/2025-04/image-1743581974521.jpg" alt=""></p>
+<img src="https://cloud.seatable.cn/workspace/32/asset/e82c7317-556e-45c4-8b5d-092331cd8977/images/2025-04/image-1743581982046.jpg" alt="undefined" title="undefined" width="559" height="378" />
+<h4 id="未来扩展功能">未来扩展功能</h4>
+<p>1、需求：支持显示谁在打字    </p>
+<p>解决：当用户键盘输入时，发送请求给服务器并广播给其他用户    </p>
+<p>​</p>
+<p>2、需求：支持在线的用户列表    </p>
+<p>解决：增加心跳检测，检测用户是否在线（客户端定期向服务器发送消息，如果长时间不发送消息，那么就是用户离线）    </p>
+<p>​</p>
+<p>3、需求：支持私聊信息    </p>
+<p>解决：发送消息时，增加 target ID, 服务器广播后，指定的 ID 接收消息并显示，其他的不显示    </p>
+<p>​</p>
+<p>4、需求：支持多人编辑普通文本    </p>
+<p>解决：普通文本可以按照行号进行分割，字符串转换成一个数组或者对象。    </p>
+<p>腾讯文档：当某人编辑某个段落时，此人锁定这个段落，然后其他人无法编辑这个段落，但是可以编辑其他段落    </p>
+<p>实际项目：某人和其他人可以同时编辑多个段落，最后提交到服务器，然后服务器做 diff 算法，并增加版本号，然后分发给其他客户端。客户端中对比版本号进行更新    </p>
+<p>​</p>
+<p>5、需求：支持多种协同    数据结构划分，把 chat message 分成不同的消息，然后不同的消息按照不同类型处理    </p>
+<p>需求：权限控制等，管理能否把某个用户强制下线操作    需要服务器端进行登录验证，socket 向 python 请求管理员权限，然后把某个连接断开</p>
+<p>​</p>
+<h2 id="0881-bt-panel-是什么">0881 BT-Panel 是什么</h2>
+<p>宝塔面板</p>
+<p><strong>便捷的操作界面</strong>：提供了可视化的 Web 操作界面，相较于传统通过命令行来管理服务器的方式，极大降低了操作门槛，即使是不太熟悉服务器运维命令的新手也能轻松上手，快速进行各种服务器相关配置操作。</p>
+<p><strong>多环境支持</strong>：支持多种常见的服务器环境搭建与管理，比如可以轻松部署 LNMP（Linux、Nginx、MySQL、PHP）以及 LAMP（Linux、Apache、MySQL、PHP）等环境，满足不同类型网站、应用程序的运行需求。</p>
+<p><strong>软件安装管理便捷</strong>：集成了众多常用的服务器软件，像 Web 服务器软件（如 Nginx、Apache）、数据库管理系统（如 MySQL、MariaDB 等）以及各种编程语言的运行环境，能够方便地进行软件的一键安装、更新、卸载等操作。</p>
+<p><strong>站点管理功能强大</strong>：可以方便地进行网站的创建、域名绑定、SSL 证书配置等工作，便于快速搭建和管理多个网站，还能针对每个站点进行个性化的配置，例如设置访问权限、伪静态规则等。</p>
+<p><strong>安全管理功能</strong>：提供了诸如防火墙设置、端口安全管理、恶意访问拦截等安全防护相关功能，帮助服务器管理员增强服务器的安全防护能力，降低被攻击的风险。</p>
+<h2 id="0883-nmap-命令扫描端口">0883 nmap 命令扫描端口</h2>
+<p>nmap + ip 地址</p>
+<p>可以扫描服务器开发的端口号和服务，例如下面的扫描结果</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Nmap scan report for 39.98.59.100
+</span></span><span style="display:flex;"><span>Host is up (0.015s latency).
+</span></span><span style="display:flex;"><span>Not shown: 995 filtered tcp ports (no-response)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT     STATE  SERVICE
+</span></span><span style="display:flex;"><span>80/tcp   open   http
+</span></span><span style="display:flex;"><span>443/tcp  closed https
+</span></span><span style="display:flex;"><span>8888/tcp open   sun-answerbook
+</span></span><span style="display:flex;"><span>9001/tcp open   tor-orport
+</span></span><span style="display:flex;"><span>9002/tcp open   dynamid
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到 80 端口打开 http 网络服务，443 ssl 端口关闭不支持 https 网络服务</p>
+<p>8888 9001 9002 端口都打开，启动不同的服务</p>
+<p>22 ssh 端口没有打开（远程登录服务）</p>
+<p>黑客可以利用这个工具进行扫描，通过端口开放进行破解等（例如对数据库端口尝试暴力破解密码）</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

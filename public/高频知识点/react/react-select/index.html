@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>react-select</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="react-select">react-select</h1>
+<p>新版 react 选择器组件</p>
+<p><a href="https://www.npmjs.com/package/react-select" title="https://www.npmjs.com/package/react-select">https://www.npmjs.com/package/react-select</a></p>
+<p><a href="https://github.com/JedWatson/react-select/tree/master" title="https://github.com/JedWatson/react-select/tree/master">https://github.com/JedWatson/react-select/tree/master</a></p>
+<p>支持不同类型的选择器组件</p>
+<h4 id="使用案例">使用案例</h4>
+<p>类组件</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react-select&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">options</span> <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>  { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;chocolate&#39;</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Chocolate&#39;</span> },
+</span></span><span style="display:flex;"><span>  { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;strawberry&#39;</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Strawberry&#39;</span> },
+</span></span><span style="display:flex;"><span>  { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;vanilla&#39;</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Vanilla&#39;</span> },
+</span></span><span style="display:flex;"><span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">App</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">Component</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">state</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">selectedOption</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">handleChange</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">selectedOption</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setState</span>({ <span style="color:#a6e22e">selectedOption</span> }, () =&gt;
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`Option selected:`</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">state</span>.<span style="color:#a6e22e">selectedOption</span>)
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">render</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">selectedOption</span> } <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">state</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">Select</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">selectedOption</span>}
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">onChange</span><span style="color:#f92672">=</span>{<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">handleChange</span>}
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">options</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">options</span>}
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>函数组件</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react-select&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">options</span> <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>  { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;chocolate&#39;</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Chocolate&#39;</span> },
+</span></span><span style="display:flex;"><span>  { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;strawberry&#39;</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Strawberry&#39;</span> },
+</span></span><span style="display:flex;"><span>  { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;vanilla&#39;</span>, <span style="color:#a6e22e">label</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Vanilla&#39;</span> },
+</span></span><span style="display:flex;"><span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">App</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">selectedOption</span>, <span style="color:#a6e22e">setSelectedOption</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span> <span style="color:#a6e22e">className</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;App&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">Select</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">defaultValue</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">selectedOption</span>}
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">onChange</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">setSelectedOption</span>}
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">options</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">options</span>}
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/div&gt;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="自定义组件">自定义组件</h4>
+<p>很多场景下，我们需要改变内部组件的样式（例如产品需要去掉某个图标，改变颜色等）</p>
+<p>可以参考这里 <a href="https://react-select.com/styles#inner-components" title="https://react-select.com/styles#inner-components">https://react-select.com/styles#inner-components</a> 调整内部组件的样式</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>clearIndicator
+</span></span><span style="display:flex;"><span>container
+</span></span><span style="display:flex;"><span>control
+</span></span><span style="display:flex;"><span>dropdownIndicator
+</span></span><span style="display:flex;"><span>group
+</span></span><span style="display:flex;"><span>groupHeading
+</span></span><span style="display:flex;"><span>indicatorsContainer
+</span></span><span style="display:flex;"><span>indicatorSeparator
+</span></span><span style="display:flex;"><span>input
+</span></span><span style="display:flex;"><span>loadingIndicator
+</span></span><span style="display:flex;"><span>loadingMessage
+</span></span><span style="display:flex;"><span>menu
+</span></span><span style="display:flex;"><span>menuList
+</span></span><span style="display:flex;"><span>menuPortal
+</span></span><span style="display:flex;"><span>multiValue
+</span></span><span style="display:flex;"><span>multiValueLabel
+</span></span><span style="display:flex;"><span>multiValueRemove
+</span></span><span style="display:flex;"><span>noOptionsMessage
+</span></span><span style="display:flex;"><span>option
+</span></span><span style="display:flex;"><span>placeholder
+</span></span><span style="display:flex;"><span>singleValue
+</span></span><span style="display:flex;"><span>valueContainer
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>实际案例</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">UserSelectStyle</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">option</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">provided</span>, <span style="color:#a6e22e">state</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">isDisabled</span>, <span style="color:#a6e22e">isFocused</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">state</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ({
+</span></span><span style="display:flex;"><span>      ...<span style="color:#a6e22e">provided</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">cursor</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">isDisabled</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#39;default&#39;</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;pointer&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">backgroundColor</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">isFocused</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#39;#f5f5f5&#39;</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;#fff&#39;</span>,
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">control</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">provided</span>) =&gt; ({
+</span></span><span style="display:flex;"><span>    ...<span style="color:#a6e22e">provided</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fontSize</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;14px&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cursor</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;pointer&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lineHeight</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;1.5&#39;</span>,
+</span></span><span style="display:flex;"><span>  }),
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">indicatorSeparator</span><span style="color:#f92672">:</span> () =&gt; ({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">display</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;none&#39;</span>,
+</span></span><span style="display:flex;"><span>  }),
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">dropdownIndicator</span><span style="color:#f92672">:</span> () =&gt; ({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">display</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;none&#39;</span>,
+</span></span><span style="display:flex;"><span>  }),
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">clearIndicator</span><span style="color:#f92672">:</span> () =&gt; ({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">display</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;none&#39;</span>,
+</span></span><span style="display:flex;"><span>  }),
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// multi select style
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">multiValue</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">provided</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      ...<span style="color:#a6e22e">provided</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">display</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;inline-flex&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">alignItems</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;center&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">background</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;#eaeaea&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">borderRadius</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;10px&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">margin</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;0 10px 0 0&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">padding</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;0 0 0 2px&#39;</span>,
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">multiValueLabel</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">provided</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      ...<span style="color:#a6e22e">provided</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">padding</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;0px&#39;</span>,
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">multiValueRemove</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">provided</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      ...<span style="color:#a6e22e">provided</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;#666&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;:hover&#39;</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">backgroundColor</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;transparent&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;#555555&#39;</span>,
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// single select style
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">singleValue</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">provided</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      ...<span style="color:#a6e22e">provided</span>,
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后传入 select 组件</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">ReactSelect</span> <span style="color:#a6e22e">styles</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">UserSelectStyle</span>}<span style="color:#f92672">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果上述某些不支持，可以从css中改变</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">true__value-container</span> .<span style="color:#a6e22e">true__multi-value__label</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">padding</span>: <span style="color:#ae81ff">0</span><span style="color:#66d9ef">px</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">true__value-container</span> .<span style="color:#a6e22e">select-module-name</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">13</span><span style="color:#66d9ef">px</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">overflow</span>: <span style="color:#66d9ef">hidden</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">text-overflow</span>: <span style="color:#66d9ef">ellipsis</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">white-space</span>: <span style="color:#66d9ef">nowrap</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">flex</span>: <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">line-height</span>: <span style="color:#ae81ff">20</span><span style="color:#66d9ef">px</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">margin-left</span>: <span style="color:#ae81ff">5</span><span style="color:#66d9ef">px</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">true__control</span>.<span style="color:#a6e22e">true__control--is-focused</span><span style="color:#f92672">,</span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">true__control</span>.<span style="color:#a6e22e">true__control--is-focused</span>:<span style="color:#a6e22e">hover</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">background-color</span>: <span style="color:#ae81ff">#ffffff</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">border-color</span>: <span style="color:#ae81ff">#1991eb</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">outline</span>: <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">box-shadow</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2</span><span style="color:#66d9ef">px</span> rgba(<span style="color:#ae81ff">70</span>, <span style="color:#ae81ff">127</span>, <span style="color:#ae81ff">207</span>, <span style="color:#ae81ff">0.25</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="版本说明">版本说明</h4>
+<p>早期版本是 2.x 曾经整理过一篇教程：<a href="https://blog.csdn.net/weixin_41697143/article/details/129011586" title="https://blog.csdn.net/weixin_41697143/article/details/129011586">https://blog.csdn.net/weixin_41697143/article/details/129011586</a></p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

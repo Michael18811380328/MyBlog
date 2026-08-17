@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">经济类学习笔记</p>
+      <h1>基金入门</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="读书笔记">读书笔记</h1>
+<p>入门的基金介绍纪录片，有大量的真实用户案例+大型基金公司介绍等。</p>
+<p>优点：通俗易懂，适合0基础小白，不适合多年玩家。</p>
+<p>缺点：纪录片几乎不讲国内基金投资失败的案例（2021年2月份左右，基金大跌），轻轻一提的都是国外，感觉这个纪录片是由基金公司赞助做的。</p>
+<p>主要介绍了基金诞生的背景和发展的历程，通过展示个人投资者的体验和疑惑，进一步阐释基金的概念，基金的专业性以及基金的制度保障，尝试解答人们对基金最基础的疑问。</p>
+<h4 id="01-基金的起源发展及其运作模式">01 基金的起源、发展及其运作模式</h4>
+<p>基金的起源、发展及其运作模式。</p>
+<p>基金发展历史：1822年荷兰出现的基金雏形，1924年美国诞生的第一支共同基金，1998年中国基金的正式引入。</p>
+<p>基金作为专业理财工具，帮助普通投资者参与股票市场，分享经济成长带来的收益。基金专业性帮助大众避免部分风险，但仍需克服对风险的担忧。</p>
+<p>基金经理：背后强大的团队，科学完善的投研体系的支持。基金经理在复杂多变的市场中，通过专业投资决策，管理着庞大的资产，承担着为投资者创造价值的重任。投资从研究员调研开始，收集信息为基金经理提供专业建议。</p>
+<p>基金投资的复杂性，提醒投资者在选择基金时，不仅要看业绩，还要关注基金经理的投资理念，团队的专业能力。</p>
+<p>托管人：基金行业在成立之初，就设立了托管人制度，保障基金份额持有人的资金安全。</p>
+<p>基金行业还在投资信息披露、销售公司和人员管理等方面，建立了一系列的制度规范。</p>
+<h4 id="02-基金理财的重要性普通家庭中的普及过程">02 基金理财的重要性+普通家庭中的普及过程</h4>
+<p>基金理财的重要性及其在普通家庭中的普及过程</p>
+<p>随着中国个人财富的积累，基金作为一种风险相对较低、收益相对稳定的投资工具，逐渐被更多人接受和选择。</p>
+<p>基金经理们通过专业化的管理，为投资者提供了多元化的投资方案，帮助人们更好地管理自己的财富。风险意识和投资教育的重要性，鼓励人们通过学习和实践，提高自己的理财能力。</p>
+<p>基金作为一种财富管理工具，如何帮助普通人实现财富增值：通过学习基金知识，她成功地利用基金理财解决了新房装修的费用问题。然而，基金投资并非一帆风顺，投资者需要具备理性投资的理念，避免追涨杀跌和羊群效应。同时，基金公司也应提供更好的服务和风险提示，帮助投资者更好地理解市场波动。最终，公募基金为投资者带来了可观的回报，越来越多的人选择通过基金参与国家经济发展，分享红利。</p>
+<p>基金理财观念在家庭间的传承与变化：家庭的经济状况和理财观念，是家庭成员之间沟通的桥梁。缺乏理财知识可能导致未来的经济困境，年轻一代需要学习理财。不同年龄段的人对理财的看法不同，影响了家庭的理财方式。</p>
+<p>案例：谢林英对理财有新规划，计划未来1年3年5年的生活，渴望解决人生大问题。作为普通工薪族，谢林英投资资金有限，难以一次性投资大笔资金。谢林英对财富盈余的渴望，促使他开始憧憬与向往理财，公募基金成为他的选择。</p>
+<p>基金理财，风险与收益并存，需理性投资。</p>
+<h4 id="03-中国养老问题的严峻性养老社保基金的角色">03 中国养老问题的严峻性+养老社保基金的角色</h4>
+<p>随着老龄化的加剧，家庭养老模式逐渐远去，养老问题成为社会关注的焦点。</p>
+<p>中国养老保障制度，经历了从国家财政承担，到国家、企业、个人共同负担的转变。</p>
+<p>基金作为一种新的金融手段，开始参与解决养老问题。</p>
+<p>社保基金通过投资实现保值增值，但面对风险无处不在的资本市场，如何选择合适的管理人成为一大挑战。</p>
+<p>社保基金选择了一批专业的基金公司，来管理这笔关乎老百姓晚年生活的养命钱。</p>
+<p>同时，视频也介绍了世界各国的养老模式，特别是美国的三支柱养老体系，为解决养老问题提供了多层次的解决方案。</p>
+<p>养老投资的重要性和风险，中国首批14支养老目标基金在2018年获批，成为公募基金助力养老金第三支柱的开端。养老投资伴随着风险，投资者需要选择正规的持牌机构，避免追求过高收益。完善相关的制度体系和监管法规也是必要的。</p>
+<p>基金投资成养老新趋势。</p>
+<p>看到父母渐渐老去，让人思考自己的养老问题，意识到财务基础与晚年生活的重要性。</p>
+<p>介绍了中国几千年的养老模式从家庭转向社会，强调了老有所养的愿望。</p>
+<p>通过讲述养老院的生活，展示了不同养老方式的费用和养老保障制度的变化。</p>
+<p>养老投资需谨慎，风险与收益并存。</p>
+<p>美国政府公布养老体系预计入不敷出，个人养老压力增大。发达国家养老金主要由三支柱构成，第三支柱个人养老计划重要性日益凸显。</p>
+<p>养老基金投资面临股市波动、基金经理决策等多重风险，需谨慎选择。</p>
+<h4 id="04-私募基金的特点和优势">04 私募基金的特点和优势</h4>
+<p>主要应对小型创新型企业，因为没有标的物，无法通过标准的贷款进行融资，就可以选择私募股权基金进行融资。</p>
+<p>特点是收益高，风险大。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

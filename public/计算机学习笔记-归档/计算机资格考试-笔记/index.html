@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">计算机学习笔记-归档</p>
+      <h1>计算机资格考试-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#第1部分个人讲解者">第1部分：个人讲解者</a></li>
+        <li><a href="#上午选择题">上午选择题</a></li>
+        <li><a href="#p2---11数值及其转换和数据的表示">P2   1.1数值及其转换和数据的表示</a></li>
+        <li><a href="#下午大题">下午大题</a></li>
+        <li><a href="#数据流图">数据流图</a></li>
+        <li><a href="#uml建模">UML建模</a></li>
+        <li><a href="#第2部分塞希网">第2部分：塞希网</a></li>
+        <li><a href="#介绍">介绍</a></li>
+        <li><a href="#第三部分塞希网">第三部分：塞希网</a></li>
+        <li><a href="#介绍-1">介绍</a></li>
+        <li><a href="#01-操作系统知识点概述">01-操作系统知识点概述</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="计算机资格考试">计算机资格考试</h1>
+<h3 id="第1部分个人讲解者">第1部分：个人讲解者</h3>
+<p>技术不太行</p>
+<h3 id="上午选择题">上午选择题</h3>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/auto-upload/image-1729064104896.jpeg" alt="" title="" width="626" height="357" />
+<h3 id="p2---11数值及其转换和数据的表示">P2   1.1数值及其转换和数据的表示</h3>
+<p>第一章 计算机组成原理</p>
+<p>考点1 进制转换</p>
+<p>考点2 原码反码</p>
+<p>​</p>
+<h3 id="下午大题">下午大题</h3>
+<p>下午 150 分钟，5道大题</p>
+<p>1、数据流图</p>
+<p>2、数据库设计</p>
+<p>3、UML 建模</p>
+<p>4、C 语言(算法)</p>
+<p>5、Java 语言（面向对象）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/56be59c8-1d8a-4d56-95f9-653c154660c6/images/auto-upload/image-1729046834259.png" alt=""></p>
+<p>通常C语言算法比较难，不容易得分。其他题目每一个15分，要求拿到 12分左右。</p>
+<h3 id="数据流图">数据流图</h3>
+<p>这个对应下午第一道大题（数据结构）</p>
+<p>结构化分析-补充数据流</p>
+<p>​</p>
+<p>​</p>
+<p>数据流图题目考点和做题思路：阅读理解</p>
+<p>1、实体（软件外部的人或者设别，用方形表示），数据库（数据最终存放到哪里）</p>
+<p>2、顶层数据流，0层数据流：顶层就是概括，0层就是细节图</p>
+<p>3、先看一下四个小题，然后看一下0层数据流和顶层数据流图，大概理解内容</p>
+<p>4、然后看题干给的细节信息，补充对应的实体或者数据库模块（前两个小题）</p>
+<p>5、后两个小题：找到缺失的数据流或者错误的数据流，这个需要一个一个看细节。</p>
+<h3 id="uml建模">UML建模</h3>
+<p>UML 建模，就是面向对象设计的建模，实际上有多个类型的图，主要是：用例图+类图</p>
+<p>元素包括：事物（类）、关系（接口）、图</p>
+<p>把握主要点</p>
+<h3 id="第2部分塞希网">第2部分：塞希网</h3>
+<p>2021年课程</p>
+<h3 id="介绍">介绍</h3>
+<p>2021年 <a href="https://www.bilibili.com/video/BV13U4y1E7oA" title="https://www.bilibili.com/video/BV13U4y1E7oA">https://www.bilibili.com/video/BV13U4y1E7oA</a></p>
+<p>下面的目录对应2021年的视频，比较长，比较旧</p>
+<p><a href="https://www.bilibili.com/video/BV1Kv421i7TS/" title="https://www.bilibili.com/video/BV1Kv421i7TS/">https://www.bilibili.com/video/BV1Kv421i7TS/</a></p>
+<p>​</p>
+<h3 id="第三部分塞希网">第三部分：塞希网</h3>
+<p>2024年课程</p>
+<h3 id="介绍-1">介绍</h3>
+<p>2024年 <a href="https://www.bilibili.com/video/BV1Kv421i7TS/" title="https://www.bilibili.com/video/BV1Kv421i7TS/">https://www.bilibili.com/video/BV1Kv421i7TS/</a></p>
+<p>2024年的视频系列比较短</p>
+<p>未来可以整理到高频知识点中</p>
+<p>​</p>
+<h3 id="01-操作系统知识点概述">01-操作系统知识点概述</h3>
+<p>操作系统：</p>
+<p>1、操作系统概述</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>操作系统的功能
+</span></span><span style="display:flex;"><span>特殊的操作系统
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2、进程管理</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>进程和线程的概念
+</span></span><span style="display:flex;"><span>进程的状态
+</span></span><span style="display:flex;"><span>信号量和PV操作
+</span></span><span style="display:flex;"><span>死锁问题
+</span></span><span style="display:flex;"><span>进程资源图
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3、存储管理</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>段页式存储
+</span></span><span style="display:flex;"><span>磁盘管理
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>4、设备管理</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>单双缓存区的计算问题
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>5、文件管理</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>文件相关概念
+</span></span><span style="display:flex;"><span>树形目录结构
+</span></span><span style="display:flex;"><span>索引文件结构
+</span></span><span style="display:flex;"><span>位示图
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

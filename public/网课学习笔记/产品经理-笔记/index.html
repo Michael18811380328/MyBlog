@@ -1,0 +1,1279 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">网课学习笔记</p>
+      <h1>产品经理-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#课程介绍">课程介绍</a></li>
+        <li><a href="#11-基础课程介绍">1.1 基础课程介绍</a></li>
+        <li><a href="#12-认识产品经理章节介绍">1.2 认识产品经理章节介绍</a></li>
+        <li><a href="#13-合格的产品经理">1.3 合格的产品经理</a></li>
+        <li><a href="#14-产品经理的分类">1.4 产品经理的分类</a></li>
+        <li><a href="#15-产品经理的岗位职责">1.5 产品经理的岗位职责</a></li>
+        <li><a href="#16-产品经理能力素质">1.6 产品经理能力素质</a></li>
+        <li><a href="#17-产品经理职业发展现状">1.7 产品经理职业发展现状</a></li>
+        <li><a href="#18-未来发展趋势-c端b端发展">1.8 未来发展趋势-C端B端发展</a></li>
+        <li><a href="#19-未来发展趋势-数字经济">1.9 未来发展趋势-数字经济</a></li>
+        <li><a href="#110-产品课程介绍-专业技术学习">1.10 产品课程介绍-专业技术学习</a></li>
+        <li><a href="#111-产品课程介绍-能力素质培养">1.11 产品课程介绍-能力素质培养</a></li>
+        <li><a href="#112-认识产品经理章节总结">1.12 认识产品经理章节总结</a></li>
+        <li><a href="#21-问题思考维度章节介绍">2.1 问题思考维度章节介绍</a></li>
+        <li><a href="#22-为什么要抓住核心用户">2.2 为什么要抓住核心用户</a></li>
+        <li><a href="#23-核心用户的特征">2.3 核心用户的特征</a></li>
+        <li><a href="#24-如何抓住核心用户">2.4 如何抓住核心用户</a></li>
+        <li><a href="#25-场景化分析">2.5 场景化分析</a></li>
+        <li><a href="#26-需求收集与辨别">2.6 需求收集与辨别</a></li>
+        <li><a href="#27-用户故事">2.7 用户故事</a></li>
+        <li><a href="#28-问题思考维度章节总结">2.8 问题思考维度章节总结</a></li>
+        <li><a href="#31-产品解决方案章节介绍">3.1 产品解决方案章节介绍</a></li>
+        <li><a href="#32-需求分析">3.2 需求分析</a></li>
+        <li><a href="#33-功能优先级划分">3.3 功能优先级划分</a></li>
+        <li><a href="#34-功能价值">3.4 功能价值</a></li>
+        <li><a href="#35-用户体验定义和影响要素">3.5 用户体验定义和影响要素</a></li>
+        <li><a href="#36-用户体验类别和层次">3.6 用户体验类别和层次</a></li>
+        <li><a href="#37-用户体验的设计目标">3.7 用户体验的设计目标</a></li>
+        <li><a href="#38-产品解决方案章节总结">3.8 产品解决方案章节总结</a></li>
+        <li><a href="#41-项目立项介绍">4.1 项目立项介绍</a></li>
+        <li><a href="#42-项目方案">4.2 项目方案</a></li>
+        <li><a href="#43-可行性分析">4.3 可行性分析</a></li>
+        <li><a href="#44-产品规划">4.4 产品规划</a></li>
+        <li><a href="#45-立项评审">4.5 立项评审</a></li>
+        <li><a href="#46-项目立项总结">4.6 项目立项总结</a></li>
+        <li><a href="#51-思维导图章节介绍">5.1 思维导图章节介绍</a></li>
+        <li><a href="#52-思维导图的作用和应用场景">5.2 思维导图的作用和应用场景</a></li>
+        <li><a href="#53-xmind的功能结构和主题元素">5.3 Xmind的功能结构和主题元素</a></li>
+        <li><a href="#54-xmind操作入门">5.4 Xmind操作入门</a></li>
+        <li><a href="#55-思维导图章节总结">5.5 思维导图章节总结</a></li>
+        <li><a href="#61-原型设计章节介绍">6.1 原型设计章节介绍</a></li>
+        <li><a href="#62-初识墨刀">6.2 初识墨刀</a></li>
+        <li><a href="#63-原型设计">6.3 原型设计</a></li>
+        <li><a href="#64-原型页面演示">6.4 原型页面演示</a></li>
+        <li><a href="#65-页面交互">6.5 页面交互</a></li>
+        <li><a href="#66-动态组件">6.6 动态组件</a></li>
+        <li><a href="#67-长页面及组件相对固定">6.7 长页面及组件相对固定</a></li>
+        <li><a href="#68-项目演示">6.8 项目演示</a></li>
+        <li><a href="#69-原型设计章节总结">6.9 原型设计章节总结</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="产品经理">产品经理</h1>
+<h3 id="课程介绍">课程介绍</h3>
+<p>课程名称：2023年产品经理入门课程</p>
+<p>课程链接：<a href="https://www.bilibili.com/video/BV1kv4y1W7SQ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224" title="https://www.bilibili.com/video/BV1kv4y1W7SQ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224">https://www.bilibili.com/video/BV1kv4y1W7SQ/?vd_source=2d5bdee7ea59486ed4aa4a9b10020224</a></p>
+<p>出品：黑马产品经理</p>
+<p>​</p>
+<h3 id="11-基础课程介绍">1.1 基础课程介绍</h3>
+<p>产品经理：把想法问题需求，转换成实现方案的人</p>
+<p>本课程分成 6 章</p>
+<p>01-产品经理干什么</p>
+<p>02-如何思考问题</p>
+<p>03-如何解决问题</p>
+<p>04-如何写立项报告书（文档）产品定位（市场分析，竞品分析，优缺点分析）-目标用户-主要功能-产品规划</p>
+<p>05-如何画思维导图（流程图）——主要用户操作流程，功能页面列表</p>
+<p>06-如何做原型设计（磨刀）——不同页面如何进行跳转</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765288091828.jpg" alt=""></p>
+<p>自我回顾的主要内容</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>主要内容：
+</span></span><span style="display:flex;"><span>﻿
+</span></span><span style="display:flex;"><span>1、介绍产品
+</span></span><span style="display:flex;"><span>什么是产品？ 有一定特点，可以解决问题的一个通用的东西
+</span></span><span style="display:flex;"><span>产品有哪些分类？ B端，C端，G端，不同分类不同的特点；实体产品，虚拟产品，移动端等等；不同行业医疗教育等。
+</span></span><span style="display:flex;"><span>产品经理主要职责？研究产品怎么做的人（通常是软件，也有智能化硬件）
+</span></span><span style="display:flex;"><span>产品经理应该会哪些技能？ 分析需求，将用户的需求挖掘出来，转换成文字和图片形式
+</span></span><span style="display:flex;"><span>﻿
+</span></span><span style="display:flex;"><span>2、如何发现问题？
+</span></span><span style="display:flex;"><span>如何思考？
+</span></span><span style="display:flex;"><span>什么是目标用户？给我们创造价值的用户是核心目标用户，核心用户有具体的特征（年龄，性别，学历，场景，行业）
+</span></span><span style="display:flex;"><span>如何抓住目标用户？针对不同用户，选择不同的营销手段（捆绑式，优惠券形式，高端服务，线上服务，股东型）
+</span></span><span style="display:flex;"><span>场景化分析是什么？5W分析，在特定场景中，挖掘用户的需求，提高用户对产品的预期
+</span></span><span style="display:flex;"><span>如何收集需求？望闻问切，观望用户的操作，倾听用户的声音，询问用户细节（问卷、访谈）切身实地感受用户
+</span></span><span style="display:flex;"><span>需求如何分类？根据重要性和紧急性，安排四个象限进行区分
+</span></span><span style="display:flex;"><span>用户故事是什么？把需求转换成一个故事，最终按照这个故事进行验收产品
+</span></span><span style="display:flex;"><span>﻿
+</span></span><span style="display:flex;"><span>3、如何解决问题？
+</span></span><span style="display:flex;"><span>需求分析方法：马斯洛体系5层，人性的弱点7种
+</span></span><span style="display:flex;"><span>评价优先级的方法：Kano 模型评级优先级（调查问卷-分析属性-Kano投图分析）有些功能必不可少（用户登录，手机验证码），有些功能是亮点非必须（例如npm输入密码捂眼睛的可爱交互）有的需求不要用（摇一摇的广告），进行投图，根据曲线选择是否做，重要性和紧急型分析
+</span></span><span style="display:flex;"><span>如何评估功能价值：某个功能的性价比 = 功能带来的收益/制作功能付出的资金成本，这个在用户定制功能很重要。
+</span></span><span style="display:flex;"><span>用户体验：用户从使用前的感官，使用中交互操作，使用后的心情等维度，感受一个产品的体验。
+</span></span><span style="display:flex;"><span>用户体验的目标：有用，易用，友好，容错，吸引力，品牌
+</span></span><span style="display:flex;"><span>﻿
+</span></span><span style="display:flex;"><span>4、如何以书面形式展示？-项目立项
+</span></span><span style="display:flex;"><span>项目方案的内容：产品名称、背景调研、公司情况，项目提出考虑的问题（基本方案）：是什么项目、为什么要做、项目的作用（带来收益）是否是公司主要业务？核心流程是什么？
+</span></span><span style="display:flex;"><span>可行性分析：市场需求，资源供应，功能规模，开发技术，设备选型，环境影响，资金筹措，盈利能力。产品团队主要考虑：市场需求、环境影响（目标市场现有规模，市场未来发展情况、用户描述、竞品分析）、盈利能力。​
+</span></span><span style="display:flex;"><span>产品规划的主要维度：产出 MRD 产品规划书，包括产品定位，目标用户，核心功能，产品结构，版本规划
+</span></span><span style="display:flex;"><span>立项说明书：包括上面的产品概况，可行性分析，产品规划三部分。
+</span></span><span style="display:flex;"><span>评审流程：产品团队开发团队开会，决定细节，产出 立项申请表（产品主管，开发主管签字）​
+</span></span><span style="display:flex;"><span>﻿
+</span></span><span style="display:flex;"><span>5、如何以图片逻辑形式展示？思维导图（逻辑绘图）
+</span></span><span style="display:flex;"><span>思维导图的作用：把复杂想法和结构，以简洁清楚的图形方式展示出来
+</span></span><span style="display:flex;"><span>软件: 本地的 xmind 在线的 processon
+</span></span><span style="display:flex;"><span>使用类型：发散思维，聚合思维，形象描述，压缩内容，结构化思维，逻辑思维
+</span></span><span style="display:flex;"><span>实际应用：单位汇报，个人总结，产品规划，产品架构
+</span></span><span style="display:flex;"><span>Xmind 具体操作：整体逻辑架构，节点-联系-属性，主题链接分享，重在使用
+</span></span><span style="display:flex;"><span>﻿
+</span></span><span style="display:flex;"><span>6、如何以动态效果形式展示？墨刀（原型设计）
+</span></span><span style="display:flex;"><span>墨刀操作：左侧是图层，中间是画布，右侧编辑某个组件的属性
+</span></span><span style="display:flex;"><span>静态原型设计：选择机型-划分页面功能区域-逐步完成（实现静态 HTML），也可以使用 AI，Sketch，Figma 等软件实现
+</span></span><span style="display:flex;"><span>动态交互设计：类似PPT中动作，或者JS中事件触发机制，某个行为会触发页面切换效果。包括页面整体切换，组件内部动态效果切换。
+</span></span><span style="display:flex;"><span>长页面和固定组件的实现：长页面需要设置滚动效果，页头页脚浮动悬浮按钮设置固定定位
+</span></span><span style="display:flex;"><span>项目的演示和导出：导出为不同客户端需要的效果（默认是图片或者动图）
+</span></span><span style="display:flex;"><span>﻿
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h3 id="12-认识产品经理章节介绍">1.2 认识产品经理章节介绍</h3>
+<p>第一章 认识产品经理</p>
+<p>分成下面的小节</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765287226682.jpg" alt="" title="" width="615" height="402" />
+<h3 id="13-合格的产品经理">1.3 合格的产品经理</h3>
+<p>什么是产品：有主要的功能，解决一定问题的东西。可以是有形的电动机，也可以是无形的软件。</p>
+<p>什么是产品经理：把产品的主要功能想清楚，让用户用起来方便，而不是用户骂这个产品不好用（早期12306抢票软件）。</p>
+<p>产品经理需要解决谁（产品的受众），在什么情况下（使用场景），遇到什么事情（具体需求）。</p>
+<p>优秀的产品经理：满足功能，用户体验良好，做出来的产品有价值。</p>
+<h3 id="14-产品经理的分类">1.4 产品经理的分类</h3>
+<p>产品经理有哪些类型，有哪些特点？</p>
+<p>根据产品分类：</p>
+<ul>
+<li>
+<p>网页产品经理</p>
+</li>
+<li>
+<p>移动产品经理</p>
+</li>
+<li>
+<p>电商产品经理</p>
+</li>
+<li>
+<p>数据产品经理——对应不同相关经验</p>
+</li>
+</ul>
+<p>不同公司/不同产品，对应的行业，客户，内容，级别都不一样。</p>
+<p>相对于程序员的通用性，产品经理更专一化，不同行业产品差距很大。</p>
+<p>根据产品对象和行业</p>
+<blockquote>
+<p>toC  淘宝，抖音，小红书（电商，短视频，内容，旅游）</p>
+<p>toB  CRM系统，SaaS 系统，OA 系统</p>
+<p>toG 政府网站，公安系统</p>
+<p>智能硬件产品</p>
+</blockquote>
+<p>根据工作侧重点不用</p>
+<ol>
+<li>
+<p>功能：关注产品功能，解决用户需求，设计页面效果</p>
+</li>
+<li>
+<p>策略：根据用户和软件的生命周期，用户画像，设计推荐策略</p>
+</li>
+<li>
+<p>商业运营：参与商业化运营，营收场景设计，广告变现，对收入利润和 ROI 负责</p>
+</li>
+<li>
+<p>数据分析：大数据平台和数据挖掘，研究数据价值，数据埋点，数据驱动决策</p>
+</li>
+<li>
+<p>用户体验：关注用户心理，UI UX 和视觉效果</p>
+</li>
+</ol>
+<p>级别</p>
+<ol>
+<li>
+<p>产品助理：独立完成圆形设计，需要别人带</p>
+</li>
+<li>
+<p>产品经理：独立完成某一个部分的需求收集+需求分析</p>
+</li>
+<li>
+<p>高级产品经理：负责某一个产品线或者业务线，带团队</p>
+</li>
+<li>
+<p>产品总监：整体公司的产品规划</p>
+</li>
+</ol>
+<h3 id="15-产品经理的岗位职责">1.5 产品经理的岗位职责</h3>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765850646398.jpg" alt=""></p>
+<p>1、产品开发流程</p>
+<blockquote>
+<p>分析问题-可行性研究（技术可行性，经济可行性）-需求报告</p>
+<p>软件设计-概要设计，详细设计</p>
+<p>编码实现-集成测试</p>
+<p>运行维护</p>
+</blockquote>
+<p>2、对应的团队和人员</p>
+<blockquote>
+<p>产品部：产品经理（产品的生命周期，产品是否要做，产品具体怎么做，对应 MDR PDR 等文档） UI、UX</p>
+<p>技术部：前端，后端，运维，测试</p>
+<p>项目部：项目经理（项目的人员和排期）</p>
+</blockquote>
+<p>如果团队规模较小，可能产品经理还需要兼职其他岗位的职能（测试运维，项目经理）</p>
+<p>3、产品开发的误区</p>
+<blockquote>
+<p>画原型的：产品经理不仅仅画原型图，还需要进行可行性分析，需求分析</p>
+<p>管项目的：产品经理不是项目经理，主要负责产品的生命周期</p>
+<p>需求混淆：对于客户运营老板自己的需求，哪些需要做，哪些不需要做，要区分清楚</p>
+<p>职能混淆：产品经理和其他部门是平级的，并不是上下级领导关系。</p>
+</blockquote>
+<p>​</p>
+<h3 id="16-产品经理能力素质">1.6 产品经理能力素质</h3>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765850751889.jpg" alt=""></p>
+<p>专业技术，指的是基本技能（MRD，PRD），这部分是产品经理必须懂得的，具体对应下面的技能和软件（红色是必须的）</p>
+<p>MRD: 需求收集，可行性研究</p>
+<p>PRD:需求分析，原型图设计</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765851264656.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765851270069.jpg" alt=""></p>
+<p>综合素质，指的是和团队成员综合的软实力，有效推动产品落地。</p>
+<p>​</p>
+<h3 id="17-产品经理职业发展现状">1.7 产品经理职业发展现状</h3>
+<p>产品经理主要的市场需求如下：一线城市，行业广泛</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765855526661.jpg" alt="" title="" width="458" height="395" />
+<p>后面具体介绍不同方向的未来发展趋势（行业发展分析）</p>
+<p>这个课程是2022年的，2025年回看这个视频，2025年只要是需求明确，产品在 AI 加持下，可以直接做效果。或者技术在 AI 加持下，也可以做出很好的效果。</p>
+<h3 id="18-未来发展趋势-c端b端发展">1.8 未来发展趋势-C端B端发展</h3>
+<p>未来发展，主要介绍 toB， ToC，toG， 数字经济（物联网）等领域</p>
+<p>C端：新智能终端（一超多强，智能手机+手表手环等可穿戴设备）、轻量化应用（小程序，开发速度快，先天流量大）、短视频直播、电商（传统电商，直播电商，VRAR电商）、自动驾驶、AI</p>
+<p>B端：基础端（人工智能，云计算，大数据，互联网， PaaS），业务端（SAAS）</p>
+<p>G端：企业数字化转型，工业互联网</p>
+<p>作为产品</p>
+<p>​</p>
+<h3 id="19-未来发展趋势-数字经济">1.9 未来发展趋势-数字经济</h3>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765956442637.jpg" alt="" title="" width="545" height="312" />
+<p>toG: 智慧办公，智能安防（无人机），物流，医疗，教育</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765960704494.jpg" alt=""></p>
+<h3 id="110-产品课程介绍-专业技术学习">1.10 产品课程介绍-专业技术学习</h3>
+<p>从不同的项目中，逐步学习基本技能</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765960801311.jpg" alt=""></p>
+<p>给出若干具体项目</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765960806835.jpg" alt=""></p>
+<p>后续是深入的课程（数据分析，企业 SaaS 产品设计等）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2025-12/image-1765960812482.jpg" alt=""></p>
+<h3 id="111-产品课程介绍-能力素质培养">1.11 产品课程介绍-能力素质培养</h3>
+<p>重在实践</p>
+<h3 id="112-认识产品经理章节总结">1.12 认识产品经理章节总结</h3>
+<p>总结第一章内容</p>
+<p>产品：解决某个问题的东西</p>
+<h3 id="21-问题思考维度章节介绍">2.1 问题思考维度章节介绍</h3>
+<p>本章从多个维度分析，问题如何思考？</p>
+<ul>
+<li>
+<p>从用户的维度——抓住核心用户（重点）为什么，是什么，怎么做（对应三个小节）</p>
+</li>
+<li>
+<p>场景化分析——不同场景下的用户行为</p>
+</li>
+<li>
+<p>需求收集和辨别</p>
+</li>
+<li>
+<p>用户故事（可视化）</p>
+</li>
+</ul>
+<h3 id="22-为什么要抓住核心用户">2.2 为什么要抓住核心用户</h3>
+<p>了解用户的付费点，更好的优化产品。</p>
+<p>用户分类：</p>
+<ul>
+<li>
+<p>目标用户（已经使用我们的产品）</p>
+</li>
+<li>
+<p>潜在用户（目前没有使用我们的产品）</p>
+</li>
+<li>
+<p>种子用户（内测用户）愿意尝鲜，愿意给我们产品提出意见，积极反馈</p>
+</li>
+<li>
+<p>核心用户（创造主要的利润来源）</p>
+</li>
+</ul>
+<p>保持市场竞争力：给核心用户提供更好的体验，增量时代已经过去，存量时代为主，同质化严重，供给大于需求</p>
+<p>产品推广更聚焦：资源有限情况下，<strong>优先解决核心用户的核心需求</strong></p>
+<p>一个产品无法满足所有用户的需求，我们设计和宣传时需要做出一定的取舍。</p>
+<p><strong>核心用户创造的价值最大，所以我们需要抓住核心用户的核心需求。​</strong></p>
+<h3 id="23-核心用户的特征">2.3 核心用户的特征</h3>
+<p>核心用户有哪些特征？</p>
+<ul>
+<li>
+<p>供需关系：服务端和消费端（打车软件，司机还是客户）</p>
+</li>
+<li>
+<p>人口统计学：年龄，性别，地区，学历，消费能力（例如母婴用品，对年龄和性别敏感）</p>
+</li>
+<li>
+<p>熟悉程度：一次性用户（婚礼纪），老用户（美团口碑淘宝），专家用户（雪球）</p>
+</li>
+<li>
+<p>业务场景：教育行业</p>
+</li>
+<li>
+<p>用户身份：黄金，白金，钻石用户</p>
+</li>
+<li>
+<p>公司规模：中小公司SaaS，大公司，上市公司，垄断公司</p>
+</li>
+</ul>
+<p>产品需要根据运营的数据，对产品核心用户进行分析</p>
+<blockquote>
+<p>案例：分析中公教育的核心用户</p>
+<p>供需关系：学生+教师</p>
+<p>人口统计学：20岁，1-2线城市，本科以上（性别不限）</p>
+<p>熟悉程度：新用户为主</p>
+<p>业务场景：教培行业</p>
+</blockquote>
+<p>​</p>
+<p>​</p>
+<h3 id="24-如何抓住核心用户">2.4 如何抓住核心用户</h3>
+<p>重点内容</p>
+<p><strong>根据目标对象不同，选择合适的营销手段，抓住核心用户：​</strong></p>
+<p>1、捆绑式：健身房，美容院：实体店铺为主，基于人性贪便宜爱面子，可以采用<strong>会员积分，预充值</strong>，买套餐等，捆绑式核心用户</p>
+<p>2、低价诱导：大型商超：用户流量为主，对价格敏感，可以提升运营效率，<strong>压低成本</strong>，例如沃尔玛，开市客，诱导式核心用户（某些商品价格优惠几分钱，门店开到郊区租金低，仓储门店减少了服务员和仓库支出，然后吸引用户很远出过来）</p>
+<p>3、高端享受：服务类高端公司：用户服务为主，让付费用户享受优质服务，提高付费用户的优越感，超预期的服务，提高用户的粘度（奈非，亚马逊）</p>
+<p>4、网络型：网络价值和用户数量的平方成正比，更容易链式扩散，建立网络关系，用户会自身吸纳更多的用户：建立社群关系，通过社群，粉丝群等，实现口碑传播（腾讯，抖音，小红书，Soul 通讯工具转换成不同的社群）</p>
+<p>5、股东型：用户就是公司的股东，用户享受企业发展的红利，核心用户从股东角度考虑公司发展（小米早期发展，汉堡王）：筛选核心优质用户，打造利益命运共同体，给用户主人翁的地位</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767412515739.jpg" alt=""></p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767412524757.jpg" alt="" title="" width="677" height="383" />
+<h3 id="25-场景化分析">2.5 场景化分析</h3>
+<h4 id="场景五要素">场景五要素</h4>
+<p>5W分析：who where when how what 用户在某个特定的时间和空间里，对应情景下产生的故事就是场景。</p>
+<p>分成现实生活中的场景，互联网中的场景。</p>
+<p>who：不同类型的用户，核心用户，人口特征，熟悉程度，业务场景等维度</p>
+<p>where：国家城市空间的具体位置，产品对应的软件和硬件设备（设备兼容性）</p>
+<p>when 时间：固定时间，周期时间，特定时间</p>
+<p>how 行为：用户的操作流程和操作动作</p>
+<p>what 目的：用户想要什么结果</p>
+<blockquote>
+<p>案例：分析抖音的 5W</p>
+<p>who：创作者，浏览者，上班者，农村人，新手玩家，专业用户，直播用户，打赏金主</p>
+<p>where+when：睡觉前的床上，上下班的公交车，中午吃饭前后，工作期间摸鱼</p>
+<p>how：刷短视频，搜索攻略，抖音商城购物，看直播活动，拍摄短视频</p>
+<p>what：打发时间，搜索新闻，查看攻略，买东西，追星，分享自己的生活</p>
+</blockquote>
+<h4 id="场景化分析方法">场景化分析方法</h4>
+<p>预判用户行为，发现新的需求：</p>
+<p>上下班的公交车上，用户刷视频打发时间，获取新的新闻动态——需求：随时刷，看各种新闻和八卦，网络可能不稳定，需要提前缓存多条视频</p>
+<p>睡前打发时间：点赞优质博主，用户互动更多</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767413340896.jpg" alt=""></p>
+<h4 id="场景化分析方法的应用">场景化分析方法的应用</h4>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767413400585.jpg" alt=""></p>
+<p>提高预期：个性化推荐用户喜欢的下一个视频，根据用户当前操作推断用户下一步操作（当前截屏，下一步分享），超过预期（用户生日礼物，纪念日礼物等）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767413473878.jpg" alt=""></p>
+<p>​</p>
+<h3 id="26-需求收集与辨别">2.6 需求收集与辨别</h3>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767414248676.jpg" alt="" title="" width="633" height="446" />
+<p>1、需求：用户预期和现状的差异，就是用户需求</p>
+<p>2、如何获取需求：望闻问切</p>
+<p>望：观察法</p>
+<p>闻：用户反馈（被动反馈）</p>
+<p>问：用户访谈（主动调研），问卷调查</p>
+<p>切：切身感受（实际多使用产品）</p>
+<p>3、一手需求：用户直接提出来的。二手需求：需求经过别人转述，是加工过的需求。实际上是全员收集需求，产品经理统一统计整理。</p>
+<p>4、什么是我们需要关注的需求？需求真是，需求强烈，需求高频。满足这些的需求才是用户的刚性需求，才是我们应当多关注的需求。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767414582524.jpg" alt=""></p>
+<p>​</p>
+<p>​</p>
+<h3 id="27-用户故事">2.7 用户故事</h3>
+<p>学会使用用户故事撰写需求</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767410340981.jpg" alt=""></p>
+<p>用户故事模板（左侧是产品写的内容，右侧是开发人员开发后，验收的标准）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767410455342.jpg" alt=""></p>
+<p>实际案例：</p>
+<blockquote>
+<p>故事 ID： 00001</p>
+<p>作为：网约车司机</p>
+<p>我想要实现：就近接单，每天接的多</p>
+<p>这样能实现：不用多跑，接单更多，提高整体效率</p>
+</blockquote>
+<p>验收标准：</p>
+<blockquote>
+<p>前提条件：当乘车人距离网约车司机5公里，并且我是距离乘客最近的网约车司机</p>
+<p>触发点：乘车人开始叫车</p>
+<p>期望结果：网约车司机按照记录依次收到信息，然后进行抢单</p>
+</blockquote>
+<p>其他案例：每天（商家+骑手+客户）、贝壳（业主，中介，房客）</p>
+<p>​</p>
+<h3 id="28-问题思考维度章节总结">2.8 问题思考维度章节总结</h3>
+<p>1、核心用户（特征，如何抓住）</p>
+<p>2、场景化分析</p>
+<p>3、需求收集和识别</p>
+<p>4、用户故事</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767410034481.jpg" alt=""></p>
+<h3 id="31-产品解决方案章节介绍">3.1 产品解决方案章节介绍</h3>
+<p>需求分析</p>
+<p>功能优先级划分</p>
+<p>功能价值</p>
+<p>用户体验</p>
+<h3 id="32-需求分析">3.2 需求分析</h3>
+<h4 id="重点内容">重点内容</h4>
+<h4 id="需求分析的目的">需求分析的目的</h4>
+<p>把用户需求（预期，目的，想法，是否是真实的需求，是否符合产品定位和公司业务），转换成产品方案（功能，服务，活动，内容），进一步实现为产品功能（如何实现，有多少种功能，优先级性价比何如）。</p>
+<p>需要分析用户需求背后的目的是什么（需求——价值观——本质），人性的本质更持久</p>
+<p>例如：福特公司造汽车钱，用户的需求是一匹更快的马（本质是更快的速度），汽车公司使用骑车解决了本质的需求</p>
+<h4 id="需求分析的方法">需求分析的方法</h4>
+<p>从马斯洛的需求理论分析，或者从人性的弱点进行分析。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767843750963.jpg" alt=""></p>
+<h4 id="需求分析的实际案例">需求分析的实际案例</h4>
+<p>1、傲慢：显示优越感（vip 特权），显示分享，显示点赞数等</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767843787824.jpg" alt=""></p>
+<p>2、嫉妒：制造焦虑感，制造不良情绪，追赶他人。常用在游戏设计中，通过排名，拉票等形成嫉妒。</p>
+<p>3、愤怒：用户对某些情况很愤怒，需要得到宣泄，所以需要支持拉黑，举报，反馈，不再关注等功能。</p>
+<p>4、懒惰：心理厌倦，想休息。产品需要减少思考，减少理解成本。例如：一键复制填写快递地址，推荐算法。</p>
+<p>5、贪婪：培养用户贪婪心理，利用用户侥幸心理。主要是拼多多，发优惠券，完成任务发放积分，随机抽奖等。</p>
+<p>6、食欲：美食诱惑，吃播，看到其他人吃的好，然后更愿意买东西。</p>
+<p>7、色欲：在线直播</p>
+<p>需要根据产品的主要客户群体，找到对应人性的弱点，设计对应的产品营销策略。</p>
+<p>（例如拼多多，主要群体就是低收入人群，抓住占便宜的心理，然后进行抽奖，优惠券等）</p>
+<p>我们还需要多多体验成熟的竞品，如果自己不确定怎么做，抄作业（可以参考同赛道的竞品，也可以跨越赛道参考其他行业的特点，例如把游戏的奖励机制，放在购物产品的奖励机制中，这样可以增加用户粘度）。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767844492713.jpg" alt=""></p>
+<h3 id="33-功能优先级划分">3.3 功能优先级划分</h3>
+<p><strong>学会根据 Kano 模型，评定任务优先级顺序</strong></p>
+<p>Kano 模型：对用户需求和优先级排序的工具，分析用户的满意度和产品功能的非线性关系。横轴是功能程度，纵轴是用户满意程度。</p>
+<p>操作步骤：</p>
+<p>1、做调查问卷：内容是有了这个功能，没有这个功能，用户是否能接受，12345评分，进行投放</p>
+<p>2、不同属性的评定：必备属性，期望属性，魅力属性，反向属性，无差异属性，可疑结果几种。</p>
+<ul>
+<li>
+<p>必备属性：必须有这个功能，去掉这个功能不能接受。</p>
+</li>
+<li>
+<p>期望属性：非常建议有这个功能</p>
+</li>
+<li>
+<p>魅力属性：很希望有这个属性，去掉这个属性无所谓</p>
+</li>
+<li>
+<p>反向属性：不建议增加这个属性</p>
+</li>
+<li>
+<p>无差别属性：是否增加这个属性，无所谓</p>
+</li>
+<li>
+<p>可疑结果和可疑问卷：前后矛盾等</p>
+</li>
+</ul>
+<p>3、评定功能优先级后，放在 Kano 模型中进行投图：</p>
+<p>需要做：必备属性 &gt; 期望属性 &gt; 魅力属性。</p>
+<p>反向属性（开屏广告），根据各方利益后（使用者，广告商，利益不同），再决定是否调整。</p>
+<p><strong>系数计算</strong>：用 Better-Worse 系数量化影响 ——Better 系数（正向满意度提升）Worse 系数（负向满意度下降），优先处理高 Worse（基本型）和高 Better（兴奋型）需求。</p>
+<p>案例</p>
+<table>
+	<thead>
+			<tr>
+					<th>需求名称</th>
+					<th>正向问题答案</th>
+					<th>反向问题答案</th>
+					<th>需求类型</th>
+					<th>Better 系数</th>
+					<th>Worse 系数</th>
+					<th>优先级</th>
+					<th>行动建议</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>智能手表防水</td>
+					<td>一般</td>
+					<td>很不满意</td>
+					<td>基本型</td>
+					<td>0.2</td>
+					<td>-0.8</td>
+					<td>高</td>
+					<td>必须达标 IP68</td>
+			</tr>
+			<tr>
+					<td>心率监测精度</td>
+					<td>满意</td>
+					<td>不满意</td>
+					<td>期望型</td>
+					<td>0.6</td>
+					<td>-0.5</td>
+					<td>中</td>
+					<td>提升至行业 TOP3</td>
+			</tr>
+			<tr>
+					<td>呼吸训练</td>
+					<td>很满意</td>
+					<td>一般</td>
+					<td>兴奋型</td>
+					<td>0.9</td>
+					<td>-0.1</td>
+					<td>中高</td>
+					<td>优先开发</td>
+			</tr>
+			<tr>
+					<td>冗余通知</td>
+					<td>不满意</td>
+					<td>满意</td>
+					<td>反向型</td>
+					<td>-0.3</td>
+					<td>0.4</td>
+					<td>低</td>
+					<td>移除功能</td>
+			</tr>
+	</tbody>
+</table>
+<p>​</p>
+<h3 id="34-功能价值">3.4 功能价值</h3>
+<p>衡量功能是否有价值？<strong>能够评估功能价值。​</strong></p>
+<p><strong>功能价值 = 功能实际价值 / 功能实现成本</strong></p>
+<h4 id="价值评估">价值评估</h4>
+<p>实际价值：范围价值（用户数 x 单用户价值）+ 频次价值（需求频次 x 每一次的价值） + 时间价值(持续时间 x 单位价值)</p>
+<p>需要看产品收费模式，按照用户个数收费，还是按照API调用次数收费，还是按照服务器按年收费等。</p>
+<blockquote>
+<p>案例：</p>
+<p>范围：从单一工具，扩展到社群，用户数会增加</p>
+<p>频次：从每天看一次天气，扩展到其他信息，打开次数增加</p>
+<p>时间：拍视频，浏览短视频，会增加用户的持续时间</p>
+</blockquote>
+<p>数据统计平台中，会显示增加了新功能，对应的增加用户数量的反馈。我们可以进行数据埋点，或者 API 服务器分析等，获取不同入口的用户数量，根据历史数据预测，上线之后小规模试点等。</p>
+<blockquote>
+<p>备注：如果是C端可以采用这个方式，如果是B端可能无法直接获取新功能的反馈情况。</p>
+</blockquote>
+<h4 id="成本评估">成本评估</h4>
+<p>人力成本</p>
+<p>时间成本</p>
+<p>金钱成本</p>
+<p>风险成本</p>
+<p>成本 = 人 x 天</p>
+<p>估算公式：人均月工资 / 21.5 x 总时间 x 总人数 = 100000</p>
+<h3 id="35-用户体验定义和影响要素">3.5 用户体验定义和影响要素</h3>
+<p>功能开发上线后，不是产品生命周期的结束，还需要关注什么？</p>
+<p>计算机软件不仅需要评价可用性（效率，性能），还需要评价用户体验。</p>
+<p>​</p>
+<p>基于用户体验，优化设计产品：</p>
+<p>1、用户体验的定义和影响因素（3.5）</p>
+<p>2、用户体验的类别和层次（3.6）</p>
+<p>3、用户体验的设计目标（3.7）</p>
+<p>​</p>
+<p><strong>用户体验 UE：用户的主观体验（是否用起来舒服？）​</strong></p>
+<p>1、使用人的状态：精神状态和性格特征（动机，期望，情绪，认知）</p>
+<p>2、系统性能</p>
+<p>3、外部环境（用户场景）</p>
+<p>例如：早上上班地铁中，某人一只手拿着手机，需要隐私，需要关注地铁信息；外边有同路人，外部杂音，网络不稳定等——用户可以选择微信语音，或者发送文字，语音转文字（当前外部环境不适合外放声音）。</p>
+<p>​</p>
+<p>​</p>
+<h3 id="36-用户体验类别和层次">3.6 用户体验类别和层次</h3>
+<p>用户体验的类别：</p>
+<p>1、静态直观感受</p>
+<p>2、动态操作交互</p>
+<p>3、使用后认可度</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767743145471.jpg" alt=""></p>
+<p>用户体验的要素：从表象到内在（页面元素排布——功能合理——用户可以获取到的信息）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767743153251.jpg" alt=""></p>
+<h3 id="37-用户体验的设计目标">3.7 用户体验的设计目标</h3>
+<p>用户体验的设计目标</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767744549939.jpg" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767744556862.jpg" alt=""></p>
+<p>1、有用：产品需要满足实际需求，而不是没有实际用处。</p>
+<p>2、易用：符合用户的使用习惯，例如从上到下滚动预览信息，计算器点击输入。用户可以便捷使用产品（预先填写表单或者收货地址，拍照后进行发送，提供系统预设选项，减少用户的多余操作）</p>
+<p>3、友好：初始化加载骨架屏，显示友好的用户提示 Loading Toaster, 状态可见，微信公众号文本可以转换成语音进行自动播放，搜索时可以联想输入搜索内容。</p>
+<p>4、容错：删除时提供二次确认，支持撤销操作；发送的消息支持撤回重新编辑；文件回收站</p>
+<p>5、吸引力：追求审美的页面，吸引用户来阅读</p>
+<p>6、品牌：构建某个品牌对应的标签</p>
+<p>​</p>
+<h3 id="38-产品解决方案章节总结">3.8 产品解决方案章节总结</h3>
+<p>需求分析</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767743853844.jpg" alt=""></p>
+<h3 id="41-项目立项介绍">4.1 项目立项介绍</h3>
+<p>项目实操：项目方案、可行性分析、产品规划、立项评审</p>
+<h3 id="42-项目方案">4.2 项目方案</h3>
+<h4 id="项目开发流程">项目开发流程</h4>
+<p>立项——设计——开发——测试——上线——运营——总结，然后进入下一个产品</p>
+<h4 id="立项阶段的流程">立项阶段的流程</h4>
+<p>我们主要考虑立项阶段的工作</p>
+<p>项目提出（基本方案）——需求讨论（开会讨论）——可行性分析（可行性报告）——立项启动（立项申请表，需要各个团队签字）</p>
+<h4 id="项目方案的内容">项目方案的内容</h4>
+<p>产品名称、背景调研、公司情况</p>
+<p>项目提出考虑的问题（基本方案）：是什么项目、为什么要做、项目的作用（带来收益）</p>
+<p>维度：是否是公司主要业务？核心流程是什么？前台-中台-后台项目？PC 端移动端项目？好处有哪些（赚到钱，还是获得更多用户，还是提高团队效率？）</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>参考产品方向：
+</span></span><span style="display:flex;"><span>1、电子商务：内容电商（小红书）、美妆电商、汽车电商
+</span></span><span style="display:flex;"><span>2、社交：陌生人（陌陌）、商务社交（脉脉）、婚恋社交（百合网）
+</span></span><span style="display:flex;"><span>3、视频：互动直播、原创视频、游戏直播、综合网剧、短视频
+</span></span><span style="display:flex;"><span>4、社区：行业社区（雪球）、问答社区（知乎）、兴趣类（豆瓣）、旅游社区（携程）
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h3 id="43-可行性分析">4.3 可行性分析</h3>
+<p>输出可行性分析报告</p>
+<p>可行性分析特点：公开性，可靠性，科学性，预见性</p>
+<p>可行性分析的内容：市场需求，资源供应，功能规模，开发技术，设备选型，环境影响，资金筹措，盈利能力。</p>
+<p><strong>产品团队主要考虑：市场需求、环境影响（目标市场现有规模，市场未来发展情况、用户描述、竞品分析）、盈利能力。​</strong></p>
+<h4 id="市场环境">市场环境</h4>
+<p>市场调研+市场分析，就是需求收集过程，需要分析这部分数据；或者查看第三方咨询机构给出的调研报告。</p>
+<ul>
+<li>
+<p>目标市场和现状（现有体量，市场格局）</p>
+</li>
+<li>
+<p>市场趋势（市场发展，市场前景）</p>
+</li>
+<li>
+<p>问题，机会，壁垒</p>
+</li>
+</ul>
+<p>行业报告：艾瑞咨询 <a href="https://www.iresearch.com.cn/" title="https://www.iresearch.com.cn/">https://www.iresearch.com.cn/</a>、199IT <a href="https://www.199it.com/" title="https://www.199it.com/">https://www.199it.com/</a>，易观 <a href="https://www.analysys.cn/" title="https://www.analysys.cn/">https://www.analysys.cn/</a></p>
+<p>资讯媒体：36Kr <a href="https://36kr.com/" title="https://36kr.com/">https://36kr.com/</a>，虎嗅 <a href="https://www.huxiu.com/" title="https://www.huxiu.com/">https://www.huxiu.com/</a></p>
+<p>官方信息：中国互联网信息中心 <a href="https://www.cnnic.net.cn/" title="https://www.cnnic.net.cn/">https://www.cnnic.net.cn/</a></p>
+<h4 id="竞品分析">竞品分析</h4>
+<ul>
+<li>
+<p>竞品战略</p>
+</li>
+<li>
+<p>用户定位</p>
+</li>
+<li>
+<p>产品功能对比</p>
+</li>
+<li>
+<p>优缺点分析</p>
+</li>
+<li>
+<p>竞品分析结论</p>
+</li>
+</ul>
+<h4 id="用户分析">用户分析</h4>
+<ul>
+<li>
+<p>目标用户群体</p>
+</li>
+<li>
+<p>用户画像和用户场景</p>
+</li>
+<li>
+<p>用户需求总结</p>
+</li>
+</ul>
+<p>需要总结一个可行性分析报告模板（借助AI工具）</p>
+<h3 id="44-产品规划">4.4 产品规划</h3>
+<p>产品规划方案：</p>
+<p>1、产品定位：面向目标市场和目标用户，提供什么服务，满足什么需求</p>
+<p>2、目标用户：目标用户的群体特征</p>
+<p>3、核心业务</p>
+<p>4、主要功能</p>
+<p>5、产品结构：不同页面的详细功能和信息，可以树状结构展示（难点）</p>
+<p>6、版本规划：规划不同版本的工作量（难点）</p>
+<p>产出 MRD 产品规划书</p>
+<h3 id="45-立项评审">4.5 立项评审</h3>
+<h4 id="立项说明书">立项说明书</h4>
+<p>1、产品概述：产品定位，目标用户，主要功能</p>
+<p>2、可行性分析：市场，用户，竞品</p>
+<p>3、产品规划：产品架构图，业务流程图，产品结构图，功能清单，迭代计划</p>
+<h4 id="立项评审流程">立项评审流程</h4>
+<p>1、预约会议：参会人员，参会时间，邮件发出会议邀请，附加会议材料</p>
+<p>2、会前准备：准备会议设备，记录人员会议记录，和参会人员核对参加</p>
+<p>3、会议过程：会议主题和目的，把握需求范围，问题探讨范围，记录关键需求</p>
+<p>4、会议结论：将结论同步相关人员和领导，确认后续跟进时间</p>
+<p><strong>结论：立项申请表（产品主管，开发主管签字）​</strong></p>
+<p>​</p>
+<p>​</p>
+<h3 id="46-项目立项总结">4.6 项目立项总结</h3>
+<p>1、掌握项目方案主要内容</p>
+<p>2、了解可行性分析</p>
+<p>3、掌握产品规划主要维度</p>
+<p>4、了解立项说明书和评审流程</p>
+<h3 id="51-思维导图章节介绍">5.1 思维导图章节介绍</h3>
+<p>Xmind 思维导图</p>
+<p>​</p>
+<h3 id="52-思维导图的作用和应用场景">5.2 思维导图的作用和应用场景</h3>
+<p>思维导图：把想法可视化展示的工具（避免大段的文字）。通过关键词，把不同的主题的逻辑关系，隶属关系，层级关系展示出来。通过不同颜色，图片，突出不同的重点。最终绘制出一个重点突出，逻辑鲜明的效果。</p>
+<h4 id="常用软件">常用软件</h4>
+<ul>
+<li>
+<p>本地 APP：Xmind, mindmaster, mindmanager 等</p>
+</li>
+<li>
+<p>在线网页：processOn <a href="https://www.processon.com/diagrams" title="https://www.processon.com/diagrams">https://www.processon.com/diagrams</a>, 其他在线 AI 工具有的也可以生成思维导图</p>
+</li>
+</ul>
+<h4 id="主要作用和特点">主要作用和特点</h4>
+<p>1、发散思维：把一个概念向外发散，寻求发散的解决方案</p>
+<p>2、聚合思维：把多个观点进行归类，概括，总结，提取相同点</p>
+<p>3、形象：将枯燥的文字，使用逻辑图形象的展示出来</p>
+<p>4、压缩：使用关键字，把大量信息压缩</p>
+<p>5、结构化思维：把文本转换成逻辑化，结构化，层次化，进行归类和处理</p>
+<p>6、逻辑思维：对想法进行比较、分析、概括和推理。</p>
+<h4 id="应用场景">应用场景</h4>
+<p>1、演示内容（嵌入到PPT），用于教学，产品演示，个人简介、上级领导报告（周报）</p>
+<p>2、项目管理、制定计划、逻辑思考，个人做笔记，背诵记忆（团队和个人都可以）、创意灵感</p>
+<h3 id="53-xmind的功能结构和主题元素">5.3 Xmind的功能结构和主题元素</h3>
+<h4 id="xmind-基本功能">Xmind 基本功能</h4>
+<ul>
+<li>
+<p>选择脑图主题（配色），结构（逻辑图，鱼骨图，树形图等）</p>
+</li>
+<li>
+<p>编辑节点，切换视图</p>
+</li>
+<li>
+<p>链接外部元素（文档，图片，超链接）</p>
+</li>
+<li>
+<p>导入导出（导出为 xml png 等格式）</p>
+</li>
+<li>
+<p>共享</p>
+</li>
+<li>
+<p>保存</p>
+</li>
+</ul>
+<h4 id="主要结构">主要结构</h4>
+<p>1、思维导图：发散性思考，顺时针增加节点。</p>
+<p>2、逻辑图（向左向右的逻辑图），表示总分，分总的关系。</p>
+<p>3、括号图：类似逻辑图</p>
+<p>4、组织结构图：表示人员职务</p>
+<p>5、时间图：时间发展，事情先后</p>
+<p>6、鱼骨图：事件分析，因果分析（某个分支内部有哪些维度）</p>
+<p>7、树形图</p>
+<h4 id="主题">主题</h4>
+<p>不同层级的主题（方块）：中心主题-分支主题-子主题，自由主题是独立的另一个节点</p>
+<p>逻辑关系（连线）：联系，概要、外框（凸显几个主题的统一特征）</p>
+<p>补充说明：描述（文字，笔记，标注，标签，链接，附件，图标）</p>
+<h3 id="54-xmind操作入门">5.4 Xmind操作入门</h3>
+<p>Xmind 软件的实际操作</p>
+<ul>
+<li>
+<p>新建画布：从空白新建，从模板新建</p>
+</li>
+<li>
+<p>添加节点：Tab 增加子节点，Enter 增加同级节点，双击空白区域增加自由节点</p>
+</li>
+<li>
+<p>编辑节点：选中节点，更改节点的属性（背景样式，文本大小）</p>
+</li>
+<li>
+<p>编辑节点关系：增加联系，增加外框</p>
+</li>
+<li>
+<p>插入附件：笔记、标签、描述</p>
+</li>
+</ul>
+<p>最佳实践</p>
+<ul>
+<li>
+<p>样式和层级：使用不同大小，不同字号的色阶，表示不同的等级关系</p>
+</li>
+<li>
+<p>关键词：提取关键词，而不是写一段话</p>
+</li>
+</ul>
+<h3 id="55-思维导图章节总结">5.5 思维导图章节总结</h3>
+<p>思维导图的作用，应用场景</p>
+<p>Xmind 软件的结构，怎样使用</p>
+<h3 id="61-原型设计章节介绍">6.1 原型设计章节介绍</h3>
+<p>将想法用示意图展示出来，就是原型（墨刀），包括</p>
+<ul>
+<li>
+<p>认识软件</p>
+</li>
+<li>
+<p>原型设计</p>
+</li>
+<li>
+<p>交互设计</p>
+</li>
+<li>
+<p>项目演示</p>
+</li>
+</ul>
+<h3 id="62-初识墨刀">6.2 初识墨刀</h3>
+<p>如何创建账号：手机号或者微信注册，包括个人版本和团队版本。</p>
+<p>如何创建项目？新建空白项目，从官方模板创建项目，从素材广场创建项目。</p>
+<p>主要的菜单和功能？</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767742880642.jpg" alt=""></p>
+<p>具体页面类似 PS，需要多实践操作才能熟悉</p>
+<p>基础工具：文字，图形，图片，位置</p>
+<p>页面工具：多页面多图层</p>
+<p>编辑区域：canvas 画布展示效果（组件库、素材库，支持很多第三方素材库，图标库）</p>
+<p>页面设置和全局事件：选择机型，选择页面颜色，编辑某个节点的属性</p>
+<p>其他工具：分享，版本管理，预览等</p>
+<h3 id="63-原型设计">6.3 原型设计</h3>
+<p>目标：设计一个典型的页面</p>
+<p>原型：线框图（线条+图形），将需求和功能具体化的图片。</p>
+<p>​</p>
+<p><strong>分成：草图，低保真原型，高保真原型</strong></p>
+<p>1、草图（手稿，自己画，早期使用）</p>
+<p>2、低保真原型（框架+黑白灰+简单交互，属于产品规划，公司内部使用）</p>
+<p>3、高保真原型（复杂交互，设计效果图，主要给客户模型演示）</p>
+<p>​</p>
+<p><strong>低保真原型操作步骤</strong></p>
+<p>0、选择机型和页面比例</p>
+<p>1、划分页面区域（移动端：导航区-内容区-菜单区）</p>
+<p>2、使用基础组件设计页面框架</p>
+<p>3、设计页面细节</p>
+<h3 id="64-原型页面演示">6.4 原型页面演示</h3>
+<p>案例：登录注册页面（静态页面）</p>
+<p>类似 Adobe Illustrator 软件</p>
+<p>使用拖拽方式，设置背景图，提示文字，用户名和登录密码的表单（实际上和 UI 工作类似）</p>
+<p>通常需要建一个标准的组件库，每次使用直接拖拽，不需要设置具体的字号对齐了</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767765746564.png" alt="" title="" width="344" height="690" />
+<h3 id="65-页面交互">6.5 页面交互</h3>
+<p>交互效果：页面整体交互，某个组件局部的交互。页面的交互分成2种：</p>
+<p>1、单页页面内部状态的切换：增加多个页面状态，使用全局事件进行触发，或者某个组件进行触发，触发更换到另一个页面状态。在同一个页面状态内部，会丝滑的切换。类似 PPT 动画效果，点击按钮触发图形的动画效果。</p>
+<blockquote>
+<p>案例：添加动态组件，点击页面的小图片，切换到大型图片预览，点击大图片后，返回小图片预览。选中某个图片后，右侧可以设置外观和交互，某个事件触发什么效果。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767767419258.jpg" alt=""></p>
+</blockquote>
+<p>2、多个页面之间的切换</p>
+<blockquote>
+<p>案例：跳转跳转到某个页面，或者跳转超链接，点击元素后，跳转到第一页（使用一个对勾图标表示跳转效果）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/2026-01/image-1767767427560.jpg" alt=""></p>
+</blockquote>
+<h3 id="66-动态组件">6.6 动态组件</h3>
+<p>动态组件-组件内部存在一个状态。可以支持位置，大小，颜色的变化。</p>
+<p>实现方法：</p>
+<p>1、新增传统组件，转换成动态组件。</p>
+<p>2、设置组件状态</p>
+<p>3、添加组件交互事件</p>
+<blockquote>
+<p>案例：点击按钮后，打开 modal。Modal 有关闭和执行2个按钮。点击关闭就关闭 Modal 点击执行就跳转页面</p>
+</blockquote>
+<p>总结：就是设置多个图层，点击按钮后，跳转到对应的图层效果（使用添加事件进行跳转）。</p>
+<h3 id="67-长页面及组件相对固定">6.7 长页面及组件相对固定</h3>
+<h4 id="滚动效果的实现">滚动效果的实现</h4>
+<p>1、选择1屏线（页面下方的虚线）</p>
+<p>2、向下拖动为长页面</p>
+<p>3、添加一些内容和元素（列表内容）</p>
+<p>​</p>
+<h4 id="固定定位的实现">固定定位的实现</h4>
+<p>1、选择组件</p>
+<p>2、设置运行时固定位置（移动端悬浮按钮在右下角固定）</p>
+<p>3、顶部栏和底部栏，标题固定在顶部，拖动左侧和右侧的位置，设置固定定位的位置</p>
+<h3 id="68-项目演示">6.8 项目演示</h3>
+<p>演示：</p>
+<ul>
+<li>
+<p>网页的产品，点击预览，或者分享给其他人（扫描二维码即可预览），在线预览</p>
+</li>
+<li>
+<p>离线网页预览（直接生成本地的 html 导出），需要付费。PNG 可以免费下载。</p>
+</li>
+<li>
+<p>安卓的产品，可以直接打包成高保真的 APP（需要付费）</p>
+</li>
+<li>
+<p>iOS 的产品，直接使用 Safari 浏览器打开，然后在本地应用中打开</p>
+</li>
+</ul>
+<h3 id="69-原型设计章节总结">6.9 原型设计章节总结</h3>
+<p>总结</p>
+<p>1、熟悉墨刀软件的使用（创建项目，各种常用菜单和功能）</p>
+<p>2、掌握低保真原型的设计</p>
+<p>3、掌握动态页面，动态组件，长页面，固定组件的实现效果</p>
+<p>4、可以进行基本演示</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

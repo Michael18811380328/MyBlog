@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">经济类学习笔记</p>
+      <h1>逻辑与现实经济</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="读书笔记">读书笔记</h1>
+<p><a href="https://www.zhihu.com/people/wang-ke-dan-13" title="https://www.zhihu.com/people/wang-ke-dan-13">https://www.zhihu.com/people/wang-ke-dan-13</a></p>
+<h4 id="房屋养老金">房屋养老金</h4>
+<p>问题：2024年6月11日，22个房屋养老金试点之一的天津市滨海新区住建委发布『关于对《天津市滨海新区房屋养老金管理办法（征求意见稿）》公开征求意见的公告』。办法基本明确了房屋养老金公共账户只承担房屋检测和办事人员薪酬，个人账户承担房屋维修费用，而且用完需要补交。另外，在交易、继承、赠予等过户环节时会核查是否有漏交少交的情况，如有会限制过户。其他试点城市是否会保持基本一致的实施方案，如按该版办法实施，对未来房地产市场有何影响？</p>
+<p><a href="https://www.zhihu.com/question/666298872/answer/3620471502" title="https://www.zhihu.com/question/666298872/answer/3620471502">https://www.zhihu.com/question/666298872/answer/3620471502</a></p>
+<p>首先，千万不要觉得房屋养老金和房地产税是替代关系，未来更可能是互补关系，前者是专款专用的公共资金池基金，后者是无偿性和强制性的地方税，不是收了这个就不收那个，而很可能是既要收房地产税，也要收房地产养老基金。</p>
+<p>原因也很简单，公共维修基金和地方财税在未来（已经）面临巨大的缺口，尤其是地方财政，已经开始“砸锅卖铁”的化债了，或者靠特色地方平台融资兜底，结合房企拍地土地，继续维持每年5万亿以上的土地财税，相比来说还是比房地产税规模更大，短期紧迫性不强，阻力也很大，2022年官方公开发生短期内不适合全面推广房地产税，但不意味着存量房屋时代地方财政缺口继续暴漏下就不收，尤其是房地产高涨周期的房子，未来收房屋养老金和房地产税的可能性非常大。</p>
+<p>其次，试点阶段各地的政策可能会有较大的差异，用于测试数据和看市场的反馈，就好比最早一批试行房地产税的上海和重庆就有较为明显的差异，天津滨海新区的政策暂时也只能作为参考，模式也相对明确，公共资金用于定期体检和相关部门的人员开支，查出问题之后的整改维修则要动用大修基金，用完需要补交可能并不准确，按照过去的相关规定，应该是低于资金池要求的30%则要继续补觉，房龄和房屋公共维修基金余额将成为影响房地产定价的最重要的因素之一。举一个简单的例子，假设未来老房子资金缺口是10万，个人公共维修基金余额1万，那么现在的市场定价就要把这些潜在的资金缺口计入到定价里面。</p>
+<p>房地产维修费用缺口是随着房龄的增加而迅速增加的，现在最紧迫的是老旧房子，一般认为是房龄超过30年的老旧小区，这类房子的特点是当时市场化程度低，分房还是非常主流的方式，房地产维修基金政策也并不完善，随着时间的推移，这类房子逐渐进入老龄化阶段，维修改造的压力最大，但也最缺钱。那么钱从哪里来？靠纳税人? 靠后来者？都不显示，所以走的应该是日本模式，有点像日本的修缮积立金，而房地产养老金的公共资金池，更像是增加一个管理部门，专门负责对房屋的安全进行评估和监管，确定是否需要维修，至于未来是否会下场选定特定的维系机构和公共资金池的使用，可能还要存疑，现在看来更像是监管和评估部门，资金池的来源可能是财政补贴，也可能是大修基金的收益，比如按照2%的无风险收益评估，一年公共维修基金存量大概可以创造200亿左右的收入，这部分可能会划转到公共资金池，结合一般公共预算收入和土地出让金的划转，确实明面上不需要居民直接承担这部分的开支。</p>
+<p>设卡方式是过户，需要查看房屋公共维修基金的余额，否则无法完成过户，这对于记成、赠予影响非常大，这也能理解为什么很多日本偏远房子是免费赠送的，遗产税要交钱，假设房屋状况较差，维修基金缺口太大，且出租本身收益有限（空心化区域），房子白菜价都不夸张，修缮积立金、房产税遗产税等各类费用缴纳之后，就是纯纯的负资产，这也是老龄化人口负增长结合房屋老龄化之后的结果。以后我们人口负增长开启以后结合各类费用的增加，比如维修基金和房产税，房子价格和成本会是什么样还真不好说。</p>
+<p>天津滨海区的房地产养老金，明确了公共资金池的作用，就是房屋检测和办事人员薪酬，暂时没说钱的来源，而现在真正影响比较大的是高房龄且缺乏公共维修基金的房子，因为新房子都交过了，老房子更多的是补交，且随着土地财税的减弱，拆字越来越难，剩下的老旧小区也只能改了，以前拆迁换了房子还有的赚，现在后来者没钱了，也拆不动了，老旧房子出问题的概率高，一出问题就是公共安全问题，火灾塌房随着房屋老龄化也会越来越多，钱要么业主出，要么财政出，没有别的办法。</p>
+<p>至于未来，新房子也不要幸灾乐祸，只是现在房龄低还不到大规模应用和资金缺口的时候，2008年以后我国进入了高速的城镇建设中，大量的高层住房出现，结合特色预售制和房地产企业的高周转要求，期间房屋质量怕是要打一个打问号，更何况这几年大量的保交付项目在资金紧缺下的质量问题，几年出问题的都一大堆，更何况十几二十年之后密集出现资金缺口，那存量的1万亿根本就不够，未来低于30%就要补交，如果资金使用效率高一些，也无可厚非，自己的钱修自己的房子，最重要的给我们两个警示：</p>
+<p>1）房子是会老化的，房价也不是永远涨，未来的定价一定是与房屋的房龄、保养程度、公共维修基金余额等高度相关，买房子一定要兼顾更多的因素和潜在成本。</p>
+<p>2）房屋现在得成本主要是一次性的土地税，未来极大概率还有无偿和强制性的房地产税（城市公共福利税），房屋的维修费用，成本除了物业费以外还要额外增加其它潜在费用，房地产税与房子估值有关，房地产维修基金则与房龄有极高的关系，前者反缴纳的钱变化可能更稳定一些，后者则可以确定的是越交越多，未来出现持有成本大于收益的情况会越来越多，尤其是人口结构失衡的地区，年轻人口大规模流失之后连需求都没有，继承就要交税交房屋养老基金，而定价则可能鹤岗化，这就不是白菜价的问题了，而是各类费用下的负资产和负担。</p>
+<p>高位变现的窗口已经远去，而未来的潜在成本还在不断增加，房地产游戏性质早就变了，但作为居民最大的财富占比，广义税明面税源的本质可能还不会消散，未来谁房子多谁多交税不也顺理成章么。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

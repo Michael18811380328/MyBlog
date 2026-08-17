@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">经济类学习笔记</p>
+      <h1>理财报告</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#战略理财报告">战略理财报告</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="读书笔记">读书笔记</h1>
+<p>个人当前财产分配的分析报告（风险收益）+改进措施（调仓报告，基金经理完成）+具体实施报告（交易员操作流程）。</p>
+<p>未来参考别人怎么写的。</p>
+<h3 id="战略理财报告">战略理财报告</h3>
+<p>报告日期：2024年5月</p>
+<p>报告适用时间：2024年——2026年</p>
+<h4 id="1宏观经济分析">1、宏观经济分析</h4>
+<p>大盘指数：2023年后半年到2024年初，大盘指数从3400下降到2700点。2024年3月，反弹到 3000点附近，4-5月，波动上升中。目前整体处于震荡环境（3000-3150之间震荡）。</p>
+<p>房地产：5月中旬出台房地产重大利好（5月17日，央行将首套及二套房贷款最低首付比例调整为15%和25%），一周内地产银行板块反弹不少。个人预测未来不会有太大上涨，暂时不投资房地产。</p>
+<h4 id="2用户信息分析">2、用户信息分析</h4>
+<p>用户可用投资理财资金100万（其余资金已购买国债和长期定期存款，暂时不动）。</p>
+<p>当前持仓比例：45%是货币基金，55%是债券基金，0.25%是股票基金。</p>
+<p>用户没有额外时间盯盘，主要投资对象是存款、基金等中长周期的产品，暂时不考虑短线交易的股票期货。</p>
+<p>风险评估：用户厌倦风险，厌倦保险产品。可以接收整体最大2%的回撤（2万元），理财期望跑赢通货膨胀（5%），多多益善。</p>
+<h4 id="3目标持仓比例">3、目标持仓比例</h4>
+<p>宏观战略投资比例、投资预期、风险控制：</p>
+<p>跑赢通货膨胀（6%），行情不好时候减少最大回撤（-2%）</p>
+<p>在 4321 比例的基础上进行微调（建议某个账户放100W，这样也好统计）。</p>
+<p>R1：15%</p>
+<p>R2：84%</p>
+<p>R3：1%</p>
+<h4 id="4具体调仓细节">4、具体调仓细节</h4>
+<p>总体调仓原则。根据晨星评级上优势的排名，靠前的基金进行选择。</p>
+<p>1、应急备用卡：增加资金（增加到3K），备用金不能动，取消和其他账户绑定。</p>
+<p>2、减少货币基金，可以改成长期定期存款或者债券基金。</p>
+<p>3、适度定投评级较高的混合基金（先看晨星评级，然后选择合适开始的点，定投指数基金）。适当考虑国际基金（其他发展较好的国家）。</p>
+<p>​</p>
+<p>​</p>
+<p>1、货币</p>
+<p>1.0 应急资金（3K不动，紧急时刻才能动）</p>
+<p>1.1 短期货币（短期货币每月的工资收入足够），用于指数基金定投买入等行为</p>
+<p>1.2 长期货币（3年定期存款，预期2.5%收益率），目前仓位足够，未来可以减少</p>
+<p>2、债券</p>
+<p>2.0 长期国债（3年国债，预期2.38收益率），不动，未来减少</p>
+<p>2.1 短期债券基金</p>
+<p>2.2 长期债券基金</p>
+<p>3、股票（不考虑）</p>
+<p>4、指数基金</p>
+<p>国内宽指数：国内2012年-2024年上证指数没有明显提升，反而回撤比较大，所以定投国内宽指数等不是很好的选择。</p>
+<p>国内行业指数：个人对某个行业了解不多，所以优先考虑宽指数指数基金。不考虑行业指数。——已有的行业指数可以逐步清仓。</p>
+<p>从手续费角度，可以考虑直接定投 ETF。被动指数即可，不需要主动投资。</p>
+<p>5、国外</p>
+<p>国外宽指数可以考虑定投（目前定投标普500，每天20元试试水）。国外行业指数目前不考虑（也不多）。</p>
+<p>成熟市场（纳斯达克指数，道琼斯指数，日经指数）</p>
+<p>新兴市场（印度市场，越南市场）</p>
+<p>实际策略和择时</p>
+<p>1、微信和支付宝等可以换一个卡，消费卡；现在招商银行2卡改成应急卡。</p>
+<p>2、调仓，减少货币基金的仓位，增加债券的仓位，逐步定投指数基金。</p>
+<p>日常任务：</p>
+<p>1、每天坚持打新债券（这半年比较少）</p>
+<p>2、每月的工资，一部分转账用于短期消费，其余部分大部分购买短期债券，少数用于货币基金和指数基金进行调仓</p>
+<h1 id="个人理财报告">个人理财报告</h1>
+<p>一、财务状况概述</p>
+<p>本报告旨在对个人财务状况进行全面的梳理与分析，以便更好地制定理财策略和实现财务目标。经过仔细整理和分析，本人的财务状况呈现出以下特点：资产总额稳步增长，负债水平相对较低，流动性资产占比较高，但资产配置较为单一，投资收益有限。</p>
+<p>二、收入与支出分析</p>
+<p>收入构成：本人的收入主要来源于工资薪金所得，占比超过80%，此外，还有少量的投资收益和兼职收入。工资薪金收入稳定，但缺乏增长潜力；投资收益波动较大，尚未形成稳定的收入来源。</p>
+<p>支出结构：支出方面，生活消费支出占据主导地位，包括住房、交通、食品、教育等日常开销；其次是投资理财支出，用于购买金融产品；最后是偶发性支出，如医疗费用、旅游支出等。整体而言，支出结构较为合理，但理财支出比例有待提高。</p>
+<p>三、资产配置现状</p>
+<p>目前，本人的资产配置主要集中在现金及活期存款、定期存款和债券等低风险资产上，占比超过70%。股票、基金等高风险资产占比较低，不足30%。这样的资产配置使得整体风险水平较低，但收益也相对有限。</p>
+<p>四、投资风险评估</p>
+<p>根据个人的风险承受能力和投资偏好，对现有的投资资产进行了风险评估。结果显示，当前的投资组合风险水平较低，符合个人的风险承受能力。但考虑到未来可能面临的市场波动和风险，需要适当调整资产配置，提高高风险资产的占比，以获取更高的投资收益。</p>
+<p>五、理财目标设定</p>
+<p>结合个人的实际情况，设定了以下理财目标：一是保持资产的稳步增长，实现资产的保值增值；二是提高投资收益，优化资产配置，降低投资风险；三是为未来的养老、子女教育等做好财务规划，确保家庭财务的稳定和可持续发展。</p>
+<p>六、投资策略建议</p>
+<p>为实现上述理财目标，提出以下投资策略建议：</p>
+<p>1、多元化投资：适当增加股票、基金等高风险资产的配置，降低对单一资产的依赖，实现资产的多元化配置。</p>
+<p>2、定期定额投资：采用定期定额投资的方式，降低市场波动对投资收益的影响，同时培养长期投资的习惯。</p>
+<p>3、关注市场动态：及时了解市场动态和政策变化，调整投资策略和资产配置，以适应市场的变化。</p>
+<p>七、未来财务规划</p>
+<p>针对未来的财务规划，将注重以下几个方面：</p>
+<p>1、提高收入水平：通过提升职业技能、拓展兼职业务等方式，增加收入来源，提高收入水平。</p>
+<p>2、优化支出结构：合理规划生活消费支出，控制不必要的开销，提高支出的效率和效益。</p>
+<p>3、完善保障措施：考虑购买适当的保险产品，为未来的养老、医疗等做好保障，降低潜在风险。</p>
+<p>八、总结与建议</p>
+<p>通过本次个人理财报告的分析，可以看出本人的财务状况整体稳定，但存在资产配置单一、投资收益有限等问题。为此，建议适当调整资产配置，增加高风险资产的配置比例，实现资产的多元化配置和保值增值。同时，加强财务规划和管理，提高财务意识和能力，为未来的生活和家庭财务稳定打下坚实基础。</p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

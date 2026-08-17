@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">网课学习笔记</p>
+      <h1>会议纪要-笔记</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#稀土开发者大会-2023">稀土开发者大会 2023</a></li>
+        <li><a href="#第一天-主论坛">第一天 主论坛</a></li>
+        <li><a href="#01-技术对产品的影响">01-技术对产品的影响</a></li>
+        <li><a href="#02-aigc-对业绩的发展">02-AiGC 对业绩的发展</a></li>
+        <li><a href="#第二天-前端工程实践">第二天 前端工程实践</a></li>
+        <li><a href="#01-前端-构建工具-rspack">01 前端-构建工具-RsPack</a></li>
+        <li><a href="#目录">目录</a></li>
+        <li><a href="#02--前端-组件化-quarkc">02  前端-组件化-quarkC</a></li>
+        <li><a href="#03-前端--chatgpt">03 前端 + chatGPT</a></li>
+        <li><a href="#04-前端--reactnative">04 前端 + ReactNative</a></li>
+        <li><a href="#第三天-前端未来">第三天 前端未来</a></li>
+      </ul>
+    </li>
+    <li>
+      <ul>
+        <li><a href="#01-后疫情下的前端未来">01-后疫情下的前端未来</a></li>
+        <li><a href="#02-编译型前端框架的探索">02-编译型前端框架的探索</a></li>
+        <li><a href="#03-web-应用中嵌入-unity-引擎">03-web 应用中嵌入 unity 引擎</a></li>
+        <li><a href="#04-kotlin-兼容各种终端系统">04-kotlin 兼容各种终端系统</a></li>
+        <li><a href="#使用-kotlin-打造多平台开发应用">使用 kotlin 打造多平台开发应用</a></li>
+        <li><a href="#新范式新时代新机会">新范式新时代新机会</a></li>
+        <li><a href="#2024年技术大会">2024年技术大会</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="会议纪要">会议纪要</h1>
+<h3 id="稀土开发者大会-2023">稀土开发者大会 2023</h3>
+<p>这个包括很多前沿领域，值得学习。</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<h3 id="第一天-主论坛">第一天 主论坛</h3>
+<p><a href="https://juejin.cn/live/2023zlt?utm_source=jjwebdhl">https://juejin.cn/live/2023zlt?utm_source=jjwebdhl</a></p>
+<h3 id="01-技术对产品的影响">01-技术对产品的影响</h3>
+<p>1.字节副总裁-致辞</p>
+<p>计算机技术的发展的目标，主要是为了业务的增长，具体体现在速度、精度、温度上面。</p>
+<ul>
+<li>
+<p>速度：开发迭代的速度快，主要涉及底层的云服务，以及容器复用快速开发的方面。</p>
+</li>
+<li>
+<p>精度：用户的个性化推荐。根据用户的具体情况，进行科学的决策精准的分析。</p>
+</li>
+<li>
+<p>温度：用户的内容与交互创新，持续提升用户的体验，传达产品的价值。</p>
+</li>
+</ul>
+<p>对于不同使用者的服务角度（以抖音为例，对于创作者的角度。要降低创作者的使用门槛。对于用户的角度。要增加产品的差异性体验）</p>
+<p>以表格或者文档为例（对于创作者的角度，要方便创作者进行使用；技术门槛低；对于用户的角度，要便捷灵巧的浏览数据）</p>
+<img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1719213211999.png" alt="" title="" width="681" height="332" />
+<img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1719213221017.png" alt="" title="" width="688" height="597" />
+<img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1719213231923.png" alt="" title="" width="683" height="375" />
+<p>​</p>
+<h3 id="02-aigc-对业绩的发展">02-AiGC 对业绩的发展</h3>
+<p>2. 谷歌云中国负责人</p>
+<p>AiGC 对业绩的发展；演讲2023年6月；2024年新技术还有更多</p>
+<p><img src="https://cloud.seatable.cn/workspace/32/asset/37d9be94-36c7-4add-8e78-fdf8564d701b/images/auto-upload/image-1719213248264.png" alt=""></p>
+<p>后面比较复杂，很当前知识体系差别较大，没有学完</p>
+<p>​</p>
+<h3 id="第二天-前端工程实践">第二天 前端工程实践</h3>
+<p><a href="https://juejin.cn/live/qdgcsj002" title="https://juejin.cn/live/qdgcsj002">https://juejin.cn/live/qdgcsj002</a></p>
+<h3 id="01-前端-构建工具-rspack">01 前端-构建工具-RsPack</h3>
+<p>RsPack 前端构建工具</p>
+<p>字节跳动前端团队</p>
+<p>rsPack 代码链接：<a href="https://github.com/web-infra-dev/rsbuild" title="https://github.com/web-infra-dev/rsbuild">https://github.com/web-infra-dev/rsbuild</a> 2025年 1000 星，2026年 3000星</p>
+<p>​</p>
+<h3 id="目录">目录</h3>
+<ul>
+<li>
+<p>Why Rspack?</p>
+</li>
+<li>
+<p>Rspack 的特性，性能收益，架构设计</p>
+</li>
+<li>
+<p>生态如何？兼容性如何？如何从 Webpack 迁移到 rspack</p>
+</li>
+<li>
+<p>未来展望</p>
+</li>
+</ul>
+<h4 id="1-webpack-的不足">1. webpack 的不足</h4>
+<p>npm run dev  和 npm run build 启动构建时间比较长，HMR 热更新时间也比较长，浪费时间。</p>
+<p>开发者希望更快的打包工具，包括冷启动，生产构建测试；兼顾灵活性。</p>
+<p>（实际上开发者希望减少某些 webpack 耗时过程，减少某些  loader 和  plugin 的时间，而不是更换新的工具）</p>
+<h4 id="2-rspack-特性">2. rspack 特性</h4>
+<p>rspack 是基于 rust 的高性能 web 构建引擎（打包工具）</p>
+<ul>
+<li>
+<p>Rust 实现增量编译，HMR 和构建速度更快</p>
+</li>
+<li>
+<p>和 webpack 兼容，不需要从0开始搭建项目开发环境</p>
+</li>
+<li>
+<p>支持多种格式 js jsx ts tsx sass 开箱即用</p>
+</li>
+<li>
+<p>内置多种优化策略，代码分割；代码压缩；摇树</p>
+</li>
+</ul>
+<h4 id="3生态兼容性">3.生态兼容性</h4>
+<p>loader 好兼容，大量的 plugin 和对应的 API 不好兼容。详见兼容列表。</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720497650949.png" alt="" title="" width="629" height="328" />
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720497658291.png" alt="" title="" width="630" height="287" />
+<h4 id="4从-webpack-迁移">4.从 webpack 迁移</h4>
+<p>参考官方文档</p>
+<h4 id="6架构设计">6.架构设计</h4>
+<p>分成左右两个阶段：make phase 和 seal phase 其中黄色部分是耗时部分。</p>
+<p>make phase 接通阶段：模块依赖关系分析（module build and analyze），文件依赖图分析（特殊的有循环引用）。</p>
+<p>seal phase 密封阶段：打包压缩（生成 module trunk assets）。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720497818811.png" alt=""></p>
+<p>增量编译是在 make phase 时，递归进行编译（循环这个过程）</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720497826233.png" alt=""></p>
+<p>互动提问环节</p>
+<p>1、rspack 和 webpack 打包构建后的产物是否相同，大小是否变化，是否对齐？</p>
+<p>解答：目前产物相同，大小不变，可以对齐，但是不会100%一样。</p>
+<p>2、未来 rspack 和 webpack 目标是什么？是否和新功能一致？</p>
+<p>未来是两个项目，但是主要功能一样，会支持大部分的插件。</p>
+<p>3、这个构建工具适应于哪些场景？</p>
+<p>小项目，要求很快的速度和基本的使用场景，可以使用 rspack；但是复杂的项目，或者 angular，使用复杂的插件，那么这样还是使用 webpack。rust 语言速度比较快，社区发展也比较好，所以使用 rust 写 rspeck。</p>
+<p>​</p>
+<h4 id="个人思考">个人思考</h4>
+<p>从技术角度，这个是加强版的 webpack，速度更快，技术领先。</p>
+<p>从项目角度，这个社区不完善，简单项目可以使用 rollup，复杂项目使用 webpack，这两个市场占有率这么大，长期稳定。如果再学习 rspack 有成本，所以不会把这个工具使用在实际生产项目中，后续观望市场占有率再说。</p>
+<h3 id="02--前端-组件化-quarkc">02  前端-组件化-quarkC</h3>
+<p>哈罗单车前端团队研发（中台团队比较小，响应降本增效做的项目（给业务部门提供公共组件））。</p>
+<p>quarkC 是低成本、跨技术栈、无框架的组件，代码连接：<a href="https://github.com/hellof2e/quark" title="https://github.com/hellof2e/quark">https://github.com/hellof2e/quark</a> 2025年300星，2026年 300星。最近1年没有改动过代码，目前看项目黄了。</p>
+<p>web-component 概念：<a href="https://juejin.cn/post/7350502488493867042">https://juejin.cn/post/7350502488493867042</a></p>
+<p>简单理解，就是 HTML默认的 video 标签，实际是很多 div + span 组成的，那么这个 video 标签就是 web-component。这个项目也是类似的工作，写了例如 hello-button 这样的原生 web-component 组件。</p>
+<h4 id="目录-1">目录</h4>
+<ul>
+<li>
+<p>当下主流前端组件的“伤”</p>
+</li>
+<li>
+<p>介绍WebComponents</p>
+</li>
+<li>
+<p>利用Quarkc高效构建Web组件</p>
+</li>
+<li>
+<p>面向未来的无框架浏览器原生组件探索与实践</p>
+</li>
+</ul>
+<h4 id="1前端组件的缺陷">1、前端组件的缺陷</h4>
+<p>通用组件依赖于框架的种类和版本，不能通用（例如 antd 依赖于 react18版本）不能复用，CSS 的效果容易冲突。</p>
+<p>如果一个企业历史代码比较多，那么不同的项目和人员使用技术栈不同，开发维护比较困难。</p>
+<p>如果框架版本大升级后，各种组件库都需要升级，比较麻烦。</p>
+<h4 id="2web-component-介绍">2、web-component 介绍</h4>
+<p>浏览器调试：在 Performance 中，开启 show user agent shadow DOM 用户代理影子 DOM。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720580989355.png" alt=""></p>
+<p>​</p>
+<p>WebComponents 组成三剑客</p>
+<ul>
+<li>
+<p>Custom elements(自定义元素):一组JavaScriptAPI，允许您定义 custom elements 及其行为，然后可以在您的用户界面中按照需要使用它们。</p>
+</li>
+<li>
+<p>ShadowDOM(影子DOM): 一组JavaScriptAPI，用于将封装的“影子”DOM树附加到元素(与主文档DOM分开呈现)并控制其关联的功能。通过这种方式，您可以保持元素的功能私有，这样它们就可以被脚本化和样式化，而不用担心与文档的其他部分发生冲突。</p>
+</li>
+<li>
+<p>HTMLtemplates(HTML模板):&lt;template&gt;和&lt;slot&gt;元素使您可以编写不在呈现页面中显示的标记模板。然后它们可以作为自定义元素结构的基础被多次重用。</p>
+</li>
+</ul>
+<p>Shadow DOM 的优点也是缺点，就是很好的封装性，外部DOM无法干扰内部组件的样式。</p>
+<p>优点：不同功能模块不会互相干扰。</p>
+<p>缺点：很多场景下，需要经常改动样式，那么组件库的样式也可能变化，然后需要频繁改动组件库。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720581050991.png" alt=""></p>
+<p>实际上就是写了新的 html 原生标签和组件，作为组件库可以嵌套到各种框架中。</p>
+<p>但是不同框架的事件处理不同，这也是痛点，兼容性等等也是痛点。</p>
+<p>所以这个作者使用 quarkC 工具构建组件。</p>
+<h4 id="3quarkc-构建-web-组件">3、quarkC 构建 web 组件</h4>
+<p>这个库把 web-component 重新封装了一次</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720583293018.png" alt=""></p>
+<p>使用Quarkc的收益</p>
+<ul>
+<li>
+<p>【研发提效，降本】跨框架的业务组件，只维护一套代码! 实现:低成本、高效构建跨技术栈组件!(e.g.营销弹窗，抽奖大转盘)</p>
+</li>
+<li>
+<p>【面向未来，稳定】前端框架会继续进代/发展，会有新的版本，新的框架出现。用Quarkc开发“通用型组件”，不会随着“前端框架浪潮”而更新运代</p>
+</li>
+<li>
+<p>【wa3C标准，极致】}高性能、极小的体积</p>
+</li>
+</ul>
+<p>实际上存在的问题：不同版本的兼容性（兼容 react16 react17 react18 的事件？）如果写大量的兼容代码，判断各种框架，性能不太行，处理的细节太多。</p>
+<p>根本的解决办法，还是一个公司或者一个项目内部，使用一套基础框架。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720583402786.png" alt=""></p>
+<h4 id="4未来探索">4、未来探索</h4>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720583411413.png" alt=""></p>
+<h4 id="互动提问环节">互动提问环节</h4>
+<p>1、具体使用场景：主要是新项目中，避免了其他技术框架更新迭代的问题（版本升级）；</p>
+<p>2、目前还不支持反向编译：例如 react 有很多良好的社区组件，把 rc-calendar 反向编译成 web-component，然后在其他项目中使用。</p>
+<p>工程化，很重要的是社区繁荣。如果没有社区和相关组件库的支持，那么底层组件库使用就不是很广泛了。</p>
+<p>从目前文档的热度看，同一个公司很少会选择多种项目栈，所以做这个的动力还是不强，使用没有那么广泛。</p>
+<h3 id="03-前端--chatgpt">03 前端 + chatGPT</h3>
+<p>GPT 结合工程化，实现智能研发</p>
+<p>作者：阿里+腾讯前端团队</p>
+<p>GPT 使用广泛，目前对于前端：结合前端工程化，将重复的事情自动化处理（对于腾讯新闻，主要是GPT问答，AIGC 写作短文，智能审核，直接查询技术问题）</p>
+<p>主要根据上下文进行理解，把上下文生成 AST，然后生成对应的代码树。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721740853282.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721740859605.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721740866320.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721740873087.png" alt=""></p>
+<p>存在的安全风险：</p>
+<ul>
+<li>
+<p>黑产（刷浏览点赞评论——根据文章内容，生成一个100字的优质评论）</p>
+</li>
+<li>
+<p>绕过验证机制（自动识别验证码，自动识别滑动模块并跳过）；</p>
+</li>
+<li>
+<p>GPT 脾气暴躁化（用户恶性训练）</p>
+</li>
+<li>
+<p>数据泄露(代码中可能有 key token 的验证数据)，训练数据库和核心数据的泄露</p>
+</li>
+</ul>
+<p>思考：</p>
+<ul>
+<li>
+<p>风险和效率并存——需要制定内部的使用规范和流程，合理使用</p>
+</li>
+<li>
+<p>万无一失，一失全无——代码安全扫描，部分情况使用</p>
+</li>
+</ul>
+<p>未来发展：</p>
+<ul>
+<li>
+<p>AI 识别生成模块代码，基于描述进行定制化开发</p>
+</li>
+<li>
+<p>低代码 + 原子化开发</p>
+</li>
+<li>
+<p>提示词工程师 = 超级个体开发工程师 = 产品+UI+研发+测试+运维+客服</p>
+</li>
+<li>
+<p>语音编程：敲代码的第三只手，可以使用语音操控项目（操作聚合，语音控制）</p>
+</li>
+</ul>
+<h3 id="04-前端--reactnative">04 前端 + ReactNative</h3>
+<p>雪球前端专家，10年从业经验</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721742074533.png" alt="" title="" width="435" height="314" />
+<p>01 RN 三段同构后的效果：H5 安卓 IOS 三个同构，只需要开发一次即可完成</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721742084850.png" alt="" title="" width="290" height="325" />
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721742093931.png" alt="" title="" width="592" height="288" />
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721742102786.png" alt="" title="" width="594" height="303" />
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721742115272.png" alt=""></p>
+<p>02 优势</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721744732988.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721744741009.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721744748487.png" alt=""></p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721744755675.png" alt="" title="" width="629" height="365" />
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721744763433.png" alt="" title="" width="630" height="358" />
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721744830878.png" alt="" title="" width="407" height="332" />
+<h3 id="第三天-前端未来">第三天 前端未来</h3>
+<h2></h2>
+<p><a href="https://juejin.cn/live/qdwl005" title="https://juejin.cn/live/qdwl005">https://juejin.cn/live/qdwl005</a></p>
+<p>​</p>
+<p>​</p>
+<h3 id="01-后疫情下的前端未来">01-后疫情下的前端未来</h3>
+<p>讲师：腾讯新闻（传统需要1000个编辑，现在优化成100个编辑了）</p>
+<p>当前的时代，资金减少，降本增效的时代，这样的情况下，分析前端未来发展：</p>
+<h4 id="01-当前前端研究方向概括">01 当前前端研究方向概括</h4>
+<p>第1个运行时框架，第2个构件工具，第3个组件库，第4个讲的是服务端</p>
+<ul>
+<li>
+<p>框架：React + VUE</p>
+</li>
+<li>
+<p>构建工具：webpack 是大头，但是项目庞大后存在性能问题</p>
+</li>
+<li>
+<p>前端组件库：bootstrap + materialUI  + antDesign 比例是 5:2:1</p>
+</li>
+<li>
+<p>nodejs: node 版本更新；无服务端开发</p>
+</li>
+</ul>
+<p>基础技术的演进，会带来前端分工的创新（减少人员），带来单一场景下的体验与效率提升，带来前端方向的变化</p>
+<h4 id="02-前端的业务更新和提效">02 前端的业务更新和提效</h4>
+<ul>
+<li>
+<p>Business FaaS：微型通用的业务解决方案。</p>
+</li>
+<li>
+<p>代码搭建应用：低代码，或者无代码，然后低代码是这个业务项目的一个实现方式。</p>
+</li>
+<li>
+<p>DDD：业务项目实现范式</p>
+</li>
+</ul>
+<h5 id="business-faas">Business FaaS</h5>
+<p>前期项目：一个项目+产品经理+前端+后端+测试</p>
+<p>中期项目：一个项目+一个产品+一个开发</p>
+<p>后期项目：多个项目+一个产品+一个开发</p>
+<p>随着业务逐渐成熟，或者衰退，那么就不需要这么多人，就形成了 Business FaaS：微型通用的业务解决方案</p>
+<p>通过 webAPI 和 Business FaaS 和 Data API 直接解决。</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720969889205.png" alt="" title="" width="206" height="283" />
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1720969946076.png" alt=""></p>
+<p>技术的发展，会促进前端组织架构的发展。</p>
+<h5 id="代码搭建应用">代码搭建应用</h5>
+<p>这里指的是低代码和微应用</p>
+<p>当一个企业有多个生产线（多个项目）那么实现一个技术中台，为上层提供通用的基础库和基础组件。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721049808005.png" alt=""></p>
+<p>这样可以避免每一套项目内部都有一个基础组件的实现，出现不一致的问题等。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721049815870.png" alt=""></p>
+<h5 id="ddd">DDD</h5>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721049792534.png" alt=""></p>
+<p>AIGC 是未来的方向</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721049800426.png" alt=""></p>
+<p>​</p>
+<h3 id="02-编译型前端框架的探索">02-编译型前端框架的探索</h3>
+<p>讲师：新加坡 Shopee 高级前端工程师 陈立豪</p>
+<p>这部分内容代表讲师的观点，不一定对，仅供参考。</p>
+<p>传统三大前端框架的特点：声明式编程（JSX）；虚拟 DOM + diff 算法；组件库繁多。造成了传统框架比较重。</p>
+<p>这里介绍了三个新的框架，和传统框架原理有差异，不需要虚拟 DOM 技术，直接操作 DOM，实现页面的更新。</p>
+<h4 id="svelte">Svelte</h4>
+<p>星标 78K，周下载量100万，目前有30万个项目使用，看起来发展还可以</p>
+<p><a href="https://svelte.dev/" title="https://svelte.dev/">https://svelte.dev/</a></p>
+<p><a href="https://www.npmjs.com/package/svelte" title="https://www.npmjs.com/package/svelte">https://www.npmjs.com/package/svelte</a></p>
+<p><a href="https://github.com/sveltejs/svelte" title="https://github.com/sveltejs/svelte">https://github.com/sveltejs/svelte</a></p>
+<blockquote>
+<p>Svelte是一种构建 web 应用程序的新方法。它是一个编译器，可以将声明性组件，转换为高效的JavaScript，从而精确地更新 DOM。</p>
+<p>compiled</p>
+<p>Svelte shifts as much work as possible out of the browser and into your build step. No more manual optimisations — just faster, more efficient apps.</p>
+<p>compact</p>
+<p>Write breathtakingly concise components using languages you already know — HTML, CSS and JavaScript. Oh, and your application bundles will be tiny as well.</p>
+<p>complete</p>
+<p>Built-in scoped styling, state management, motion primitives, form bindings and more — don&rsquo;t waste time trawling npm for the bare essentials. It&rsquo;s all here.</p>
+</blockquote>
+<p>特点：不使用虚拟 DOM；重新思考响应式编程；其他的语法和 React 函数式编程类似。代码案例如下</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">// Svelte 实现原生创建元素节点的函数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">element</span>(<span style="color:#a6e22e">tag</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#a6e22e">tag</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">text</span>(<span style="color:#a6e22e">str</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> document.<span style="color:#a6e22e">createTextNode</span>(<span style="color:#a6e22e">str</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">create</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">button</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">element</span>(<span style="color:#e6db74">&#39;button&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">t</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">text</span>(<span style="color:#a6e22e">ctx</span>[<span style="color:#ae81ff">0</span>]);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 可以判断哪些变量会触发 DOM 更新；哪些只是属性变化
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">instance</span>(<span style="color:#a6e22e">$$self</span>, <span style="color:#a6e22e">$$props</span>, <span style="color:#a6e22e">$$invalidate</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">onClick</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">$$invalidate</span>(<span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">number</span><span style="color:#f92672">++</span>, <span style="color:#a6e22e">number</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> [<span style="color:#a6e22e">number</span>, <span style="color:#a6e22e">onClick</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>​</p>
+<h4 id="solid">Solid</h4>
+<p>特点：单向数据流，和 React 函数式编程的语法类似；去掉了虚拟 DOM，细粒度响应性等</p>
+<p><a href="https://github.com/solidjs/solid" title="https://github.com/solidjs/solid">https://github.com/solidjs/solid</a></p>
+<p><a href="https://www.npmjs.com/package/solid-js" title="https://www.npmjs.com/package/solid-js">https://www.npmjs.com/package/solid-js</a></p>
+<p>目前 30K stars 下载量 30万，5万个项目使用</p>
+<blockquote>
+<p>Solid is a declarative JavaScript library for creating user interfaces. Instead of using a Virtual DOM, it compiles its templates to real DOM nodes and updates them with fine-grained reactions. Declare your state and use it throughout your app, and when a piece of state changes, only the code that depends on it will rerun. </p>
+</blockquote>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721633009160.png" alt="" title="" width="546" height="255" />
+<p>代码案例</p>
+<p>可以看到 createSignal 和 useState 使用方法基本类似，但是内部的实现不同。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">createSignal</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;solid-js&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">Counter</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">count</span>, <span style="color:#a6e22e">setCount</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">createSignal</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">increment</span> <span style="color:#f92672">=</span> () =&gt; <span style="color:#a6e22e">setCount</span>(<span style="color:#a6e22e">count</span>() <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> (
+</span></span><span style="display:flex;"><span>  	<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;button&#39;</span> <span style="color:#a6e22e">onClick</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">increment</span>}<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    	{<span style="color:#a6e22e">count</span>()}
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/button&gt;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="qwic">Qwic</h4>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721693516240.png" alt=""></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">component$</span>, <span style="color:#a6e22e">useStore</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@builder.io/qwic&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#a6e22e">component$</span>(() =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">count</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">useStore</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> (
+</span></span><span style="display:flex;"><span>  	<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">button</span> <span style="color:#a6e22e">onClick$</span><span style="color:#f92672">=</span>{() =&gt; <span style="color:#a6e22e">count</span>.<span style="color:#a6e22e">value</span><span style="color:#f92672">++</span>}<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    	{<span style="color:#a6e22e">count</span>.<span style="color:#a6e22e">value</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/button&gt;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721693522452.png" alt="" title="" width="653" height="346" />
+<p>​</p>
+<p><strong>作者总结：前端框架的未来趋势是编译器为基础</strong></p>
+<p>​</p>
+<p>提问环节：</p>
+<p>1、是否有虚拟DOM更好？不断循环，客户端渲染服务端渲染，有虚拟DOM没有虚拟DOM，可能随着其他技术的成熟，某个时间节点选择比较好的思路等，每次可能在逐步稳步前进。只有不断地进步和前进，没有必要一定说虚拟 DOM 好还是没有虚拟 DOM 阶段。</p>
+<p>2、不需要完全学习新的框架和技术的细节，背会API等，主要了解新的框架和已有成熟的框架的差距在哪里，原理上做了哪些优化。</p>
+<p>3、中级前端，还想继续提升？多使用新的功能，然后不断学习，持续的学习和实践。</p>
+<h3 id="03-web-应用中嵌入-unity-引擎">03-web 应用中嵌入 unity 引擎</h3>
+<p>讲师：董天成，阿里的一个项目，然后阿里把这个项目砍了，现在在蔚来。</p>
+<p><strong>如何在 web 应用中嵌入原生的游戏 3D 引擎（unity）? WebF 的核心开发者</strong></p>
+<p>问题：游戏引擎和 3D 效果，在不同场景下面性能不同。在原生的 ios 或者安卓中，性能比较好，但是不容易修改（新产品出来后，不能让用户都更新到新的APP）；网页应用可以随时更新，但是网页 webGL 性能比较卡，低配设备上容易卡顿发热，内存溢出（自己实际测试过，手机上运行1分钟内就卡顿，这是不能接受的问题）。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694100889.png" alt=""></p>
+<p>产品需要不卡顿，每次的效果可以快速更新</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694123794.png" alt=""></p>
+<p>所以作者想要解决，一个页面中使用 3D引擎+传统网页元素，可以同时在 web + ios  + android 三个端使用，就是 webF</p>
+<p>现在可以支持原生 JS 和 css，主流的前端框架（react vue）但是市场上众多的第三方库，还是不完全支持</p>
+<p>代码层面如何支持？</p>
+<p>在 前端代码中，使用一个 flutter-unity 的标签作为容器，然后实现和 unity 通信，使用 css 可以定义基础样式，具体通信通过 json 传参即可。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694451708.png" alt=""></p>
+<p>Flutter 中使用 unity 也是类似</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694457719.png" alt=""></p>
+<p>webF 不考虑Flutter底层的引擎，主要处理了框架层面，支持了 HTML CSS 等解析器</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694463673.png" alt=""></p>
+<p>界面渲染时，也主要处理右侧的渲染部分</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694471309.png" alt=""></p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694479601.png" alt="" title="" width="482" height="316" />
+<p>局限性：还是不支持其他格式的单位和标签等</p>
+<p>性能：和原生应用的 FPS 差不多，内存比原生多100MB</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694486522.png" alt=""></p>
+<p>结论：结合了 Native 和 Web 的优势</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721694492706.png" alt=""></p>
+<p>​</p>
+<p>提问环节：</p>
+<h5 id="1样式兼容问题">1、样式兼容问题：</h5>
+<p>还不能兼容100%的CSS，以及市面上很多框架对应的样式问题，团队还在做。</p>
+<h5 id="2webf-提供了浏览器的-api不涉及状态管理等问题">2、WebF 提供了浏览器的 API，不涉及状态管理等问题。</h5>
+<p>底层渲染差别不大，主要是 WebF 和 WebGL 的差距。现在主要是更快的速度呈现给用户。quickJS 更快的加载效率，牺牲一些 JS 执行的效率。页面中很复杂消耗CPU的运算，不如浏览器内置的 V8 的计算速度。</p>
+<p>就是一个浏览器内核，类似 RN，Flutter 比 RN 系统兼容性比较好 electron</p>
+<p>使用客户端的策略，解决3D的效果（充分使用多线程和多核CPU的效果，实现3D效果，因为webGL JS  parse 处理3D比较慢）</p>
+<p>​</p>
+<h3 id="04-kotlin-兼容各种终端系统">04-kotlin 兼容各种终端系统</h3>
+<p>讲师：JetBrains 工程师，范生右</p>
+<p>kotlin 创建的目的，是取代 java 的安卓开发语言，是 JetBrains 创建的语言（也为了推广IDE）</p>
+<h3 id="使用-kotlin-打造多平台开发应用">使用 kotlin 打造多平台开发应用</h3>
+<p>问题引入：客户端开发中，设备终端很多，各种屏幕尺寸，各种操作系统，各种开发语言让应用开发很困难。所以希望有一套工具开发客户端应用。</p>
+<h4 id="kotlin-语言介绍">Kotlin 语言介绍</h4>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721695732366.png" alt="" title="" width="611" height="298" />
+<p>通过编译，可以生成 JS Java 和原生语言 exe</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721695738989.png" alt="" title="" width="428" height="395" />
+<p>理论上适配各种平台</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721695744850.png" alt="" title="" width="635" height="280" />
+<p>开发时也有对应工具，需要同时安装 Android 和 Xcode 等各个系统的开发环境</p>
+<img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721695751237.png" alt="" title="" width="640" height="335" />
+<p>项目架构：基础的组件（shared）和 不同平台的兼容代码，也有服务端兼容代码</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1721695758760.png" alt=""></p>
+<h4 id="kotlin-开发组件案例">Kotlin 开发组件案例</h4>
+<p>客户端按钮组件</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">Composable</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fun</span> <span style="color:#a6e22e">App</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Button</span> (
+</span></span><span style="display:flex;"><span>  	<span style="color:#a6e22e">onClick</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">shape</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">RoundedCornerShape</span>(<span style="color:#ae81ff">50.</span><span style="color:#a6e22e">dp</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">modifer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Modifer</span>.<span style="color:#a6e22e">fillMaxWidth</span>().<span style="color:#a6e22e">height</span>(<span style="color:#ae81ff">50.</span><span style="color:#a6e22e">dp</span>)
+</span></span><span style="display:flex;"><span>  ) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Text</span>(<span style="color:#a6e22e">text</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Login&#34;</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>服务端</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AuthClient</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">val</span> <span style="color:#a6e22e">urlString</span><span style="color:#f92672">:</span> String <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;...&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">val</span> <span style="color:#a6e22e">httpClient</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">HttpClient</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">install</span>(<span style="color:#a6e22e">ContentNegotiation</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">json</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">defaultRequest</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">url</span>(<span style="color:#a6e22e">urlString</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">expectSuccess</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">suspend</span> <span style="color:#a6e22e">fun</span> <span style="color:#a6e22e">login</span>(<span style="color:#a6e22e">request</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Login</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">LoginReq</span>)<span style="color:#f92672">:</span> <span style="color:#a6e22e">LoginRes</span> <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>  	<span style="color:#a6e22e">httpClient</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;...&#34;</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">setBody</span>(<span style="color:#a6e22e">loginReq</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">contentType</span>(<span style="color:#a6e22e">ContentType</span>.<span style="color:#a6e22e">Application</span>.<span style="color:#a6e22e">Json</span>)
+</span></span><span style="display:flex;"><span>    }.<span style="color:#a6e22e">body</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其他服务端的框架，还有 Ktor 等框架</p>
+<p>总结：kotlin 跨平台，是一个跨平台的语言，生态系统逐步完善</p>
+<h3 id="新范式新时代新机会">新范式新时代新机会</h3>
+<p><a href="https://miracleplus.feishu.cn/file/TGKRbW4yrosqmixCtprcUlAynzg">https://miracleplus.feishu.cn/file/TGKRbW4yrosqmixCtprcUlAynzg</a></p>
+<p>陆奇最新演讲《新范式新时代新机会》完整PPT.pdf 可以扫码查看视频回放</p>
+<h4 id="新时代新范式">新时代新范式</h4>
+<p>最下面一层是技术发展史，技术的发展促进了模型的变化</p>
+<p>第一阶段：信息系统（计算机仅仅存储信息+人类观察总结模型+人类和环境交互）</p>
+<p>第二阶段：模型系统（计算机把数据整理成一部分知识模型，例如百度地图会把基础的 GPS 和坐标转换成地图和导航，实际还需要人类和环境交互）</p>
+<p>第三阶段：行动系统（计算机支持大模型，把很多知识模型整合成大模型，信息-模型-行动）例如自动驾驶，智能化更通用。</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709953034247.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709956184126.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709956190929.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709956212209.png" alt=""></p>
+<p>新范式下面有很多新机会</p>
+<p>技术层面和对应的新产品</p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709957285261.png" alt=""></p>
+<p><img src="https://cloud.seatable.cn/workspace/81910/asset/b0de7002-5abf-48b9-b07b-ba7033be74a7/images/auto-upload/image-1709957292863.png" alt=""></p>
+<p>后半部分是创业团队的发展过程</p>
+<h3 id="2024年技术大会">2024年技术大会</h3>
+<p><a href="https://juejin.cn/post/7383650248264171531" title="https://juejin.cn/post/7383650248264171531">https://juejin.cn/post/7383650248264171531</a></p>
+<p><a href="https://conf.juejin.cn/xdc2024/?utm_source=zw" title="https://conf.juejin.cn/xdc2024/?utm_source=zw">https://conf.juejin.cn/xdc2024/?utm_source=zw</a></p>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

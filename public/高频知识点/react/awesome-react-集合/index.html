@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">高频知识点</p>
+      <h1>awesome-react 集合</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#react">React</a></li>
+        <li><a href="#react-native">React Native</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="awesome-react-集合">awesome-react 集合</h1>
+<p><a href="https://github.com/enaqx/awesome-react" title="https://github.com/enaqx/awesome-react">https://github.com/enaqx/awesome-react</a></p>
+<p>很多有用的第三方库，有时间可以多看多用</p>
+<p>1、图标库：<a href="https://react-icons.github.io/react-icons/" title="https://react-icons.github.io/react-icons/">https://react-icons.github.io/react-icons/</a> 很多很多图标的集合 11K</p>
+<h3 id="react">React</h3>
+<h4 id="react-general-resources">React General Resources</h4>
+<ul>
+<li>
+<p><a href="https://react.dev/">React Official Website</a></p>
+</li>
+<li>
+<p><a href="https://github.com/facebook/react">React GitHub</a></p>
+</li>
+<li>
+<p><a href="http://www.reactiflux.com/">Reactiflux Discord Channel</a></p>
+</li>
+<li>
+<p><a href="https://react.dev/community">React Community</a></p>
+</li>
+<li>
+<p><a href="https://react.dev/community/conferences">React Conferences</a></p>
+</li>
+<li>
+<p><a href="https://codesandbox.io/s/new">React CodeSandbox Playground</a></p>
+</li>
+</ul>
+<h4 id="react-tutorials">React Tutorials</h4>
+<ul>
+<li>
+<p><a href="https://react.dev/learn">React Official Tutorial</a></p>
+</li>
+<li>
+<p><a href="https://code.visualstudio.com/docs/nodejs/reactjs-tutorial">Using React in Visual Studio Code</a></p>
+</li>
+<li>
+<p><a href="https://github.com/sudheerj/reactjs-interview-questions">React Interview Questions &amp; Answers</a></p>
+</li>
+<li>
+<p><a href="https://www.patterns.dev/">Design patterns and Component patterns for building powerful Web Apps</a></p>
+</li>
+<li>
+<p><a href="https://github.com/alan2207/bulletproof-react">A simple, scalable, and powerful architecture for building production ready React applications</a></p>
+</li>
+<li>
+<p><a href="https://github.com/typescript-cheatsheets/react-typescript-cheatsheet">Cheatsheets for experienced React developers getting started with TypeScript</a></p>
+</li>
+<li>
+<p><a href="https://github.com/howtographql/howtographql">The Fullstack Tutorial for GraphQL</a></p>
+</li>
+</ul>
+<h4 id="react-frameworks">React Frameworks</h4>
+<ul>
+<li>
+<p><a href="https://github.com/vercel/next.js">next</a> - The React Framework</p>
+</li>
+<li>
+<p><a href="https://github.com/remix-run/remix">remix</a> - Full stack web Framework that lets you focus on the user interface</p>
+</li>
+<li>
+<p><a href="https://github.com/gatsbyjs/gatsby">gatsby</a> - Build modern websites with React</p>
+</li>
+<li>
+<p><a href="https://github.com/marmelab/react-admin">react-admin</a> - A frontend Framework for building B2B applications</p>
+</li>
+<li>
+<p><a href="https://github.com/refinedev/refine">refine</a> - Build your React-based CRUD applications, without constraints</p>
+</li>
+</ul>
+<h4 id="react-component-libraries">React Component Libraries</h4>
+<ul>
+<li>
+<p><a href="https://github.com/mui/material-ui">material-ui</a> - Ready-to-use foundational React components</p>
+</li>
+<li>
+<p><a href="https://github.com/ant-design/ant-design">ant-design</a> - An enterprise-class UI design language and React UI library</p>
+</li>
+<li>
+<p><a href="https://github.com/shadcn-ui/ui">shadcn-ui</a> - Beautifully designed components built using Radix UI and Tailwind CSS</p>
+</li>
+<li>
+<p><a href="https://github.com/react-bootstrap/react-bootstrap">react-bootstrap</a> - Bootstrap components built with React</p>
+</li>
+<li>
+<p><a href="https://github.com/microsoft/fluentui">fluentui</a> - Microsoft&rsquo;s Fluent UI</p>
+</li>
+<li>
+<p><a href="https://github.com/framework7io/framework7">framework7</a> - Full featured HTML framework for building iOS &amp; Android apps</p>
+</li>
+<li>
+<p><a href="https://github.com/ariakit/ariakit">ariakit</a> - Toolkit for building accessible web apps with React</p>
+</li>
+<li>
+<p><a href="https://github.com/mantinedev/mantine">mantine</a> - Fully featured React components library</p>
+</li>
+<li>
+<p><a href="https://github.com/resend/react-email">react-email</a> - Unstyled components for creating beautiful emails</p>
+</li>
+</ul>
+<h4 id="react-state-management-and-data-fetching">React State Management and Data Fetching</h4>
+<ul>
+<li>
+<p><a href="https://github.com/reduxjs/redux">redux</a> - Predictable State Container for JavaScript Apps</p>
+</li>
+<li>
+<p><a href="https://github.com/mobxjs/mobx">mobx</a> - Simple, scalable state management</p>
+</li>
+<li>
+<p><a href="https://github.com/pmndrs/zustand">zustand</a> - Bear necessities for state management in React</p>
+</li>
+<li>
+<p><a href="https://github.com/TanStack/query">tanstack-query</a> - Powerful asynchronous state management</p>
+</li>
+<li>
+<p><a href="https://github.com/vercel/swr">swr</a> - React Hooks for Data Fetching</p>
+</li>
+<li>
+<p><a href="https://github.com/apollographql/apollo-client">apollo-client</a> - A fully-featured, production ready caching GraphQL client</p>
+</li>
+<li>
+<p><a href="https://github.com/facebook/relay">relay</a> - A framework for building data-driven React applications</p>
+</li>
+<li>
+<p><a href="https://github.com/pmndrs/jotai">jotai</a> - Primitive and flexible state management for React</p>
+</li>
+<li>
+<p><a href="https://github.com/statelyai/xstate">xstate</a> - State machines and statecharts for the modern web</p>
+</li>
+<li>
+<p><a href="https://github.com/zerobias/effector">effector</a> - Business logic with ease</p>
+</li>
+<li>
+<p><a href="https://github.com/immerjs/immer">immer</a> - Create the next immutable state by mutating the current one</p>
+</li>
+<li>
+<p><a href="https://github.com/immutable-js/immutable-js">immutable-js</a> - Immutable persistent data collections for Javascript</p>
+</li>
+<li>
+<p><a href="https://github.com/pubkey/rxdb">rxdb</a> - A fast, offline-first, reactive database for JavaScript Applications</p>
+</li>
+</ul>
+<h4 id="react-styling">React Styling</h4>
+<ul>
+<li>
+<p><a href="https://github.com/styled-components/styled-components">styled-components</a> - Visual primitives for the component age</p>
+</li>
+<li>
+<p><a href="https://github.com/emotion-js/emotion">emotion</a> - CSS-in-JS library designed for high performance style composition</p>
+</li>
+<li>
+<p><a href="https://github.com/seek-oss/vanilla-extract">vanilla-extract</a> - Zero-runtime Stylesheets-in-TypeScript</p>
+</li>
+</ul>
+<h4 id="react-routing">React Routing</h4>
+<ul>
+<li>
+<p><a href="https://github.com/remix-run/react-router">react-router</a> - Declarative routing for React</p>
+</li>
+<li>
+<p><a href="https://github.com/molefrog/wouter">wouter</a> - A minimalist-friendly routing</p>
+</li>
+<li>
+<p><a href="https://github.com/TanStack/router">tanstack-router</a> - Type-safe router with built-in caching &amp; URL state management</p>
+</li>
+</ul>
+<h4 id="react-development-tools">React Development Tools</h4>
+<ul>
+<li>
+<p><a href="https://github.com/facebook/create-react-app">create-react-app</a> - Set up a modern Web app by running one command</p>
+</li>
+<li>
+<p><a href="https://github.com/vitejs/vite">vite</a> - Next Generation Frontend Tooling</p>
+</li>
+<li>
+<p><a href="https://github.com/parcel-bundler/parcel">parcel</a> - The zero configuration build tool for the web</p>
+</li>
+<li>
+<p><a href="https://github.com/aidenybai/million">million</a> - An extremely fast and lightweight optimizing compiler</p>
+</li>
+<li>
+<p><a href="https://github.com/skellock/reactotron">reactotron</a> - A desktop app for inspecting your React and React Native projects</p>
+</li>
+<li>
+<p><a href="https://github.com/yannickcr/eslint-plugin-react">eslint-plugin-react</a> - React specific linting rules for ESLint</p>
+</li>
+<li>
+<p><a href="https://github.com/welldone-software/why-did-you-render">why-did-you-render</a> - Monkey patches React to notify you about avoidable re-renders</p>
+</li>
+</ul>
+<h4 id="react-libraries">React Libraries</h4>
+<ul>
+<li>
+<p><a href="https://github.com/preactjs/preact">preact</a> - Fast React alternative with the same modern API</p>
+</li>
+<li>
+<p><a href="https://github.com/floating-ui/floating-ui">floating-ui</a> - Toolkit to create floating elements</p>
+</li>
+<li>
+<p><a href="https://github.com/gregberge/loadable-components">loadable-components</a> - The recommended Code Splitting library for React</p>
+</li>
+<li>
+<p><a href="https://github.com/rpldy/react-uploady">react-uploady</a> - Modern file-upload components &amp; hooks for React</p>
+</li>
+<li>
+<p><a href="https://github.com/downshift-js/downshift">downshift</a> - React autocomplete, combobox or select dropdown components</p>
+</li>
+<li>
+<p><a href="https://github.com/bvaughn/react-error-boundary">react-error-boundary</a> - A React error boundary component that lets you catch errors</p>
+</li>
+</ul>
+<h4 id="react-testing">React Testing</h4>
+<ul>
+<li>
+<p><a href="https://github.com/facebook/jest">jest</a> - Delightful JavaScript Testing</p>
+</li>
+<li>
+<p><a href="https://github.com/testing-library/react-testing-library">react-testing-library</a> - Simple and complete React DOM testing utilities</p>
+</li>
+<li>
+<p><a href="https://github.com/cypress-io/cypress">cypress</a> - Fast, easy and reliable testing for anything that runs in a browser</p>
+</li>
+</ul>
+<h4 id="react-awesome-components">React Awesome Components</h4>
+<ul>
+<li>
+<p><a href="https://github.com/brillout/awesome-react-components">Awesome React Components</a></p>
+</li>
+<li>
+<p><a href="https://github.com/JedWatson/react-select">react-select</a> - The Select Component for React</p>
+</li>
+<li>
+<p><a href="https://github.com/jquense/react-big-calendar">react-big-calendar</a> - Calendar component</p>
+</li>
+<li>
+<p><a href="https://github.com/Hacker0x01/react-datepicker/">react-datepicker</a> - A simple and reusable datepicker component for React</p>
+</li>
+<li>
+<p><a href="https://github.com/dvtng/react-loading-skeleton">react-loading-skeleton</a> - Create skeleton screens that automatically adapt to your app</p>
+</li>
+<li>
+<p><a href="https://github.com/zpao/qrcode.react">react-qrcode</a> - QR component for use with React</p>
+</li>
+<li>
+<p><a href="https://github.com/pierpo/react-archer">react-archer</a> - Draw arrows between React elements</p>
+</li>
+<li>
+<p><a href="https://github.com/react-icons/react-icons">react-icons</a> - SVG React icons of popular icon packs</p>
+</li>
+<li>
+<p><a href="https://github.com/lukasbach/react-complex-tree">react-complex-tree</a> - Unopinionated Accessible Tree</p>
+</li>
+<li>
+<p><a href="https://github.com/mohitk05/react-insta-stories">react-insta-stories</a> - A React component for Instagram like stories</p>
+</li>
+<li>
+<p><a href="https://github.com/nolimits4web/swiper">swiper</a> - Most modern mobile touch slider</p>
+</li>
+<li>
+<p><a href="https://github.com/rcbyr/keen-slider">keen-slider</a> - The Touch slider carousel</p>
+</li>
+<li>
+<p><a href="https://github.com/porscheofficial/cookie-consent-banner">cookie-consent-banner</a> – The lightweight and flexible Cookie Consent Banner</p>
+</li>
+<li>
+<p><a href="https://github.com/anatoliygatt/heart-switch">heart-switch</a> - A heart-shaped toggle switch component for React</p>
+</li>
+<li>
+<p><a href="https://github.com/timc1/kbar">kbar</a> - Fast, portable, and extensible cmd+k interface for your site</p>
+</li>
+<li>
+<p><a href="https://github.com/yairEO/tagify">tagify</a> - Lightweight, efficient Tags input component</p>
+</li>
+<li>
+<p><a href="https://github.com/measuredco/puck">puck</a> - The visual editor for React</p>
+</li>
+</ul>
+<h4 id="react-components-sandboxes">React Components Sandboxes</h4>
+<ul>
+<li>
+<p><a href="https://github.com/storybookjs/storybook">storybook</a> - Storybook is a frontend workshop for building UI components and pages in isolation</p>
+</li>
+<li>
+<p><a href="https://github.com/styleguidist/react-styleguidist">react-styleguidist</a> - Isolated React component development environment with a living style guide</p>
+</li>
+<li>
+<p><a href="https://github.com/react-cosmos/react-cosmos">react-cosmos</a> - Dev tool for creating reusable React components</p>
+</li>
+<li>
+<p><a href="https://github.com/teambit/bit">bit</a> - A build system for development of composable software</p>
+</li>
+</ul>
+<h4 id="react-forms">React Forms</h4>
+<ul>
+<li>
+<p><a href="https://github.com/react-hook-form/react-hook-form">react-hook-form</a> - React Hooks for form state management and validation</p>
+</li>
+<li>
+<p><a href="https://github.com/jaredpalmer/formik">formik</a> - Build forms in React, without the tears</p>
+</li>
+<li>
+<p><a href="https://github.com/mozilla-services/react-jsonschema-form">react-jsonschema-form</a> - A React component for building Web forms from JSON Schema</p>
+</li>
+<li>
+<p><a href="https://github.com/alibaba/formily">formily</a> - Alibaba Group Unified Form Solution</p>
+</li>
+<li>
+<p><a href="https://github.com/ealush/vest">vest</a> - Declarative validations framework</p>
+</li>
+</ul>
+<h4 id="react-tables-and-grids">React Tables and Grids</h4>
+<ul>
+<li>
+<p><a href="https://github.com/react-grid-layout/react-grid-layout">react-grid-layout</a> - A draggable and resizable grid layout with responsive breakpoints</p>
+</li>
+<li>
+<p><a href="https://github.com/TanStack/table">tanstack-table</a> - Headless UI for building powerful tables &amp; datagrids</p>
+</li>
+<li>
+<p><a href="https://github.com/adazzle/react-data-grid">react-data-grid</a> - Feature-rich and customizable data grid React component</p>
+</li>
+</ul>
+<h4 id="react-maps">React Maps</h4>
+<ul>
+<li>
+<p><a href="https://github.com/visgl/react-map-gl">react-map-gl</a> - React friendly API wrapper around MapboxGL JS</p>
+</li>
+<li>
+<p><a href="https://github.com/PaulLeCam/react-leaflet">react-leaflet</a> - React components for Leaflet maps</p>
+</li>
+</ul>
+<h4 id="react-charts">React Charts</h4>
+<ul>
+<li>
+<p><a href="https://github.com/recharts/recharts">recharts</a> - Redefined chart library built with React and D3</p>
+</li>
+<li>
+<p><a href="https://github.com/airbnb/visx">visx</a> - Visualization components</p>
+</li>
+<li>
+<p><a href="https://github.com/FormidableLabs/victory">victory</a> - A collection of composable React components for building interactive data visualizations</p>
+</li>
+<li>
+<p><a href="https://github.com/uber/react-vis">react-vis</a> - Data Visualization Components</p>
+</li>
+<li>
+<p><a href="https://github.com/plouc/nivo">nivo</a> - Provides a rich set of data visualization components built on top of the D3 and React libraries</p>
+</li>
+<li>
+<p><a href="https://github.com/xyflow/xyflow">xyflow</a> - A customizable React component for building node-based editors and interactive diagrams</p>
+</li>
+</ul>
+<h4 id="react-renderers">React Renderers</h4>
+<ul>
+<li>
+<p><a href="https://github.com/pmndrs/react-three-fiber">react-three-fiber</a> - A React renderer for Three.js</p>
+</li>
+<li>
+<p><a href="https://github.com/vadimdemedes/ink">ink</a> - React for interactive command-line apps</p>
+</li>
+<li>
+<p><a href="https://github.com/remotion-dev/remotion">remotion</a> - Make videos programmatically with React</p>
+</li>
+<li>
+<p><a href="https://github.com/diegomura/react-pdf">react-pdf</a> - Create PDF files using React</p>
+</li>
+<li>
+<p><a href="https://github.com/react-figma/react-figma">react-figma</a> - A React renderer for Figma</p>
+</li>
+</ul>
+<h4 id="react-internationalization">React Internationalization</h4>
+<ul>
+<li>
+<p><a href="https://github.com/formatjs/formatjs">formatjs</a> - Internationalize your web apps</p>
+</li>
+<li>
+<p><a href="https://github.com/i18next/react-i18next">react-i18next</a> - Internationalization for React done right</p>
+</li>
+</ul>
+<h4 id="react-graphics-and-animations">React Graphics and Animations</h4>
+<ul>
+<li>
+<p><a href="https://github.com/pmndrs/react-spring">react-spring</a> - A spring physics based React animation library</p>
+</li>
+<li>
+<p><a href="https://github.com/framer/motion">framer-motion</a> - Open source, production-ready animation and gesture library for React</p>
+</li>
+<li>
+<p><a href="https://github.com/formkit/auto-animate">auto-animate</a> - A zero-config, drop-in animation utility that adds smooth transitions</p>
+</li>
+<li>
+<p><a href="https://github.com/matteobruni/tsparticles">react-tsparticles</a> - Easily create highly customizable particles effects</p>
+</li>
+<li>
+<p><a href="https://github.com/mkosir/react-parallax-tilt">react-parallax-tilt</a> - Easily apply tilt hover effect on React components</p>
+</li>
+<li>
+<p><a href="https://github.com/geosigno/simpleParallax.js">simple-parallax-js</a> - The easiest way to get a parallax effect with React and JavaScript</p>
+</li>
+</ul>
+<h4 id="react-integration">React Integration</h4>
+<ul>
+<li>
+<p><a href="https://github.com/rescript-lang/rescript-compiler">rescript-compiler</a> - A robustly typed language that compiles to efficient and human-readable JavaScript</p>
+</li>
+<li>
+<p><a href="https://github.com/reactjs/react-rails">react-rails</a> - Integrate React with Rails</p>
+</li>
+<li>
+<p><a href="https://github.com/fulcrologic/fulcro">fulcro</a> - A library for development of web applications in clj/cljs</p>
+</li>
+<li>
+<p><a href="https://tw-elements.com/docs/standard/integrations/react-integration/">tailwind-react</a> - Article that shows you how to integrate React application with Tailwind</p>
+</li>
+</ul>
+<h4 id="react-real-apps">React Real Apps</h4>
+<ul>
+<li>
+<p><a href="https://github.com/mattermost/mattermost-server">mattermost-server</a> - An open source platform for secure collaboration</p>
+</li>
+<li>
+<p><a href="https://github.com/elastic/kibana">kibana</a> - Your window into the Elastic Stack</p>
+</li>
+<li>
+<p><a href="https://github.com/captbaritone/webamp">webamp</a> - Winamp 2 reimplemented for the browser</p>
+</li>
+<li>
+<p><a href="https://github.com/gaearon/overreacted.io">overreacted</a> - Personal blog by Dan Abramov</p>
+</li>
+<li>
+<p><a href="https://github.com/wavetermdev/waveterm">wave</a> - An open-source, cross-platform terminal for seamless workflows</p>
+</li>
+</ul>
+<h3 id="react-native">React Native</h3>
+<h4 id="react-native-general-resources">React Native General Resources</h4>
+<ul>
+<li>
+<p><a href="https://reactnative.dev/">React Native Official Website</a></p>
+</li>
+<li>
+<p><a href="https://github.com/facebook/react-native">React Native GitHub</a></p>
+</li>
+<li>
+<p><a href="https://reactnative.dev/community/overview">React Native Community</a></p>
+</li>
+<li>
+<p><a href="https://expo.dev/">Expo</a></p>
+</li>
+<li>
+<p><a href="https://snack.expo.dev/">Expo Snack Playground</a></p>
+</li>
+</ul>
+<h4 id="react-native-navigation">React Native Navigation</h4>
+<ul>
+<li><a href="https://github.com/react-navigation/react-navigation">react-navigation</a> - Routing and navigation for your React Native apps</li>
+</ul>
+<h4 id="react-native-awesome-components">React Native Awesome Components</h4>
+<ul>
+<li>
+<p><a href="https://github.com/oblador/react-native-vector-icons">react-native-vector-icons</a> - Customizable Icons for React Native</p>
+</li>
+<li>
+<p><a href="https://github.com/FaridSafi/react-native-gifted-chat">react-native-gifted-chat</a> - The most complete chat UI for React Native</p>
+</li>
+</ul>
+<h4 id="react-native-libraries">React Native Libraries</h4>
+<ul>
+<li>
+<p><a href="https://github.com/realm/realm-js">realm-js</a> - A mobile database: an alternative to SQLite &amp; key-value stores</p>
+</li>
+<li>
+<p><a href="https://github.com/react-native-device-info/react-native-device-info">react-native-device-info</a> - Device Information for React Native iOS and Android</p>
+</li>
+</ul>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>

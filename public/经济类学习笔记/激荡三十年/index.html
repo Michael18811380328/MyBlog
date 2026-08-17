@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的笔记</title>
+    <meta name="description" content="Michael An 的个人博客">
+    <style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f4ef;
+    --panel: rgba(255, 255, 255, 0.82);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: rgba(31, 41, 55, 0.12);
+    --accent: #0f766e;
+    --accent-soft: rgba(15, 118, 110, 0.12);
+    --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 30%),
+      linear-gradient(180deg, #faf8f3 0%, var(--bg) 100%);
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .site-shell {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 48px;
+  }
+
+  .site-header,
+  .site-footer,
+  .hero,
+  .page-header,
+  .card,
+  .post,
+  .toc,
+  .article-list-wrap {
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+  }
+
+  .brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .site-nav a {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    border: 1px solid transparent;
+  }
+
+  .site-main { display: grid; gap: 20px; }
+
+  .hero,
+  .page-header,
+  .article-list-wrap,
+  .post,
+  .toc {
+    padding: 28px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1, h2, h3, h4 { line-height: 1.25; margin-top: 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3.6rem); margin-bottom: 12px; }
+  h2 { font-size: 1.35rem; margin-bottom: 10px; }
+
+  .lede { margin: 0 0 12px; color: var(--muted); font-size: 1.02rem; }
+  .content { overflow-wrap: anywhere; }
+  .content :first-child { margin-top: 0; }
+  .content img { max-width: 100%; height: auto; }
+  .content pre {
+    padding: 18px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content code {
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.08);
+  }
+  .content pre code { padding: 0; background: transparent; }
+  .content .highlight {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .content .highlight:hover .copy-button,
+  .content .highlight:focus-within .copy-button {
+    opacity: 1;
+  }
+  .content .highlight pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  .content .highlight code {
+    background: transparent;
+    padding: 0;
+  }
+  .content .highlight .chroma {
+    color: #e5e7eb;
+    background-color: #0f172a;
+  }
+  .content .highlight .lntable,
+  .content .highlight .lntd {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+  }
+  .content .highlight .lntable pre {
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .copy-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .copy-button:hover {
+    transform: translateY(-1px);
+    background: rgba(15, 23, 42, 0.92);
+  }
+  .copy-button.is-copied {
+    background: rgba(15, 118, 110, 0.92);
+    border-color: rgba(15, 118, 110, 0.6);
+  }
+  .content blockquote {
+    margin-left: 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 12px;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    min-height: 140px;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(15, 118, 110, 0.35);
+  }
+  .card p,
+  .card span,
+  .article-list time { color: var(--muted); }
+
+  .article-list-wrap { padding-top: 22px; padding-bottom: 22px; }
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+  .article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .article-list li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(31, 41, 55, 0.06);
+  }
+
+  .toc + .content,
+  .page-header + .content {
+    margin-top: 16px;
+  }
+  .toc ul { padding-left: 1.2rem; }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 18px 22px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .site-shell { width: min(100% - 20px, 1120px); }
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+    .site-nav { justify-content: flex-start; }
+    .hero,
+    .page-header,
+    .article-list-wrap,
+    .post,
+    .toc { padding: 20px; }
+    .article-list li a { flex-direction: column; }
+    .copy-button { opacity: 1; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.highlight').forEach(function (block) {
+      if (block.querySelector('.copy-button')) return;
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.addEventListener('click', async function () {
+        var code = block.querySelector('pre code');
+        if (!code) return;
+
+        try {
+          await navigator.clipboard.writeText(code.innerText);
+          button.textContent = '已复制';
+          button.classList.add('is-copied');
+          window.setTimeout(function () {
+            button.textContent = '复制';
+            button.classList.remove('is-copied');
+          }, 1400);
+        } catch (error) {
+          button.textContent = '失败';
+          window.setTimeout(function () {
+            button.textContent = '复制';
+          }, 1400);
+        }
+      });
+
+      block.appendChild(button);
+    });
+  });
+</script>
+
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+  <a class="brand" href="/">我的笔记</a>
+  <nav class="site-nav" aria-label="Primary">
+    
+      <a href="/MyBlog/%E7%BB%8F%E6%B5%8E%E7%B1%BB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">经管类学习笔记</a>
+    
+      <a href="/MyBlog/%E7%BD%91%E8%AF%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">网课学习笔记</a>
+    
+      <a href="/MyBlog/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%BD%92%E6%A1%A3/">计算机学习笔记</a>
+    
+      <a href="/MyBlog/%E9%AB%98%E9%A2%91%E7%9F%A5%E8%AF%86%E7%82%B9/">高频知识点</a>
+    
+  </nav>
+</header>
+
+      <main class="site-main">
+        
+  <article class="post">
+    <header class="page-header">
+      <p class="eyebrow">经济类学习笔记</p>
+      <h1>激荡三十年</h1>
+      <p class="lede">
+        
+        
+      </p>
+      
+    </header>
+
+    
+      <aside class="toc">
+        <h2>目录</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#第三部分-19931997-民族品牌进行曲">第三部分 1993‑1997 民族品牌进行曲</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#第四部分-19982002-在暴风雨中转折">第四部分 1998‑2002 在暴风雨中转折</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#第五部分-20032008-大国梦想成真">第五部分 2003‑2008 大国梦想成真</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </aside>
+    
+
+    <div class="content">
+      <h1 id="读书笔记">读书笔记</h1>
+<p>大学期间读过一次，讲改革开放1978年到2008年，30年的历史发展</p>
+<p>《激荡三十年》介绍了改革开放到新世纪发生在中国大陆经济体制改革中的大事。</p>
+<p>其中有政府的决策，有高层领导的指示，有亚洲金融风暴的影响，更多的是企业界人士台前幕后的种种作为。</p>
+<p>人们能从宏观上看出经济体制改革的艰难和民企在突围中的奋斗，无论成功与失败，都真实地映衬出中国腾飞中沉重的翅膀。</p>
+<p>电子版链接：<a href="https://moodle.scnu.edu.cn/pluginfile.php/217549/mod_folder/content/0/%E3%80%8A%E6%BF%80%E8%8D%A1%E4%B8%89%E5%8D%81%E5%B9%B4%E3%80%8B.pdf" title="https://moodle.scnu.edu.cn/pluginfile.php/217549/mod_folder/content/0/%E3%80%8A%E6%BF%80%E8%8D%A1%E4%B8%89%E5%8D%81%E5%B9%B4%E3%80%8B.pdf">https://moodle.scnu.edu.cn/pluginfile.php/217549/mod_folder/content/0/%E3%80%8A%E6%BF%80%E8%8D%A1%E4%B8%89%E5%8D%81%E5%B9%B4%E3%80%8B.pdf</a></p>
+<h4 id="第一部分-19781983-没有规则的骚动">第一部分 1978—1983 没有规则的骚动</h4>
+<p>1978改革开放启动，旧计划经济体系瓦解、市场经济无成文法规约束，民间、基层、国企在模糊灰色地带试探经商，全民陷入无序又充满生机的创业骚动，一切行为无明确制度界定，一边突破禁区，一边频繁遭遇政策收紧、整顿，是中国市场化破冰的原始混乱期。</p>
+<h5 id="第一节-1978-伟大的缺口">第一节 1978 伟大的缺口</h5>
+<ol>
+<li>顶层转折：十一届三中全会召开，正式放弃 “以阶级斗争为纲”，确立经济建设中心，承认商品经济、允许适度市场调节，为民间经商撕开政策缺口。</li>
+<li>农村：安徽小岗村大包干秘密落地，农民打破集体大锅饭，分田到户解决温饱，是全国最早的产权变革试验；各地农村偷偷搞副业、集市贸易复苏。</li>
+<li>国企：国营工厂开始试行奖金制度，打破平均主义 “大锅饭”，允许企业少量自主安排生产，微小放权试水。</li>
+<li>民间暗流：长期禁止的个体经营出现苗头，小贩、小手工业者悄悄谋生，但政策未完全合法化，处处受限。</li>
+</ol>
+<h5 id="第二节-1979-放权放权再放权">第二节 1979 放权、放权、再放权</h5>
+<ol>
+<li>中央放权改革：对地方、国营企业双重放权，扩大地方财政自主权，企业拥有产品自销、少量定价、利润留存权限。</li>
+<li>特区诞生：深圳、珠海、汕头、厦门设立经济特区（实际上对应着外部的港澳台和潮汕投资，其中香港对应的深圳发展很好），对外开放破冰，允许外资建厂、来料加工，引进海外资本与管理模式，举国争议特区 “是不是租界”。</li>
+<li>个体工商户合法化：国家首次承认个体经济合法地位，允许城镇无业人员开店经营，第一批个体户正式出现。</li>
+<li>乡镇企业萌芽：苏南地区社队企业快速发展，依托本地资源承接城市工业外溢订单，不属国营、不属私有，游走在制度缝隙。</li>
+<li>企业史人物“傻子”年广久（傻子瓜子个体销售）+企业史人物“老板”袁庚</li>
+</ol>
+<h5 id="第三节-1980-告别短缺的第一步">第三节 1980 告别短缺的第一步</h5>
+<ol>
+<li>商品供给改善：市场化试点见效，集市、个体户填补国营商店供给空白，生活用品不再完全凭票供应，票证体系开始松动。</li>
+<li>温州模式雏形：温州农民外出务工、家庭作坊批量生产小商品，依靠民间购销大军全国兜售，民间地下流通网络成型。</li>
+<li>国企承包试点：部分工厂试行利润承包制，多劳多得激发生产，但出现企业只顾短期盈利、忽视设备维护的问题。</li>
+<li>政策摇摆：市场化引发 “姓资姓社” 争论，舆论对个体户、特区、私人作坊批评声不断，改革路线出现短暂摇摆。</li>
+</ol>
+<h5 id="第四节-1981-笼子与鸟的争论">第四节 1981 笼子与鸟的争论</h5>
+<ol>
+<li>核心争论：高层提出 “计划经济为主，市场调节为辅”，把市场比作 “鸟”、计划比作 “笼子”，限定市场只能在计划框架内活动，收紧市场化边界。</li>
+<li>全面整顿工商业：对乱涨价、地下工厂、长途贩运开展整顿，大量个体户、小型作坊被关停，长途商贩一度被定性 “投机倒把”。</li>
+<li>乡镇企业受限：社队企业生产范围被严格限制，禁止和国营工厂争夺原料、市场，发展遭遇政策天花板。</li>
+<li>外资遇冷：特区政策收缩，外商投资顾虑加重，来料加工、合资项目推进放缓。</li>
+<li>企业史人物难忘“任项”</li>
+</ol>
+<h5 id="第五节-1982-投机倒把的年代">第五节 1982 投机倒把的年代</h5>
+<ol>
+<li>“投机倒把” 高压治理：全国严打长途贩运、私人倒卖物资，大量民间商人被处罚、关押，经商风险达到阶段性顶峰。典型案例：温州 “八大王” 事件，小商品经营者被立案查办。</li>
+<li>双轨制雏形显现：物资分计划内平价、计划外议价，价差催生灰色倒卖空间，管制越严，地下流通越活跃。</li>
+<li>农村改革稳固：家庭联产承包责任制全国推广，粮食产量大幅提升，农民温饱基本解决，农村副业依旧偷偷发展。</li>
+<li>国企回归管控：前期下放的部分经营权限回收，企业自主经营空间收缩，改革步伐放缓。</li>
+<li>企业史人物“大王”如蚁</li>
+</ol>
+<h5 id="第六节-1983-松动的边界">第六节 1983 松动的边界</h5>
+<ol>
+<li>政策适度松绑：持续两年的严厉整顿缓和，中央意识到全面打压民间经济会造成商品短缺，逐步放宽对个体、贩运的限制。</li>
+<li>平反民间商人：温州八大王等一批投机倒把案件平反，承认小商品流通的合理价值，释放经商信号。</li>
+<li>个体经济壮大：城镇个体户数量激增，餐饮、服装、修理等服务业兴起，成为吸纳就业主力。</li>
+<li>乡镇企业突围：苏南、温州乡镇企业找到差异化赛道，避开国营主业，生产轻工小商品，地方政府默许扶持；特区重新放开招商，外资加工产业回暖。</li>
+<li>时代特征总结：1978—1983 全程无完善商事法律、市场规则空白，政策时松时紧，所有人都在试探制度红线，野蛮、混乱却完成中国市场经济最初的启蒙。</li>
+<li>企业史人物裁缝神话、步鑫生</li>
+</ol>
+<h4 id="第二部分-19841992被释放的精灵">第二部分 1984—1992被释放的精灵</h4>
+<p>这一时期核心：十二届三中全会确立“有计划的商品经济”，企业活力被释放，民营、乡镇、国企改革、外资一起登场；中间历经狂欢、混乱、治理整顿、思想争论，最终南巡讲话把市场经济再次推向快车道。</p>
+<h4 id="1984-公司元年">1984 公司元年</h4>
+<ol>
+<li>政策：十二届三中全会，提出有计划的商品经济，承认商品经济合法性，开放14个沿海港口城市，改革闸门彻底打开。</li>
+<li>一大批日后知名公司在这一年诞生：海尔、联想、万科、四通、健力宝，集体创业浪潮爆发。</li>
+<li>国企开始推行放权让利，企业第一次拥有经营自主权；乡镇企业快速崛起；中外合资企业起步（北京吉普等）。</li>
+<li>时代特征：大批体制内人员“下海”，中国人第一次大规模学习怎么做“公司”。</li>
+</ol>
+<h4 id="1985-无度的狂欢">1985 无度的狂欢</h4>
+<ol>
+<li>经济过热，消费、投资猛增，物价开始躁动；全民经商热潮，倒买倒卖、“官倒”现象大量出现。</li>
+<li>商品供不应求，很多企业重产量、轻质量，市场秩序混乱。</li>
+<li>政府开始第一轮宏观调控，试图收紧信贷、抑制过热，但效果有限。</li>
+</ol>
+<p>企业史人物｜两面雷宇 雷宇，海南主官。一方面大胆放开海南，鼓励经商，造就海南早期的经济活力；另一方面爆发轰动全国的海南汽车走私案。他既有改革闯将的一面，又要为失控乱象承担责任，是早期特区改革“闯祸与探索并存”的缩影。</p>
+<h4 id="1986-一无所有的力量">1986 一无所有的力量</h4>
+<ol>
+<li>改革陷入迷茫：国企放权之后，出现工资侵蚀利润、短期行为，国企改革找不到完美方案。</li>
+<li>没有资源、没有身份的乡镇企业、民营小企业逆势生长。没有计划内原料，靠“找米下锅”，在夹缝抢市场，展现“一无所有”民间力量。</li>
+<li>宏观上加强治理，对过热的市场进行整顿。</li>
+</ol>
+<p>企业史人物｜郑氏之死 步鑫生，国企改革先锋，曾经全国学习的改革样板。大刀阔斧改革老厂，后来扩张冒进、项目失败，企业衰落。从万众推崇到迅速跌落，折射早期国企改革人物的悲剧命运。</p>
+<p>企业史人物｜仁宝当家 鲁冠球，万向集团。乡镇企业家代表，从农机小作坊起步，不追逐短期投机，踏实做实业，把乡镇企业做成全国知名企业，代表稳健型民营实业家路线。</p>
+<h4 id="1987-企业家年代">1987 企业家年代</h4>
+<ol>
+<li>社会开始出现“企业家”这个概念，民间创业热情高涨；乡镇企业迎来最好的发展年份。</li>
+<li>国企大规模推广承包制，把企业承包给个人经营，试图解决国企激励问题。</li>
+<li>外资持续进入，深圳等特区建设加速。</li>
+</ol>
+<p>企业史人物｜“承包典范”马胜利 国企承包改革的标杆人物。承包造纸厂，短期扭亏为盈，名声大噪；之后一口气承包几十家亏损国企，摊子铺太大，管理跟不上，最终全面溃败。本书以此反思：承包制可以短期激活，但解决不了国企深层制度问题。</p>
+<h4 id="1988-资本的苏醒">1988 资本的苏醒</h4>
+<ol>
+<li>价格闯关，试图放开物价，引发全国抢购风潮，通货膨胀爆发。</li>
+<li>中国资本市场萌芽：股票、债券开始出现，民间第一次接触资本、股份制。</li>
+<li>国家启动严厉的治理整顿，收缩银根，打压投机，经济由热转冷。</li>
+</ol>
+<p>企业史人物｜廿人沉浮 讲述80年代知名的20位改革风云人物，有国企厂长、民营老板、改革官员。有的人风光一时，有的人入狱、失意，集中展现这一代开拓者命运的大起大落。</p>
+<h4 id="1989-倒春寒">1989 “倒春寒”</h4>
+<ol>
+<li>治理整顿继续加码，经济收缩，市场萧条。</li>
+<li>改革出现思想争论，市场经济方向受到质疑，民营、乡镇企业压力加大，很多人不敢继续下海。</li>
+<li>企业界普遍观望，改革脚步停滞，被称为改革的“倒春寒”。</li>
+</ol>
+<h4 id="1990-乍热骤冷">1990 乍热骤冷</h4>
+<ol>
+<li>经济低迷，市场疲软；上海证券交易所、深圳证券交易所相继成立，资本市场正式开张，但初期交易冷清。</li>
+<li>政策反复摇摆：时而想刺激经济，时而又怕重燃通胀，一放就乱、一收就死。</li>
+<li>大量民营企业收缩，不少个体户、乡镇企业处境艰难。</li>
+</ol>
+<h4 id="1991-沧海一声笑">1991 沧海一声笑</h4>
+<ol>
+<li>经济略微回暖，但意识形态争论仍然激烈，“姓资还是姓社”的争论笼罩整个商界。</li>
+<li>一部分企业家收缩避险，另一部分人在暗中积蓄力量，等待风向。</li>
+<li>股市开始慢慢活跃，民间资本在压抑环境下暗流涌动。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜牟氏幻觉 牟其中，传奇投机商人。罐头换飞机，制造轰动商业案例；擅长宏大构想、资本腾挪，但是缺少扎实实业根基，沉迷宏大叙事，最终走向毁灭。代表那一代“空手道”式冒险家。</p>
+</blockquote>
+<h4 id="1992-春天的故事">1992 春天的故事</h4>
+<ol>
+<li>邓小平南巡讲话，彻底打破思想枷锁，明确搞市场经济，不再纠缠姓资姓社。</li>
+<li>全国再次掀起下海狂潮，公务员、知识分子大批辞职经商；股市爆发，认购证传奇发生，创业浪潮席卷全国。</li>
+<li>这一年，宣告一个时代结束，开启1993之后的市场经济新阶段。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜黄家“天使” 黄任中，台商投资人。80‑90年代来大陆投资，资本风格豪放，擅长投资与财富运作；既是早期大陆重要外来资本力量，也折射出时代浪潮下资本的欲望与命运。</p>
+</blockquote>
+<h2 id="第三部分-19931997-民族品牌进行曲">第三部分 1993‑1997 民族品牌进行曲</h2>
+<p>时代总览：南巡之后经济狂飙，分税制改革落地，本土民族品牌集体崛起；同时股市野蛮生长、保健品泡沫、国企改革阵痛，狂欢背后埋下大量危机。</p>
+<h4 id="1993-扭转战局">1993 扭转战局</h4>
+<ol>
+<li>中央推行分税制改革，重新划分中央与地方财政，扭转财政格局；同时强力调控抑制经济过热。</li>
+<li>本土企业全面崛起：海尔、联想、娃哈哈等民族品牌发力；外资大规模进入中国市场，本土企业开始直面外企竞争。</li>
+<li>股市快速扩张，上市公司数量大增，但监管制度不完善。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜庄主之殇 禹作敏，大邱庄的领头人，“天下第一村”的缔造者，乡镇企业时代代表人物。带领村庄暴富，但权力膨胀，无视法治，最终身陷囹圄。象征乡镇企业家：野蛮生长的能力，与时代制度约束之间的悲剧冲突。</p>
+</blockquote>
+<h4 id="1994-青春期的躁动">1994 青春期的躁动</h4>
+<ol>
+<li>通货膨胀压力大，物价高涨；本土企业疯狂扩张，保健品、家电行业火热，企业普遍心态急躁，盲目多元化。</li>
+<li>《公司法》正式颁布，中国企业第一次有正式商事法律依据。</li>
+<li>资本市场乱象丛生，券商力量快速壮大。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜支教公司 南德集团牟其中的支教公司，商业理想与现实错位，体现90年代一部分企业家“大概念、轻实业”的特征。</p>
+</blockquote>
+<blockquote>
+<p>企业史人物｜“君安教父” 张国庆，君安证券创始人。君安是90年代最凶猛券商，投行、资本运作风光无限；试图MBO完成管理层持股，触碰监管红线，最终崩塌，是早期券商野蛮生长的缩影。</p>
+</blockquote>
+<h4 id="1995-收复之役">1995 收复之役</h4>
+<ol>
+<li>本土企业对抗外资品牌，家电等行业打响“国货收复市场”战役；同时国企改革推进，“抓大放小”思路浮现。</li>
+<li>市场秩序问题凸显：假货、虚假广告泛滥，消费者维权意识觉醒。</li>
+<li>证券市场爆发重大事件，国债期货327事件震动全国。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜刁民王海 王海，职业打假第一人。利用规则打假维权，揭开市场假货泛滥现实，折射转型期消费者保护的空白。</p>
+</blockquote>
+<blockquote>
+<p>企业史人物｜万国大佬 管金生，万国证券创始人。327国债期货事件，万国证券轰然倒下，一代证券大佬陨落，暴露早期资本市场制度漏洞。</p>
+</blockquote>
+<h4 id="1996-500强梦想">1996 500强梦想</h4>
+<ol>
+<li>国内企业家集体萌生冲进世界500强的宏大梦想，大批企业疯狂扩张、跨行业并购，追求规模优先。</li>
+<li>家电价格大战爆发，惨烈的市场洗牌；三九、巨人等企业快速膨胀。</li>
+<li>地方政府热衷于扶持本地巨型企业。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜一人三九 赵新先，三九集团。一人撑起整个三九，个人权威压倒制度，靠个人能力把企业做大；但个人独断，盲目多元化，为后续溃败埋下隐患，代表一批“一个人=一个国企”的时代特征。</p>
+</blockquote>
+<h4 id="1997-世界不再令人着迷">1997 “世界不再令人着迷”</h4>
+<ol>
+<li>亚洲金融危机爆发，外部环境突变；国内保健品泡沫破裂，巨人集团轰然倒塌，很多风光企业集体出事。</li>
+<li>苏南模式走到尽头，乡镇企业原有模式暴露弊端；企业从狂热扩张，转入反思收缩。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜时代标本 复盘一批90年代高光之后倒下的企业家，他们抓住时代红利崛起，却受制于产权、制度、个人认知，成为改革年代的标本。</p>
+</blockquote>
+<hr>
+<h2 id="第四部分-19982002-在暴风雨中转折">第四部分 1998‑2002 在暴风雨中转折</h2>
+<p>时代总览：亚洲金融危机冲击，国企大改革、下岗潮；互联网兴起；股市庄家横行；住房改革；中国奋力冲刺入世；“中国制造”开始成型，同时无数企业家在产权、政策夹缝中命运跌宕。</p>
+<h4 id="1998-闯地雷阵">1998 闯地雷阵</h4>
+<ol>
+<li>国企改革“闯地雷阵”，大规模国企改制、下岗分流；取消福利分房，房地产时代开启；面对金融危机，坚守人民币不贬值。</li>
+<li>大量国企进行产权重组，“国退民进”浪潮；外资进一步调整在华策略。</li>
+<li>互联网企业萌芽，阿里、腾讯相继诞生。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜“烟王”是非 褚时健，红塔集团。一手把玉溪卷烟厂做成超级国企，创造巨额税收；但国企激励机制缺失，个人待遇与贡献严重不对等，经济问题入狱。书中讨论时代制度困境下企业家的功过是非。</p>
+</blockquote>
+<h4 id="1999-庄家恶之花">1999 庄家“恶之花”</h4>
+<ol>
+<li>《证券法》出台，但股市庄家横行，坐庄炒作盛行，“重融资轻保护散户”问题突出，吴敬琏“股市赌场论”引发大讨论。</li>
+<li>互联网概念火热，大量网络公司涌现。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜胡润造榜 胡润，制作中国内地富豪榜。一张榜单第一次把中国富豪群体推到公众视野，也搅动财富舆论，很多上榜企业家因此卷入风波。</p>
+</blockquote>
+<h4 id="2000-曙光后的冬天">2000 曙光后的冬天</h4>
+<ol>
+<li>全球互联网泡沫破灭，国内互联网行业进入寒冬，大批网站倒闭。</li>
+<li>资本市场矛盾凸显，国企改制过程的财富争议开始浮现。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜霸王宿命 讲述霸王等一批本土龙头企业，在市场、资本、地方利益之间挣扎，体现本土强势企业难以摆脱的时代宿命。</p>
+</blockquote>
+<h4 id="2001-入世与出局">2001 入世与出局</h4>
+<ol>
+<li>中国正式加入WTO，全面融入全球贸易体系；外资加速在华独资化；很多本土企业面临冲击，一部分企业黯然出局。</li>
+<li>国企大规模海外上市，银行业、大型国企开启现代企业改造。</li>
+</ol>
+<h4 id="2002-中国制造">2002 中国制造</h4>
+<ol>
+<li>制造业全面爆发，长三角、珠三角工厂遍地开花，“世界工厂”成型；民营资本进入汽车等过去垄断行业。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜仰融悲情 仰融，华晨汽车创始人。把华晨送上纽交所，打造中华轿车、华晨宝马；但企业产权模糊，“红帽子”企业的产权困局，最终被迫出走海外，是转轨时代民营资本的悲剧样本。</p>
+</blockquote>
+<hr>
+<h2 id="第五部分-20032008-大国梦想成真">第五部分 2003‑2008 大国梦想成真</h2>
+<p>时代总览：中国经济高速重型化，重化工、地产、外贸腾飞；民营资本渴望突破行业壁垒；资本市场大牛市；大国崛起的光环之下，社会矛盾、监管缺失、外部贸易摩擦同步积累，直到2008金融危机到来。</p>
+<h4 id="2003-重型化运动">2003 重型化运动</h4>
+<ol>
+<li>SARS疫情冲击之后，全国掀起重型化浪潮：钢铁、电解铝、地产、重化工爆发式增长，国企、民企纷纷冲进重资产行业。</li>
+<li>地方政府大举投资拉动GDP。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜大午集资 孙大午，大午集团。民营企业发展缺正规融资渠道，民间集资现实困境，民间金融制度缺失下的典型悲剧。</p>
+</blockquote>
+<h4 id="2004-表面的胜利">2004 表面的胜利</h4>
+<ol>
+<li>宏观调控重启，打压过热重化工业投资；部分民企在宏观调控中受挫。</li>
+<li>企业做大，但很多深层制度问题没有真正解决，胜利带有表面性。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜“江湖”总裁 代表一批草根出身的企业家，靠江湖智慧、人情关系闯荡市场，在法制逐步完善的时代，原有生存模式开始遭遇挑战。</p>
+</blockquote>
+<h4 id="2005-深水区">2005 深水区</h4>
+<ol>
+<li>改革进入深水区：国企产权改革大争论，郎咸平风波爆发；股权分置改革提上日程；贸易摩擦增多。</li>
+<li>民营资本、国有资本、外资三方博弈加剧。</li>
+</ol>
+<h4 id="2006-资本的盛宴">2006 资本的盛宴</h4>
+<ol>
+<li>A股市场迎来资本盛宴，大量企业上市，财富效应爆发，批量诞生富豪。</li>
+</ol>
+<blockquote>
+<p>企业史人物｜“首富部落” 一大批首富轮番登场，财富快速膨胀，折射中国资本造富时代，也暴露财富背后的制度漏洞。</p>
+</blockquote>
+<h4 id="2007-大国崛起">2007 大国崛起</h4>
+<ol>
+<li>经济高速增长，股市大牛市，GDP高速提升，大国崛起成为主流舆论；外贸规模巨大。</li>
+<li>同时社会矛盾、贫富差距、环境压力不断积累。</li>
+</ol>
+<h4 id="2008-正在展开的未来">2008 正在展开的未来</h4>
+<ol>
+<li>北京奥运，大国高光时刻；全球金融危机呼啸而至。</li>
+<li>三十年改革走到新十字路口：旧红利消退，很多历史遗留问题浮出水面，中国企业站在未知的未来路口。</li>
+</ol>
+
+    </div>
+  </article>
+
+      </main>
+      <footer class="site-footer">
+  <small>
+    © 2026 Michael An · Built with Hugo
+  </small>
+</footer>
+
+    </div>
+  </body>
+</html>
