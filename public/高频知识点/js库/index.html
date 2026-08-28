@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Javascript · 我的笔记</title>
-    <meta name="description" content="JavaScript 常用库、工具和前端生态相关知识。">
+    <meta name="description" content="JavaScript 构建工具、前端框架、UI 组件、图表库、测试框架、Node.js 后端及常用工具库。">
     <style>
   :root {
     color-scheme: light;
@@ -330,16 +330,86 @@
   <section class="page-header">
     <p class="eyebrow">Section</p>
     <h1>Javascript</h1>
-    <p class="lede">JavaScript 常用库、工具和前端生态相关知识。</p>
-    <div class="content"><p>这里收录的是 JavaScript 生态里的常用库、工具和工程化组件，适合按需快速检索。</p>
-<p>当前目录下共有 188 篇文章，包含：</p>
+    <p class="lede">JavaScript 构建工具、前端框架、UI 组件、图表库、测试框架、Node.js 后端及常用工具库。</p>
+    <div class="content"><p>这里收录的是 JavaScript 生态里的常用库、框架和工程化工具，适合按需快速检索。</p>
+<p>当前目录下共有 180+ 篇文章，按功能分为以下几类：</p>
+<p>构建工具 (Build Tools)</p>
 <ul>
-<li>Babel、Webpack、ESLint 等工程化工具</li>
-<li>React、Redux、MobX、Ant Design 等前端生态</li>
-<li>Axios、Lodash、Moment、Echarts 等常用库</li>
-<li>以及一些浏览器和构建相关的工具文档</li>
+<li>Webpack 全家桶：webpack、webpack-cli、webpack-dev-server、webpack-bar、webpack-merge、webpack-bundle-analyzer、webpack-manifest-plugin、webpack-node-externals</li>
+<li>Webpack 插件：html-webpack-plugin、copy-webpack-plugin、clean-webpack-plugin、terser-webpack-plugin、uglifyjs-webpack-plugin、mini-css-extract-plugin、optimize-css-assets-webpack-plugin、hard-source-webpack-plugin、pnp-webpack-plugin、workbox-webpack-plugin 等</li>
+<li>Webpack Loader：babel-loader、css-loader、style-loader、sass-loader、less-loader、postcss-loader、file-loader、url-loader、resolve-url-loader、@svgr_webpack</li>
+<li>任务运行器：gulp、grunt、lerna.js</li>
 </ul>
-<p>如果你要找某个库的笔记，先进入这个分类，再从文章列表里继续查找。</p>
+<p>Babel 转译</p>
+<ul>
+<li>核心：babel、babel-core、babel-cli、babel-register、babel-eslint、babel-jest</li>
+<li>预设：@babel_preset-env、@babel_preset-react、babel-preset-react-app</li>
+<li>插件：@babel_plugin-transform-runtime、@babel_plugin-transform-modules-commonjs、@babel_plugin-proposal-object-rest-spread、@babel_plugin-proposal-class-properties 等</li>
+</ul>
+<p>ESLint 代码检查</p>
+<ul>
+<li>eslint-loader、eslint-plugin-import、eslint-plugin-jsx-a11y、eslint-plugin-react、eslint-plugin-react-hooks、eslint-plugin-flowtype、eslint-config-react-app</li>
+<li>TypeScript ESLint：@typescript-eslint_parser、@typescript-eslint_eslint-plugin</li>
+</ul>
+<p>前端框架 &amp; UI 组件库</p>
+<ul>
+<li>Ant Design、antd-mobile、Material-UI、Fusion Design、Tailwind CSS、univer</li>
+<li>MobX 状态管理、@reach_router 路由</li>
+<li>Storybook、docz 文档工具</li>
+<li>jQuery、zepto</li>
+</ul>
+<p>CSS 处理</p>
+<ul>
+<li>PostCSS 生态：autoprefixer、postcss-loader、postcss-normalize、postcss-preset-env、postcss-safe-parser、postcss-flexbugs-fixes</li>
+<li>CSS 相关：css-modules、css-hot-loader</li>
+<li>预处理器：less、sass-loader、less-loader</li>
+</ul>
+<p>图表 &amp; 可视化</p>
+<ul>
+<li>ECharts、Chart.js、@antv_g2</li>
+</ul>
+<p>测试框架</p>
+<ul>
+<li>Jest 全家桶：jest、jest-environment-jsdom-fourteen、jest-resolve、jest-watch-typeahead</li>
+<li>Testing Library：@testing-library_jest-dom、@testing-library_user-event</li>
+<li>Enzyme：enzyme、enzyme-adapter-react-16</li>
+</ul>
+<p>后端 &amp; 服务端框架</p>
+<ul>
+<li>Express、express-rate-limit、NestJS</li>
+<li>实时通信：socket.io、socket.io-client</li>
+<li>ODM/ORM：mongoose、sequelize</li>
+<li>测试 &amp; 请求：supertest、request、connect-multiparty、response-time</li>
+</ul>
+<p>HTTP &amp; 网络请求</p>
+<ul>
+<li>axios、whatwg-fetch、form-data、WebRTC</li>
+</ul>
+<p>工具库 (Utilities)</p>
+<ul>
+<li>通用工具：lodash、moment、uuid、semver、faker</li>
+<li>辅助函数：classnames、camelcase、slugid、keymirror、identity-obj-proxy、number-precision</li>
+<li>对象操作：merge、deep-copy、shallowequal、promise、object-assign、immutability-helper、reselect</li>
+<li>文件系统：fs-extra、rimraf、vfile</li>
+<li>调试 &amp; 配置：debug、dotenv、dotenv-expand、is-wsl、is-hotkey、husky</li>
+<li>其他：jszip、md5、jsonwebtoken、csv、raf</li>
+</ul>
+<p>文件 &amp; 文档处理</p>
+<ul>
+<li>PDF：pdfjs、pdfjs 打印空白页的问题</li>
+<li>截图 &amp; 导出：html2canvas、file-saver、sharp、printjs</li>
+<li>代码高亮：prismjs</li>
+<li>图片处理：exif-js、image-size、iconv-lite、detect-character-encoding</li>
+<li>日期格式化：date-format</li>
+</ul>
+<p>国际化 &amp; 其他</p>
+<ul>
+<li>i18next、ts-pnp、jison、GreaseMonkey</li>
+<li>mockjs 模拟数据、resumablejs</li>
+<li>DOM 辅助：dom-helpers、glamor、emotion</li>
+<li>UI 交互：swiper、konva、excalidraw、watermark-dom、video.js</li>
+<li>Markdown：unified、unied</li>
+</ul>
 </div>
   </section>
 
